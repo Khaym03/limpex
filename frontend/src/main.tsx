@@ -1,25 +1,24 @@
 import React from 'react'
-import {createRoot} from 'react-dom/client'
+import { createRoot } from 'react-dom/client'
 import './index.css'
+import Root from './routes/root'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import App from './App'
-import {
-    createBrowserRouter,
-    RouterProvider,
-  } from "react-router-dom";
+import Selection from './routes/selection'
 
 const container = document.getElementById('root')
 
 const root = createRoot(container!)
 
 const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <div>Hello world!</div>,
-    },
-  ]);
+  {
+    element: <Root />,
+    children: [{ path: '/', element: <App /> },{path:'/selection', element: <Selection/>}]
+  }
+])
 
 root.render(
-    <React.StrictMode>
-        <RouterProvider router={router} />
-    </React.StrictMode>
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
 )

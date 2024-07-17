@@ -29,13 +29,7 @@ function App() {
 
   return (
     <div id="App">
-      <NavigationMenu>
-        <Link to="/">
-          <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-            Documentation
-          </NavigationMenuLink>
-        </Link>
-      </NavigationMenu>
+      asdasd
     </div>
   )
 }
