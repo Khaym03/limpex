@@ -15,7 +15,7 @@ func NewSQLiteStorage() (*sql.DB, error) {
 		log.Fatal(err)
 	}
 
-	dbPath := filepath.Join(workDir, "/internal/db/db.db")
+	dbPath := filepath.Join(workDir, os.Getenv("DB_PATH"))
 
 	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {

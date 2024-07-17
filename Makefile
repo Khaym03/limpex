@@ -1,10 +1,15 @@
+include .env
+
 MigrationName := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 
 migrate-up:
-	@goose -dir internal/db/migrations sqlite3 internal/db/db.db up 
+	@goose -dir $(MIGRATION_DIR) sqlite3 $(DB_PATH) up 
 
 migrate-down:
-	@goose -dir internal/db/migrations sqlite3 internal/db/db.db down
+	@goose -dir $(MIGRATION_DIR) sqlite3 $(DB_PATH) down
 
 migration:
 	@goose -dir internal/db/migrations create $(MigrationName) sql
+
+data:
+	@echo "${DB_PATH}"
