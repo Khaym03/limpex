@@ -9,7 +9,7 @@ import (
 	"github.com/khaym03/limpex/internal/cart"
 	"github.com/khaym03/limpex/internal/core/domain"
 	"github.com/khaym03/limpex/internal/core/ports"
-	"github.com/khaym03/limpex/internal/product"
+	"github.com/khaym03/limpex/internal/core/services/product"
 	"github.com/khaym03/limpex/internal/sales"
 )
 
@@ -58,6 +58,6 @@ func (a *App) CreateCleaningProduct(name string, price float64, color string) {
 	}
 }
 
-func (a *App) GetProducts() {
-	a.ProductService.GetProducts()
+func (a *App) GetCleaningProducts() []domain.CleaningProduct {
+	return a.ProductService.GetCleaningProducts()
 }
