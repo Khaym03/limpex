@@ -19,7 +19,8 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import {EventsEmit, EventsOn, EventsOnce} from 'wailsjs/runtime'
+import { EventsEmit, EventsOn, EventsOnce } from 'wailsjs/runtime'
+import { CreateCleaningProduct, GetCleaningProducts } from 'wailsjs/go/main/App'
 
 const invoices = [
   {
@@ -45,8 +46,6 @@ const invoices = [
 ]
 
 export function TableDemo() {
-
-  
   return (
     <Card className="flex flex-grow px-3 py-2">
       <Table>
@@ -62,9 +61,7 @@ export function TableDemo() {
             <TableRow key={invoice.Id}>
               <TableCell className="font-medium">{invoice.Id}</TableCell>
               <TableCell>{invoice.Quantity}</TableCell>
-              <TableCell className="text-right">
-                {invoice.TotalPrice}
-              </TableCell>
+              <TableCell className="text-right">{invoice.TotalPrice}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -124,7 +121,7 @@ const Slice = () => {
 }
 
 const MeasureSection = () => {
-  EventsOnce("eco", d => {
+  EventsOnce('eco', d => {
     console.log(d)
   })
   const addToCart = () => {
@@ -133,11 +130,15 @@ const MeasureSection = () => {
       Quantity: 1000,
       TotalPrice: 34
     }
-    EventsEmit("add-to-cart", orderItem)
+    EventsEmit('add-to-cart', orderItem)
   }
 
   const removeFromCart = () => {
-    EventsEmit("remove-from-cart", {Id:1})
+    EventsEmit('remove-from-cart', { Id: 1 })
+  }
+
+  const createProduct = () => {
+    CreateCleaningProduct('lavaplatos', 0.78, 'red')
   }
 
   return (
@@ -154,12 +155,24 @@ const MeasureSection = () => {
           <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2">
             Ingrese Ml
           </label>
-          <Input  id="ml" type="text" placeholder="Ml" />
+          <Input id="ml" type="text" placeholder="Ml" />
         </div>
       </div>
 
-      <Button onClick={addToCart} className="w-full">Agregar</Button>
-      <Button onClick={removeFromCart} className="w-full">Remove</Button>
+      <Button
+        onClick={async () => {
+           console.log(await GetCleaningProducts())
+        }}
+        className="w-full"
+      >
+        get
+      </Button>
+      <Button onClick={removeFromCart} className="w-full">
+        Remove
+      </Button>
+      <Button onClick={createProduct} className="w-full">
+        create
+      </Button>
     </Card>
   )
 }

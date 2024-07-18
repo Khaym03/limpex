@@ -5,7 +5,8 @@ import (
 	"fmt"
 
 	"github.com/khaym03/limpex/internal/cart"
-	"github.com/khaym03/limpex/internal/types"
+	"github.com/khaym03/limpex/internal/core/domain"
+	"github.com/khaym03/limpex/internal/core/ports"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -19,8 +20,8 @@ const (
 	StatusCompleted = "completed"
 )
 
-func NewOrderItem(id types.Id, quantity float64, totalPrice float64) *types.OrderItem {
-	return &types.OrderItem{
+func NewOrderItem(id domain.Id, quantity float64, totalPrice float64) *domain.OrderItem {
+	return &domain.OrderItem{
 		Id:         id,
 		Quantity:   quantity,
 		TotalPrice: totalPrice,
@@ -28,7 +29,8 @@ func NewOrderItem(id types.Id, quantity float64, totalPrice float64) *types.Orde
 }
 
 type Sales struct {
-	Cart *cart.Cart
+	Cart  *cart.Cart
+	Store ports.ProductStore
 }
 
 func (s *Sales) SetEvents(ctx context.Context) {
@@ -59,8 +61,8 @@ func (s *Sales) SetEvents(ctx context.Context) {
 	})
 }
 
-func NewOrderItemFromJS(m map[string]interface{}) (*types.OrderItem, error) {
-	var orderItem types.OrderItem
+func NewOrderItemFromJS(m map[string]interface{}) (*domain.OrderItem, error) {
+	var orderItem domain.OrderItem
 
 	idVal, ok := m["Id"]
 	if !ok {
@@ -95,7 +97,7 @@ func NewOrderItemFromJS(m map[string]interface{}) (*types.OrderItem, error) {
 	return &orderItem, nil
 }
 
-func ExtractId(m map[string]interface{}) (types.Id, error) {
+func ExtractId(m map[string]interface{}) (domain.Id, error) {
 	idVal, ok := m["Id"]
 	if !ok {
 		return 0, fmt.Errorf("missing 'id' field in input map")

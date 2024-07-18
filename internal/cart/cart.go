@@ -1,31 +1,31 @@
 package cart
 
 import (
-	"github.com/khaym03/limpex/internal/types"
+	"github.com/khaym03/limpex/internal/core/domain"
 )
 
 type Cart struct {
-	items []types.OrderItem
+	items []domain.OrderItem
 }
 
 func NewCart() *Cart {
-	return &Cart{items: []types.OrderItem{}}
+	return &Cart{items: []domain.OrderItem{}}
 }
 
-func (c *Cart) Items() []types.OrderItem {
+func (c *Cart) Items() []domain.OrderItem {
 	return c.items
 }
 
-func (c *Cart) AddItem(o *types.OrderItem) {
+func (c *Cart) AddItem(o *domain.OrderItem) {
 	c.items = append(c.items, *o)
 }
 
-func (c *Cart) RemoveItem(id types.Id) {
+func (c *Cart) RemoveItem(id domain.Id) {
 	if len(c.items) <= 0 {
 		return
 	}
 
-	var newItems []types.OrderItem
+	var newItems []domain.OrderItem
 	for _, item := range c.items {
 		if item.Id != id {
 			newItems = append(newItems, item)
@@ -35,5 +35,5 @@ func (c *Cart) RemoveItem(id types.Id) {
 }
 
 func (c *Cart) Reset() {
-	c.items = []types.OrderItem{}
+	c.items = []domain.OrderItem{}
 }
