@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/table'
 import { EventsEmit, EventsOn, EventsOnce } from 'wailsjs/runtime'
 import { CreateCleaningProduct, GetCleaningProducts } from 'wailsjs/go/main/App'
+import { useEffect, useState } from 'react'
 
 const invoices = [
   {
@@ -76,7 +77,20 @@ export function TableDemo() {
   )
 }
 
+const useCleaningProducts = () => {
+  const [products, setProducts] = useState<CleaningProduct[]>([])
+
+  useEffect(() => {
+    GetCleaningProducts().then(p => setProducts(p))
+  }, [])
+
+  return {products}
+}
+
 const Slice = () => {
+  const {products} = useCleaningProducts()
+
+  
   return (
     <Carousel
       opts={{
@@ -85,8 +99,8 @@ const Slice = () => {
       className=" w-11/12 mx-auto"
     >
       <CarouselContent>
-        {Array.from({ length: 9 }).map((_, index) => (
-          <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/5">
+        {products && products.map((p) => (
+          <CarouselItem key={p.Id} className="md:basis-1/2 lg:basis-1/5">
             <div className="p-1">
               <Card className="[&>*]:select-none relative aspect-[8/12] overflow-hidden flex flex-col gap-2">
                 <div className="font-semibold top-0 w-full h-12 grid grid-cols-2 ">
@@ -106,8 +120,8 @@ const Slice = () => {
                 </div>
 
                 <div className="text-center font-semibold px-3 py-2 flex flex-col">
-                  <span>Product</span>
-                  <span className="text-slate-500">34 Bs</span>
+                  <span>{p.Name}</span>
+                  <span className="text-slate-500">{`${p.Price} $`}</span>
                 </div>
               </Card>
             </div>
@@ -180,7 +194,7 @@ const MeasureSection = () => {
 export default function Selection() {
   return (
     <div className="grid gap-8">
-      <Slice />{' '}
+      <Slice />
       <div className="flex gap-4 w-11/12 mx-auto">
         <MeasureSection /> <TableDemo />
       </div>

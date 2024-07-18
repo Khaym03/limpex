@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button'
+import { CreateProductDialog } from "@/dialogs/create-cleaning-product"
 import { RiHome4Line } from 'react-icons/ri'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 
@@ -30,8 +31,9 @@ export default function Root() {
         </ul>
       </nav>
       <section className="col-span-4 flex flex-col ">
-        <header className="px-3 py-2 font-semibold border-b">
-          {document.location.href}
+        <header className="px-3 py-2 font-semibold border-b flex gap-8">
+          <span>{document.location.href}</span>
+          <CreateProductDialog/>
         </header>
         <main className="p-4">
           <Outlet />
