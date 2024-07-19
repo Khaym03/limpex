@@ -68,3 +68,13 @@ func (a *App) DeleteProductById(id int64) domain.Message {
 
 	return common.MakeMessage(err)
 }
+
+func (a *App) GetCleaningProductById(id int64) *domain.CleaningProduct {
+	cp, err := a.ProductService.GetById(id)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(cp)
+	return cp
+}

@@ -75,3 +75,49 @@ func (s *Service) DeleteById(id int64) error {
 	}
 	return nil
 }
+
+func (s *Service) GetById(id int64) (*domain.CleaningProduct, error) {
+	rows, err := s.db.Query(`
+	SELECT p.id, p.name, p.price, cp.color
+	FROM cleaning_products AS cp
+	JOIN products AS p ON cp.product_id = p.id
+	WHERE p.id = ?
+	`, id)
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	if !rows.Next() {
+		return nil, fmt.Errorf("no cleaning product found with id %d", id)
+	}
+
+	var cp domain.CleaningProduct
+
+	err = rows.Scan(
+		&cp.Product.Id,
+		&cp.Product.Name,
+		&cp.Product.Price,
+		&cp.CleaningProductData.Color)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &cp, nil
+}
+
+func (s *Service) UpdateCleaningProduct(id int64, name string, price float64, color string) error {
+	_, err := s.db.Exec("UPDATE products SET name = ?, price = ? WHERE id = ?", name, price, id)
+	if err != nil {
+		return fmt.Errorf("error updating product: %w", err)
+	}
+
+	_, err = s.db.Exec("UPDATE cleaning_products SET color = ? WHERE product_id = ?", color, id)
+	if err != nil {
+		return fmt.Errorf("error updating cleaning product: %w", err)
+	}
+
+	return nil
+}

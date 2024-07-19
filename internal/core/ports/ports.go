@@ -7,4 +7,6 @@ type ProductStore interface {
 	CreateCleaningProduct(name string, price float64, color string) error
 	GetCleaningProducts() []domain.CleaningProduct
 	DeleteById(id int64) error
+	GetById(id int64) (*domain.CleaningProduct, error)
+	UpdateCleaningProduct(id int64, name string, price float64, color string) error
 }

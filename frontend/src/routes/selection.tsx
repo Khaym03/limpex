@@ -20,7 +20,7 @@ import {
   TableRow
 } from '@/components/ui/table'
 import { EventsEmit, EventsOn, EventsOnce } from 'wailsjs/runtime'
-import { CreateCleaningProduct, GetCleaningProducts } from 'wailsjs/go/main/App'
+import { CreateCleaningProduct, GetCleaningProductById, GetCleaningProducts } from 'wailsjs/go/main/App'
 import { useEffect, useState } from 'react'
 import { useCleaningProducts } from '@/hooks/produtc'
 
@@ -146,6 +146,10 @@ const MeasureSection = () => {
     CreateCleaningProduct('lavaplatos', 0.78, 'red')
   }
 
+  const getCPById = () => {
+    GetCleaningProductById(6).then(cp => console.log(cp))
+  }
+
   return (
     <Card className="flex flex-col p-4 gap-4">
       <div className="w-full max-w-sm flex items-center gap-4 ">
@@ -165,9 +169,7 @@ const MeasureSection = () => {
       </div>
 
       <Button
-        onClick={async () => {
-           console.log(await GetCleaningProducts())
-        }}
+        onClick={getCPById}
         className="w-full"
       >
         get

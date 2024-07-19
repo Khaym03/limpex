@@ -6,6 +6,8 @@ export function CreateCleaningProduct(arg1:string,arg2:number,arg3:string):Promi
 
 export function DeleteProductById(arg1:number):Promise<domain.Message>;
 
+export function GetCleaningProductById(arg1:number):Promise<domain.CleaningProduct>;
+
 export function GetCleaningProducts():Promise<Array<domain.CleaningProduct>>;
 
 export function Greet(arg1:string):Promise<string>;
