@@ -6,10 +6,10 @@ import (
 	"log"
 
 	"github.com/khaym03/limpex/internal/adapters/repository"
-	"github.com/khaym03/limpex/internal/cart"
 	"github.com/khaym03/limpex/internal/common"
 	"github.com/khaym03/limpex/internal/core/domain"
 	"github.com/khaym03/limpex/internal/core/ports"
+	"github.com/khaym03/limpex/internal/core/services/cart"
 	"github.com/khaym03/limpex/internal/core/services/product"
 	"github.com/khaym03/limpex/internal/sales"
 )

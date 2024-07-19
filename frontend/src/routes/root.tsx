@@ -39,7 +39,7 @@ export default function Root() {
         <header className="px-3 py-2 font-semibold border-b flex gap-8">
           <span>{document.location.href}</span>
         </header>
-        <main className="p-4">
+        <main className="h-full">
           <Outlet />
         </main>
       </section>

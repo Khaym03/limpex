@@ -4,7 +4,7 @@ import './index.css'
 import Root from './routes/root'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import App from './App'
-import Selection from './routes/selection'
+import Selection from './routes/product-selection/selection'
 import Config from './routes/config/config'
 import { Toaster } from '@/components/ui/toaster'
 
