@@ -24,6 +24,7 @@ import {
 import { useCleaningProducts } from '@/hooks/produtc'
 import { z } from 'zod'
 import { useToast } from '@/components/ui/use-toast'
+import { ProductSelect } from '@/components/product-select'
 
 export function DeleteProductDialog() {
   const { products } = useCleaningProducts()
@@ -62,22 +63,8 @@ export function DeleteProductDialog() {
           </DialogDescription>
         </DialogHeader>
 
-        <div>
-          <Select onValueChange={id => setProdId(+id)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Seleccione un producto" />
-            </SelectTrigger>
+        <ProductSelect products={products} onSelect={setProdId} />
 
-            <SelectContent>
-              {products &&
-                products.map(p => (
-                  <SelectItem key={p.Id} value={p.Id.toString()}>
-                    {p.Name}
-                  </SelectItem>
-                ))}
-            </SelectContent>
-          </Select>
-        </div>
         <DialogFooter>
           <DialogClose asChild>
             <Button variant={'destructive'} onClick={clickHandler}>

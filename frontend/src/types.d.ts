@@ -3,7 +3,7 @@ interface CleaningProduct  {
     Name: string,
     Price: number,
     CleaningProductData: {
-        color: string
+        Color: string
     }
 }
 

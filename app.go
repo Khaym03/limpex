@@ -75,6 +75,10 @@ func (a *App) GetCleaningProductById(id int64) *domain.CleaningProduct {
 		fmt.Println(err)
 	}
 
-	fmt.Println(cp)
 	return cp
+}
+
+func (a *App) UpdateCleaningProduct(id int64, name string, price float64, color string) domain.Message {
+	err := a.ProductService.UpdateCleaningProduct(id, name, price, color)
+	return common.MakeMessage(err)
 }

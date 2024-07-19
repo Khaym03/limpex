@@ -1,6 +1,7 @@
 import { Separator } from "@/components/ui/separator"
 import { CreateProductDialog } from "@/dialogs/create-cleaning-product"
 import { DeleteProductDialog } from "@/dialogs/delete-cleaning-product"
+import { UpdateProductDialog } from "@/dialogs/update-cleaning-product"
 
 const Header = () => {
   return (
@@ -20,6 +21,7 @@ export default function Config() {
       <Separator className="my-6"/>
       <CreateProductDialog/>
       <DeleteProductDialog/>
+      <UpdateProductDialog/>
     </div>
   )
 }

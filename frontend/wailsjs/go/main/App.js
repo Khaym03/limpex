@@ -25,3 +25,7 @@ export function Greet(arg1) {
 export function SalesObj() {
   return window['go']['main']['App']['SalesObj']();
 }
+
+export function UpdateCleaningProduct(arg1, arg2, arg3, arg4) {
+  return window['go']['main']['App']['UpdateCleaningProduct'](arg1, arg2, arg3, arg4);
+}
