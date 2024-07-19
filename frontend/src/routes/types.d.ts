@@ -6,3 +6,8 @@ interface CleaningProduct  {
         color: string
     }
 }
+
+interface Message {
+    Success: boolean
+    Error: string
+}

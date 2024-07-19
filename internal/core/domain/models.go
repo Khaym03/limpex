@@ -37,3 +37,8 @@ type Order struct {
 	CreatedAt time.Time
 	Status    string
 }
+
+type Message struct {
+	Success bool
+	Error   string
+}

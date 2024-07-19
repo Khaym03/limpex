@@ -5,6 +5,8 @@ import Root from './routes/root'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import App from './App'
 import Selection from './routes/selection'
+import Config from './routes/config/config'
+import { Toaster } from '@/components/ui/toaster'
 
 const container = document.getElementById('root')
 
@@ -13,12 +15,17 @@ const root = createRoot(container!)
 const router = createBrowserRouter([
   {
     element: <Root />,
-    children: [{ path: '/', element: <App /> },{path:'/selection', element: <Selection/>}]
+    children: [
+      { path: '/', element: <App /> },
+      { path: '/selection', element: <Selection /> },
+      { path: '/config', element: <Config /> }
+    ]
   }
 ])
 
 root.render(
   <React.StrictMode>
     <RouterProvider router={router} />
+    <Toaster />
   </React.StrictMode>
 )

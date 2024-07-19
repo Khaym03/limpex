@@ -8,6 +8,11 @@ const links = [
     name: 'home',
     link: '/selection',
     Icon: RiHome4Line
+  },
+  {
+    name: 'configuracion',
+    link: '/config',
+    Icon: RiHome4Line
   }
 ]
 
@@ -19,7 +24,7 @@ export default function Root() {
       <nav className="px-3 py-2 border-r">
         <ul className="flex gap-2 flex-col">
           {links.map(l => (
-            <Button
+            <Button key={l.link}
               className="flex justify-start"
               variant={'ghost'}
               onClick={() => navigate(l.link)}
@@ -33,7 +38,6 @@ export default function Root() {
       <section className="col-span-4 flex flex-col ">
         <header className="px-3 py-2 font-semibold border-b flex gap-8">
           <span>{document.location.href}</span>
-          <CreateProductDialog/>
         </header>
         <main className="p-4">
           <Outlet />

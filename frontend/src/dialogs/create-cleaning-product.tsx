@@ -14,11 +14,14 @@ import { Label } from '@/components/ui/label'
 import { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
 import {} from '@radix-ui/react-dialog'
 import { CreateCleaningProduct } from 'wailsjs/go/main/App'
+import { useToast } from '@/components/ui/use-toast'
+import { describe } from 'node:test'
 
 export function CreateProductDialog() {
   const [productName, setProductName] = useState('')
   const [productPrice, setProductPrice] = useState(0)
   const [disable, setDisable] = useState(true)
+  const { toast } = useToast()
 
   const shouldDisable = () => {
     setDisable(productName === '' || productPrice === 0)
@@ -36,8 +39,27 @@ export function CreateProductDialog() {
     shouldDisable()
   }
 
-  const handleCreation = (e: MouseEvent<HTMLButtonElement>) => {
-    CreateCleaningProduct(productName, productPrice, 'text-slate-700')
+  const handleCreation = async (e: MouseEvent<HTMLButtonElement>) => {
+    const msg = (await CreateCleaningProduct(
+      productName,
+      productPrice,
+      'text-slate-700'
+    )) as Message
+
+    if (msg.Success) {
+      const { dismiss } = toast({
+        title: 'Creado exitosamente'
+      })
+
+      setTimeout(dismiss, 3000)
+    } else {
+      toast({
+        title: 'Error',
+        description: msg.Error
+      })
+    }
+
+    // Reset states
     setProductName('')
     setProductPrice(0)
     setDisable(true)
@@ -77,8 +99,7 @@ export function CreateProductDialog() {
               onChange={onChangePrice}
               placeholder="00.00"
               className="col-span-3 appearance-none"
-              value={productPrice}
-              type='number'
+              type="number"
             />
             <div className="pointer-events-none flex items-center absolute right-4">
               <span className="text-slate-400 text-sm">$</span>

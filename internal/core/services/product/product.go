@@ -67,3 +67,11 @@ func (s *Service) GetCleaningProducts() []domain.CleaningProduct {
 	fmt.Println("Productos de Limpieza:", cleaningProducts)
 	return cleaningProducts
 }
+
+func (s *Service) DeleteById(id int64) error {
+	_, err := s.db.Exec("DELETE FROM products WHERE id=?", id)
+	if err != nil {
+		return err
+	}
+	return nil
+}

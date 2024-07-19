@@ -22,6 +22,7 @@ import {
 import { EventsEmit, EventsOn, EventsOnce } from 'wailsjs/runtime'
 import { CreateCleaningProduct, GetCleaningProducts } from 'wailsjs/go/main/App'
 import { useEffect, useState } from 'react'
+import { useCleaningProducts } from '@/hooks/produtc'
 
 const invoices = [
   {
@@ -77,20 +78,10 @@ export function TableDemo() {
   )
 }
 
-const useCleaningProducts = () => {
-  const [products, setProducts] = useState<CleaningProduct[]>([])
-
-  useEffect(() => {
-    GetCleaningProducts().then(p => setProducts(p))
-  }, [])
-
-  return {products}
-}
 
 const Slice = () => {
   const {products} = useCleaningProducts()
 
-  
   return (
     <Carousel
       opts={{

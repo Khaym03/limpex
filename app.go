@@ -7,6 +7,7 @@ import (
 
 	"github.com/khaym03/limpex/internal/adapters/repository"
 	"github.com/khaym03/limpex/internal/cart"
+	"github.com/khaym03/limpex/internal/common"
 	"github.com/khaym03/limpex/internal/core/domain"
 	"github.com/khaym03/limpex/internal/core/ports"
 	"github.com/khaym03/limpex/internal/core/services/product"
@@ -52,12 +53,18 @@ func (a *App) SalesObj() []domain.OrderItem {
 	return a.Sales.Cart.Items()
 }
 
-func (a *App) CreateCleaningProduct(name string, price float64, color string) {
-	if err := a.ProductService.CreateCleaningProduct(name, price, color); err != nil {
-		fmt.Println(err)
-	}
+func (a *App) CreateCleaningProduct(name string, price float64, color string) domain.Message {
+	err := a.ProductService.CreateCleaningProduct(name, price, color)
+
+	return common.MakeMessage(err)
 }
 
 func (a *App) GetCleaningProducts() []domain.CleaningProduct {
 	return a.ProductService.GetCleaningProducts()
+}
+
+func (a *App) DeleteProductById(id int64) domain.Message {
+	err := a.ProductService.DeleteById(id)
+
+	return common.MakeMessage(err)
 }

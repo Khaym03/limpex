@@ -6,6 +6,10 @@ export function CreateCleaningProduct(arg1, arg2, arg3) {
   return window['go']['main']['App']['CreateCleaningProduct'](arg1, arg2, arg3);
 }
 
+export function DeleteProductById(arg1) {
+  return window['go']['main']['App']['DeleteProductById'](arg1);
+}
+
 export function GetCleaningProducts() {
   return window['go']['main']['App']['GetCleaningProducts']();
 }
