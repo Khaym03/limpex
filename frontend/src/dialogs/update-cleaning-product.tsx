@@ -11,12 +11,8 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
-import {} from '@radix-ui/react-dialog'
-import {
-  CreateCleaningProduct,
-  UpdateCleaningProduct
-} from 'wailsjs/go/main/App'
+import { ChangeEvent, useEffect, useState } from 'react'
+import { UpdateCleaningProduct } from 'wailsjs/go/main/App'
 import { useToast } from '@/components/ui/use-toast'
 import { ProductSelect } from '@/components/product-select'
 import { useCleaningProducts } from '@/hooks/produtc'
@@ -32,31 +28,31 @@ export function UpdateProductDialog() {
   const { toast } = useToast()
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
+    const { id, value } = e.target
 
     if (id === 'price') {
-      const priceValue = parseFloat(value);
-      setProductPrice(isNaN(priceValue) || priceValue < 0 ? 0 : priceValue);
+      const priceValue = parseFloat(value)
+      setProductPrice(isNaN(priceValue) || priceValue < 0 ? 0 : priceValue)
     } else {
       switch (id) {
         case 'name':
-          setProductName(value);
-          break;
+          setProductName(value)
+          break
         case 'color':
-          setProductColor(value);
-          break;
+          setProductColor(value)
+          break
         default:
-          break;
+          break
       }
     }
-  };
+  }
 
   const resetForm = () => {
-    setProductName('');
-    setProductPrice(0);
-    setProductColor('');
-    setProductId(0);
-  };
+    setProductName('')
+    setProductPrice(0)
+    setProductColor('')
+    setProductId(0)
+  }
 
   const handleUpdate = async () => {
     if (!productId) return
@@ -86,14 +82,14 @@ export function UpdateProductDialog() {
 
   useEffect(() => {
     if (productId) {
-      const selectedProd = products.find(p => p.Id === productId);
+      const selectedProd = products.find(p => p.Id === productId)
       if (selectedProd) {
-        setProductName(selectedProd.Name);
-        setProductPrice(selectedProd.Price);
-        setProductColor(selectedProd.CleaningProductData.Color);
+        setProductName(selectedProd.Name)
+        setProductPrice(selectedProd.Price)
+        setProductColor(selectedProd.CleaningProductData.Color)
       }
     }
-  }, [productId]);
+  }, [productId])
 
   useEffect(() => {
     setDisable(!productName || !productPrice || !productColor)
@@ -102,7 +98,7 @@ export function UpdateProductDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Editar Producto</Button>
+        <Button variant="ghost">Editar Producto</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

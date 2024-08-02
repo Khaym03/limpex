@@ -9,20 +9,9 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
-import {} from '@radix-ui/react-dialog'
-import { CreateCleaningProduct, DeleteProductById } from 'wailsjs/go/main/App'
-import {
-  Select,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  SelectContent
-} from '@/components/ui/select'
+import { useState } from 'react'
+import { DeleteProductById } from 'wailsjs/go/main/App'
 import { useCleaningProducts } from '@/hooks/produtc'
-import { z } from 'zod'
 import { useToast } from '@/components/ui/use-toast'
 import { ProductSelect } from '@/components/product-select'
 
@@ -53,7 +42,7 @@ export function DeleteProductDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Borra Producto</Button>
+        <Button variant="ghost">Borra Producto</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

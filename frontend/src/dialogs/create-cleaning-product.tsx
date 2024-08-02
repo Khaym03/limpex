@@ -70,7 +70,7 @@ export function CreateProductDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Crear Producto</Button>
+        <Button variant='ghost'>Crear Producto</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
