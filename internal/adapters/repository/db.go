@@ -3,15 +3,28 @@ package repository
 import (
 	"database/sql"
 	"log"
+	"sync"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func NewSQLiteStorage() (*sql.DB, error) {
-	db, err := sql.Open("sqlite3", "internal/adapters/repository/limpex.db")
-	if err != nil {
-		log.Fatal(err)
-	}
+var db *sql.DB
+var once sync.Once
 
-	return db, nil
+func NewSQLiteStorage() *sql.DB {
+
+	once.Do(func() {
+		dbConn, err := sql.Open("sqlite3", "./limpex.db")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if err := dbConn.Ping(); err != nil {
+			log.Fatal(err)
+		}
+
+		db = dbConn
+	})
+
+	return db
 }

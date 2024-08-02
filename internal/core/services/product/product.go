@@ -44,7 +44,6 @@ func (s *Service) CreateCleaningProduct(name string, price float64, color string
 }
 
 func (s *Service) GetCleaningProducts() []domain.CleaningProduct {
-	// Consulta para obtener todos los productos de limpieza.
 	cleaningRows, err := s.db.Query(`
 	SELECT p.id, p.name, p.price, cp.color
 	FROM cleaning_products AS cp
@@ -64,7 +63,6 @@ func (s *Service) GetCleaningProducts() []domain.CleaningProduct {
 		cleaningProducts = append(cleaningProducts, cp)
 	}
 
-	fmt.Println("Productos de Limpieza:", cleaningProducts)
 	return cleaningProducts
 }
 

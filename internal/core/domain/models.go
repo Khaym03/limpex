@@ -4,17 +4,15 @@ import (
 	"time"
 )
 
-type Id = uint64
-
 type Client struct {
-	Id
+	Id        int64
 	Name      string
 	CreatedAt time.Time
 	CI        int64
 }
 
 type Product struct {
-	Id
+	Id    int64
 	Name  string
 	Price float64
 }
@@ -26,8 +24,15 @@ type CleaningProduct struct {
 	}
 }
 
+type OrderItemPayload struct {
+	ProductID int64
+	Quantity  float64
+	UnitPrice float64
+	Subtotal  float64
+}
+
 type OrderItem struct {
-	Id
+	Id        int64
 	ProductID int64
 	Quantity  float64
 	UnitPrice float64

@@ -7,7 +7,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "wailsjs/runtime": path.resolve(__dirname, "./wailsjs/runtime/runtime.js"),
       "wailsjs": path.resolve(__dirname, "./wailsjs"),
       //"dialogs": path.resolve(__dirname, "./src/dialogs")
     },

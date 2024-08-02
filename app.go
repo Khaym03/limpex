@@ -3,13 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"github.com/khaym03/limpex/internal/adapters/repository"
 	"github.com/khaym03/limpex/internal/common"
 	"github.com/khaym03/limpex/internal/core/domain"
 	"github.com/khaym03/limpex/internal/core/ports"
-	"github.com/khaym03/limpex/internal/core/services/cart"
 	"github.com/khaym03/limpex/internal/core/services/product"
 	"github.com/khaym03/limpex/internal/sales"
 )
@@ -17,13 +15,13 @@ import (
 // App struct
 type App struct {
 	ctx            context.Context
-	Sales          *sales.Sales
 	ProductService ports.ProductStore
 }
 
 // NewApp creates a new App application struct
 func NewApp() *App {
-	return &App{Sales: &sales.Sales{Cart: cart.NewCart()}}
+	dbConn := repository.NewSQLiteStorage()
+	return &App{ProductService: product.NewService(dbConn)}
 }
 
 // startup is called when the app starts. The context is saved
@@ -31,26 +29,14 @@ func NewApp() *App {
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 
-	dbConn, err := repository.NewSQLiteStorage()
-	if err != nil {
-		log.Fatal(err)
-	}
-	if err := dbConn.Ping(); err != nil {
-		log.Fatal(err)
-	}
+	salesHanler := sales.NewSales()
+	salesHanler.Start(ctx)
 
-	a.ProductService = product.NewService(dbConn)
-
-	a.Sales.SetEvents(ctx)
 }
 
 // Greet returns a greeting for the given name
 func (a *App) Greet(name string) string {
 	return fmt.Sprintf("Hello %s, It's show time!", name)
-}
-
-func (a *App) SalesObj() []domain.OrderItem {
-	return a.Sales.Cart.Items()
 }
 
 func (a *App) CreateCleaningProduct(name string, price float64, color string) domain.Message {

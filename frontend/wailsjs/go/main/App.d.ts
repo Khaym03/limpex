@@ -12,6 +12,4 @@ export function GetCleaningProducts():Promise<Array<domain.CleaningProduct>>;
 
 export function Greet(arg1:string):Promise<string>;
 
-export function SalesObj():Promise<Array<domain.OrderItem>>;
-
 export function UpdateCleaningProduct(arg1:number,arg2:string,arg3:number,arg4:string):Promise<domain.Message>;

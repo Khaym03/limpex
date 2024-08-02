@@ -2,11 +2,19 @@ package main
 
 import (
 	"embed"
+	"fmt"
 
+	"github.com/khaym03/limpex/internal/sales"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 )
+
+type X struct{}
+
+func (x X) Hi() {
+	fmt.Println("hi")
+}
 
 //go:embed all:frontend/dist
 var assets embed.FS
@@ -14,6 +22,8 @@ var assets embed.FS
 func main() {
 	// Create an instance of the app structure
 	app := NewApp()
+
+	salesHandler := sales.NewSales()
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -27,6 +37,7 @@ func main() {
 		OnStartup:        app.startup,
 		Bind: []interface{}{
 			app,
+			salesHandler,
 		},
 	})
 

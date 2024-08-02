@@ -1,58 +1,100 @@
-import { EventsEmit, EventsOn, EventsOnce } from 'wailsjs/runtime'
-import { CreateCleaningProduct, GetCleaningProductById, GetCleaningProducts } from 'wailsjs/go/main/App'
-import { Card } from '@/components/ui/card'
+import {
+  Card,
+  CardHeader,
+  CardDescription,
+  CardContent,
+  CardTitle,
+  CardFooter
+} from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import { ChangeEvent, useContext, useEffect, useState } from 'react'
+import { SalesCtx } from '@/context/sales-provider'
+import { addToShoppingCart } from '@/lib/utils'
 
 export default function Measure() {
-    EventsOnce('eco', d => {
-      console.log(d)
-    })
-    const addToCart = () => {
-      const orderItem = {
-        Id: 1,
-        Quantity: 1000,
-        TotalPrice: 34
-      }
-      EventsEmit('add-to-cart', orderItem)
-    }
-  
-    const removeFromCart = () => {
-      EventsEmit('remove-from-cart', { Id: 1 })
-    }
-  
-    const createProduct = () => {
-      CreateCleaningProduct('lavaplatos', 0.78, 'red')
-    }
-  
-    const getCPById = () => {
-      GetCleaningProductById(6).then(cp => console.log(cp))
-    }
-  
-    return (
-      <Card className="flex flex-col p-4 gap-4">
-        <div className="w-full max-w-sm flex items-center gap-4 ">
-          <div className="flex flex-col">
-            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2">
-              Ingrese Bs
-            </label>
-            <Input id="bs" type="text" placeholder="Bolivares" />
-          </div>
-  
-          <div className="flex flex-col">
-            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2">
-              Ingrese Ml
-            </label>
-            <Input id="ml" type="text" placeholder="Ml" />
-          </div>
-        </div>
-  
-        <Button
-          onClick={getCPById}
-          className="w-full"
-        >
-          get
-        </Button>
-      </Card>
-    )
+  const [bsInput, setBsInput] = useState(0)
+  const [MlInput, setMlInput] = useState(0)
+
+  const resetInputs = () => {
+    setBsInput(0)
+    setMlInput(0)
   }
+
+  const {selectedProduct} = useContext(SalesCtx)
+
+  const [disabled, setDisabled] = useState(!selectedProduct)
+
+  useEffect(() => {
+    resetInputs()
+    setDisabled(!selectedProduct)
+  }, [selectedProduct])
+
+  
+
+  const OnChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.currentTarget.id == 'bs') {
+      setMlInput(0)
+      setBsInput(Number(e.currentTarget.value))
+    }
+
+    if (e.currentTarget.id == 'ml') {
+      setBsInput(0)
+      setMlInput(Number(e.currentTarget.value))
+    }
+  }
+
+  const calcHowMuchCanBuy = () => {
+    if(!selectedProduct) return
+    
+    if(bsInput){
+      const quantity = parseInt(((bsInput / selectedProduct.Price) * 1000 ).toString())
+      addToShoppingCart(selectedProduct,quantity)
+    }
+
+    if(MlInput) {
+      addToShoppingCart(selectedProduct,MlInput)
+    }
+  }
+
+
+  return (
+    <Card className="grid gap-3 w-full font-semibold">
+      <CardHeader className="pb-0">
+        <CardTitle className=" font-bold">Medidores</CardTitle>
+        <CardDescription>Mide en funcion de Bs o Ml</CardDescription>
+      </CardHeader>
+
+      <CardContent className="flex flex-col gap-4 py-0">
+        <div className="grid gap-3 w-full">
+          <Label htmlFor="bs">Ingrese Bs</Label>
+          <Input
+            id="bs"
+            type="number"
+            placeholder="Bolivares"
+            onChange={OnChangeValue}
+            value={bsInput ? bsInput : ''}
+            disabled={disabled}
+          />
+        </div>
+
+        <div className="grid gap-3 w-full">
+          <Label htmlFor="ml">Ingrese Ml</Label>
+          <Input
+            id="ml"
+            type="number"
+            placeholder="Ml"
+            onChange={OnChangeValue}
+            value={MlInput ? MlInput : ''}
+            disabled={disabled}
+          />
+        </div>
+      </CardContent>
+
+      <CardFooter className="border-t px-6 py-4">
+        <Button disabled={disabled} className="w-full" onClick={calcHowMuchCanBuy}>Agregar</Button>
+      </CardFooter>
+    </Card>
+  )
+}
