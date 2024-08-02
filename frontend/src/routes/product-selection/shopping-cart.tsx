@@ -6,10 +6,10 @@ import { GetCartItems, RemoveItemFromCart } from 'wailsjs/go/sales/Sales'
 
 import { ShoppingCart as ShoppingCartIcon } from 'lucide-react'
 import { X } from 'lucide-react'
+import { animated, useSpring } from '@react-spring/web'
 
 interface IItem {
   item: OrderItemPayload
-  handler: () => void
 }
 
 const EmptyShoppingCart = () => (
@@ -19,40 +19,48 @@ const EmptyShoppingCart = () => (
   </div>
 )
 
-const Item = ({ item, handler }: IItem) => {
+const Item = ({ item }: IItem) => {
   const { products } = useCleaningProducts()
 
   const product = products.find(p => item.ProductID === p.Id)
 
-  return (
-    <Card
-      onClick={handler}
-      className={`
-        flex flex-col  [&>*]:select-none
-        font-medium rounded-lg cursor-pointer transition-transform hover:scale-105
-      `}
-    >
-      <CardHeader className="py-3 flex flex-row">
-        <CardTitle className="text-black text-base capitalize ">
-          {product?.Name}
-        </CardTitle>
-        <X size={'1.125rem'} className='ml-auto'/>
-      </CardHeader>
+  const handler = () => {
+    RemoveItemFromCart(item.ProductID)
+  }
 
-      <CardContent className="text-sm border-t text-muted-foreground flex py-2 justify-between">
-        <span className=" text-muted-foreground">{item.Subtotal} $</span>
-        <span>-</span>
-        <span className=" text-muted-foreground">{`${item.Quantity} Ml`}</span>
-      </CardContent>
-    </Card>
+  const animation = useSpring({
+    from: { opacity: 0, y: -10 },
+    to: { opacity: 1, y: 0 }
+  })
+
+  return (
+    <animated.div style={{ ...animation }}>
+      <Card
+        onClick={handler}
+        className={`
+      flex flex-col  [&>*]:select-none
+      font-medium rounded-lg cursor-pointer transition-transform
+    `}
+      >
+        <CardHeader className="py-3 flex flex-row">
+          <CardTitle className="text-black text-base capitalize ">
+            {product?.Name}
+          </CardTitle>
+          <X size={'1.125rem'} className="ml-auto" />
+        </CardHeader>
+
+        <CardContent className="text-sm border-t text-muted-foreground flex py-2 justify-between">
+          <span className=" text-muted-foreground">{item.Subtotal} $</span>
+          <span>-</span>
+          <span className=" text-muted-foreground">{`${item.Quantity} Ml`}</span>
+        </CardContent>
+      </Card>
+    </animated.div>
   )
 }
 
 export default function ShoppingCart() {
   const [cartItems, setCartItems] = useState<OrderItemPayload[]>([])
-  const { products } = useCleaningProducts()
-
-  const total = cartItems.reduce((a, b) => a + b.Subtotal, 0)
 
   useEffect(() => {
     GetCartItems().then(items => {
@@ -76,14 +84,8 @@ export default function ShoppingCart() {
   return (
     <Card className="grid grid-cols-3 auto-rows-[94px] overflow-y-auto gap-2 bg-zinc-100 p-2 shadow-inner relative h-[316px] rounded-md">
       {cartItems.length > 0 ? (
-        cartItems.map((item, i) => {
-          return (
-            <Item
-              key={item.ProductID}
-              item={item}
-              handler={() => RemoveItemFromCart(item.ProductID)}
-            />
-          )
+        cartItems.map(item => {
+          return <Item key={item.ProductID} item={item} />
         })
       ) : (
         <EmptyShoppingCart />

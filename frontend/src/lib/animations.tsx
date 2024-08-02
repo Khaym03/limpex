@@ -1,0 +1,8 @@
+import { useTransition } from "@react-spring/web"
+
+export const InsertAnimation = (data: any) => {
+    return useTransition(data, {
+      from: { opacity: 0, y: -10 },
+      enter: { opacity: 1, y: 0 }//,leave: {opacity: 0, y: 10}
+    })
+  }

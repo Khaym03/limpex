@@ -4,10 +4,12 @@ import ShoppingCart from './shopping-cart'
 import { Button } from '@/components/ui/button'
 import { Trash2, Receipt } from 'lucide-react'
 import { ResetCart } from 'wailsjs/go/sales/Sales'
+import { animated, useSpring } from '@react-spring/web'
+import { InsertAnimation } from '@/lib/animations'
 
 const CartActions = () => {
   return (
-    <div className="grid grid-row-2 gap-2 grow text-lg">
+    <div className="grid grid-row-2 gap-4 grow text-lg h-full">
       <Button
         className="h-full flex flex-col gap-2 text-base"
         variant={'destructive'}
@@ -25,12 +27,22 @@ const CartActions = () => {
 }
 
 export default function Selection() {
+  const fase = useSpring({
+    from: { opacity: 0 },
+    to: { opacity: 1 }
+  })
+
   return (
-    <div className="flex flex-col h-screen p-6 gap-4 justify-center items-center">
+    <animated.div className="flex flex-col h-screen p-6 gap-4 justify-center items-center">
       <ProductSlice />
-      <div className="grid grid-cols-[1.25fr,3fr,0.75fr] gap-6 w-11/12 mx-auto">
-        <Measure /> <ShoppingCart /> <CartActions />
-      </div>
-    </div>
+      <animated.div
+        style={{ ...fase }}
+        className="grid grid-cols-[1.25fr,3fr,0.75fr] gap-6 w-11/12 mx-auto"
+      >
+        <Measure />
+        <ShoppingCart />
+        <CartActions />
+      </animated.div>
+    </animated.div>
   )
 }

@@ -1,28 +1,6 @@
-import { Button } from '@/components/ui/button'
 import SalesProvider from '@/context/sales-provider'
-import { CreateProductDialog } from '@/dialogs/create-cleaning-product'
-import { RiHome4Line } from 'react-icons/ri'
-import { Link, Outlet, useNavigate } from 'react-router-dom'
-import { RiSettings3Fill } from 'react-icons/ri'
-import {
-  ChevronLeft,
-  ChevronRight,
-  Copy,
-  CreditCard,
-  File,
-  Home,
-  LineChart,
-  ListFilter,
-  MoreVertical,
-  Package,
-  Package2,
-  PanelLeft,
-  Search,
-  Settings,
-  ShoppingCart,
-  Truck,
-  Users2
-} from 'lucide-react'
+import { Link, Outlet } from 'react-router-dom'
+import { Home, Settings } from 'lucide-react'
 import {
   Tooltip,
   TooltipContent,
@@ -76,17 +54,11 @@ export default function Root() {
           </TooltipProvider>
         </nav>
       </aside>
-
-    
-        {/* <header className="px-3 py-2 font-semibold border-b flex gap-8">
-          <span>{document.location.href}</span>
-        </header> */}
-        <main className="h-screen ml-14 font-semibold relative">
-          <SalesProvider>
-            <Outlet />
-          </SalesProvider>
-        </main>
-    
+      <main className="h-screen ml-14 font-semibold relative">
+        <SalesProvider>
+          <Outlet />
+        </SalesProvider>
+      </main>
     </div>
   )
 }
