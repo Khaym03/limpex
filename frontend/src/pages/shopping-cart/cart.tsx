@@ -1,18 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useCleaningProducts } from '@/hooks/produtc'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { EventsOff, EventsOn } from 'wailsjs/runtime'
 import { GetCartItems, RemoveItemFromCart } from 'wailsjs/go/sales/Sales'
-
 import { ShoppingCart as ShoppingCartIcon } from 'lucide-react'
 import { X } from 'lucide-react'
 import { animated, useSpring } from '@react-spring/web'
+import { SalesCtx } from '@/context/sales-provider'
 
 interface IItem {
   item: OrderItemPayload
 }
 
-const EmptyShoppingCart = () => (
+const EmptyCart = () => (
   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-2">
     <ShoppingCartIcon size={'4rem'} />
     <span className="text-lg text-center">Vacio</span>
@@ -59,28 +59,9 @@ const Item = ({ item }: IItem) => {
   )
 }
 
-export default function ShoppingCart() {
-  const [cartItems, setCartItems] = useState<OrderItemPayload[]>([])
+export default function Cart() {
+  const { cartItems } = useContext(SalesCtx)
 
-  useEffect(() => {
-    GetCartItems().then(items => {
-      items ? setCartItems(items) : setCartItems([])
-    })
-  }, [])
-
-  useEffect(() => {
-    const updateCart = async () => {
-      const items = await GetCartItems()
-
-      items ? setCartItems(items) : setCartItems([])
-    }
-
-    EventsOn('update-cart', updateCart)
-
-    return () => {
-      EventsOff('update-cart')
-    }
-  }, [cartItems])
   return (
     <Card className="grid grid-cols-3 auto-rows-[94px] overflow-y-auto gap-2 bg-zinc-100 p-2 shadow-inner relative h-[316px] rounded-md">
       {cartItems.length > 0 ? (
@@ -88,7 +69,7 @@ export default function ShoppingCart() {
           return <Item key={item.ProductID} item={item} />
         })
       ) : (
-        <EmptyShoppingCart />
+        <EmptyCart />
       )}
     </Card>
   )

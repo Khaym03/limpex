@@ -10,3 +10,8 @@ type ProductStore interface {
 	GetById(id int64) (*domain.CleaningProduct, error)
 	UpdateCleaningProduct(id int64, name string, price float64, color string) error
 }
+
+type CostumerStore interface {
+	CreateCostumer(domain.CostumerPayload) error
+	GetCostumers() []domain.Costumer
+}

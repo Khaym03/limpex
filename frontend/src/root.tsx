@@ -1,6 +1,6 @@
 import SalesProvider from '@/context/sales-provider'
 import { Link, Outlet } from 'react-router-dom'
-import { Home, Settings } from 'lucide-react'
+import { Home, Settings, ShoppingCart as ShoppingCartIcon } from 'lucide-react'
 import {
   Tooltip,
   TooltipContent,
@@ -9,15 +9,21 @@ import {
 } from '@/components/ui/tooltip'
 import { useState } from 'react'
 
+
 const links = [
   {
     name: 'home',
-    link: '/selection',
+    link: '/shopping-cart',
     Icon: Home
   },
   {
-    name: 'configuracion',
-    link: '/config',
+    name: 'checkout',
+    link: '/checkout',
+    Icon: ShoppingCartIcon
+  },
+  {
+    name: 'ajustes',
+    link: '/settings',
     Icon: Settings
   }
 ]
@@ -54,7 +60,7 @@ export default function Root() {
           </TooltipProvider>
         </nav>
       </aside>
-      <main className="h-screen ml-14 font-semibold relative">
+      <main className="h-screen ml-14 font-medium relative">
         <SalesProvider>
           <Outlet />
         </SalesProvider>

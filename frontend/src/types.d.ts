@@ -7,6 +7,13 @@ interface CleaningProduct  {
     }
 }
 
+interface Costumer {
+    Id: number,
+    Name: string,
+    CreatedAt: string,
+    CI: string
+}
+
 interface Message {
     Success: boolean
     Error: string

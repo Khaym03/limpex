@@ -9,6 +9,7 @@ import {
 import { CreateProductDialog } from '@/dialogs/create-cleaning-product'
 import { DeleteProductDialog } from '@/dialogs/delete-cleaning-product'
 import { UpdateProductDialog } from '@/dialogs/update-cleaning-product'
+import { useFadeIn } from '@/lib/animations'
 import { useSpring, animated } from '@react-spring/web'
 import { Link } from 'react-router-dom'
 
@@ -40,14 +41,11 @@ const Nav = () => {
   )
 }
 
-export default function Config() {
-  const animation = useSpring({
-    from: { opacity: 0, y: -10 },
-    to: { opacity: 1, y: 0 }
-  })
+export default function Settings() {
+  const fadeIn = useFadeIn()
 
   return (
-    <animated.section style={{...animation}} className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
+    <animated.section style={{...fadeIn}} className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
       <Header />
 
       <div className="mx-auto grid w-full max-w-6xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">

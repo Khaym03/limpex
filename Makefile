@@ -9,7 +9,7 @@ migrate-down:
 	@goose -dir $(MIGRATION_DIR) sqlite3 $(DB_PATH) down
 
 migration:
-	@goose -dir internal/db/migrations create $(MigrationName) sql
+	@goose -dir $(MIGRATION_DIR) create $(MigrationName) sql
 
 data:
 	@echo "${DB_PATH}"

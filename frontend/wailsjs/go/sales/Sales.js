@@ -6,8 +6,16 @@ export function AddItemToCart(arg1) {
   return window['go']['sales']['Sales']['AddItemToCart'](arg1);
 }
 
+export function CreateCostumer(arg1) {
+  return window['go']['sales']['Sales']['CreateCostumer'](arg1);
+}
+
 export function GetCartItems() {
   return window['go']['sales']['Sales']['GetCartItems']();
+}
+
+export function GetCostumers() {
+  return window['go']['sales']['Sales']['GetCostumers']();
 }
 
 export function RemoveItemFromCart(arg1) {

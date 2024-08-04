@@ -4,11 +4,16 @@ import (
 	"time"
 )
 
-type Client struct {
+type Costumer struct {
 	Id        int64
 	Name      string
 	CreatedAt time.Time
-	CI        int64
+	CI        string
+}
+
+type CostumerPayload struct {
+	Name string `json:"name"`
+	CI   string `json:"ci"`
 }
 
 type Product struct {

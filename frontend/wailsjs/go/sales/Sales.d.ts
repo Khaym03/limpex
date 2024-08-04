@@ -5,7 +5,11 @@ import {context} from '../models';
 
 export function AddItemToCart(arg1:any):Promise<void>;
 
+export function CreateCostumer(arg1:any):Promise<domain.Message>;
+
 export function GetCartItems():Promise<Array<domain.OrderItemPayload>>;
+
+export function GetCostumers():Promise<Array<domain.Costumer>>;
 
 export function RemoveItemFromCart(arg1:number):Promise<void>;
 

@@ -1,12 +1,13 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import Root from './routes/root'
+import Root from './root'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import App from './App'
-import Selection from './routes/product-selection/selection'
-import Config from './routes/config/config'
+import ShoppingCart from './pages/shopping-cart/shopping-cart'
+import Settings from './pages/settings/settings'
 import { Toaster } from '@/components/ui/toaster'
+import Checkout from './pages/checkout/checkout'
 
 const container = document.getElementById('root')
 
@@ -17,8 +18,9 @@ const router = createBrowserRouter([
     element: <Root />,
     children: [
       { path: '/', element: <App /> },
-      { path: '/selection', element: <Selection /> },
-      { path: '/config', element: <Config /> }
+      { path: '/shopping-cart', element: <ShoppingCart /> },
+      { path: '/checkout', element: <Checkout /> },
+      { path: '/settings', element: <Settings /> }
     ]
   }
 ])

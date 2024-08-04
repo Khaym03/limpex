@@ -1,6 +1,6 @@
 import ProductSlice from './product-slice'
 import Measure from './measure'
-import ShoppingCart from './shopping-cart'
+import Cart from './cart'
 import { Button } from '@/components/ui/button'
 import { Trash2, Receipt } from 'lucide-react'
 import { ResetCart } from 'wailsjs/go/sales/Sales'
@@ -26,7 +26,7 @@ const CartActions = () => {
   )
 }
 
-export default function Selection() {
+export default function ShoppingCart() {
   const fase = useSpring({
     from: { opacity: 0 },
     to: { opacity: 1 }
@@ -40,7 +40,7 @@ export default function Selection() {
         className="grid grid-cols-[1.25fr,3fr,0.75fr] gap-6 w-11/12 mx-auto"
       >
         <Measure />
-        <ShoppingCart />
+        <Cart />
         <CartActions />
       </animated.div>
     </animated.div>
