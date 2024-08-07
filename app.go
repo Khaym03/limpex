@@ -39,13 +39,16 @@ func (a *App) Greet(name string) string {
 	return fmt.Sprintf("Hello %s, It's show time!", name)
 }
 
-func (a *App) CreateCleaningProduct(name string, price float64, color string) domain.Message {
-	err := a.ProductService.CreateCleaningProduct(name, price, color)
+func (a *App) CreateCleaningProduct(productPayload any) domain.Message {
+	var pp domain.ProductPayload
+	common.JSToStruc(productPayload, &pp)
+
+	_, err := a.ProductService.CreateProduct(pp)
 
 	return common.MakeMessage(err)
 }
 
-func (a *App) GetCleaningProducts() []domain.CleaningProduct {
+func (a *App) GetCleaningProducts() []domain.Product {
 	return a.ProductService.GetCleaningProducts()
 }
 
@@ -55,7 +58,7 @@ func (a *App) DeleteProductById(id int64) domain.Message {
 	return common.MakeMessage(err)
 }
 
-func (a *App) GetCleaningProductById(id int64) *domain.CleaningProduct {
+func (a *App) GetCleaningProductById(id int64) *domain.Product {
 	cp, err := a.ProductService.GetById(id)
 	if err != nil {
 		fmt.Println(err)
@@ -64,7 +67,11 @@ func (a *App) GetCleaningProductById(id int64) *domain.CleaningProduct {
 	return cp
 }
 
-func (a *App) UpdateCleaningProduct(id int64, name string, price float64, color string) domain.Message {
-	err := a.ProductService.UpdateCleaningProduct(id, name, price, color)
+func (a *App) UpdateCleaningProduct(product any) domain.Message {
+	var p domain.Product
+
+	common.JSToStruc(product, &p)
+
+	err := a.ProductService.UpdateCleaningProduct(p)
 	return common.MakeMessage(err)
 }

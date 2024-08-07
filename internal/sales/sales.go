@@ -11,6 +11,7 @@ import (
 	"github.com/khaym03/limpex/internal/core/ports"
 	"github.com/khaym03/limpex/internal/core/services/cart"
 	"github.com/khaym03/limpex/internal/core/services/costumer"
+	"github.com/khaym03/limpex/internal/core/services/order"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -28,33 +29,27 @@ var salesInstance *Sales
 var once sync.Once
 
 type Sales struct {
-	Cart          *cart.Cart
+	ShoppingCart  ports.ShoppingCart
 	CostumerStore ports.CostumerStore
+	OrderStore    ports.OrderStore
 	ctx           context.Context
 }
 
 func NewSales() *Sales {
 	once.Do(func() {
 		dbConn := repository.NewSQLiteStorage()
+
 		costumerSrv := costumer.NewService(dbConn)
+		orderSrv := order.Service(dbConn)
 
 		salesInstance = &Sales{
-			Cart:          cart.NewCart(),
+			ShoppingCart:  cart.Service(dbConn),
 			CostumerStore: costumerSrv,
+			OrderStore:    orderSrv,
 		}
 	})
 
 	return salesInstance
-}
-
-func NewOrderItem(id int64, productID int64, quantity float64, unitPrice float64, subtotal float64) *domain.OrderItem {
-	return &domain.OrderItem{
-		Id:        id,
-		ProductID: productID,
-		Quantity:  quantity,
-		UnitPrice: unitPrice,
-		Subtotal:  subtotal,
-	}
 }
 
 func (s *Sales) Start(ctx context.Context) {
@@ -82,22 +77,22 @@ func (s *Sales) AddItemToCart(orderItemPayload any) {
 
 	fmt.Println(oip)
 
-	s.Cart.AddItem(&oip)
+	s.ShoppingCart.AddItem(&oip)
 
 	runtime.EventsEmit(s.ctx, updateCart)
 }
 
 func (s *Sales) GetCartItems() []domain.OrderItemPayload {
-	return s.Cart.Items()
+	return s.ShoppingCart.Items()
 }
 
 func (s *Sales) RemoveItemFromCart(id int64) {
-	s.Cart.RemoveItem(id)
+	s.ShoppingCart.RemoveItem(id)
 	runtime.EventsEmit(s.ctx, updateCart)
 }
 
 func (s *Sales) ResetCart() {
-	s.Cart.Reset()
+	s.ShoppingCart.Clear()
 	runtime.EventsEmit(s.ctx, updateCart)
 }
 
@@ -115,4 +110,11 @@ func (s *Sales) CreateCostumer(costumerPayload any) domain.Message {
 
 func (s *Sales) GetCostumers() []domain.Costumer {
 	return s.CostumerStore.GetCostumers()
+}
+
+func (s *Sales) SaveOrder(op domain.OrderPayload) domain.Message {
+	err := s.OrderStore.SaveOrder(&op)
+
+	runtime.EventsEmit(s.ctx, updateCart)
+	return common.MakeMessage(err)
 }

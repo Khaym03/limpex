@@ -9,14 +9,24 @@ import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Fingerprint, CreditCard, HandCoins } from 'lucide-react'
 
-export default function PaymentMethod() {
+interface PaymentMethodsProps {
+  onChagePaymentMethod: React.Dispatch<React.SetStateAction<PaymentMethod>>
+}
+
+export default function PaymentMethods({
+  onChagePaymentMethod
+}: PaymentMethodsProps) {
   return (
-    <Card className='h-max'>
+    <Card className="h-max">
       <CardHeader>
         <CardTitle>Metodos de pago</CardTitle>
       </CardHeader>
       <CardContent className="grid gap-6">
-        <RadioGroup defaultValue="bio-pago" className="grid grid-cols-3 gap-4">
+        <RadioGroup
+          onValueChange={v => onChagePaymentMethod(v as PaymentMethod)}
+          defaultValue="bio-pago"
+          className="grid grid-cols-3 gap-4"
+        >
           <div>
             <RadioGroupItem
               value="bio-pago"
@@ -32,7 +42,11 @@ export default function PaymentMethod() {
             </Label>
           </div>
           <div>
-            <RadioGroupItem value="efectivo" id="efectivo" className="peer sr-only" />
+            <RadioGroupItem
+              value="efectivo"
+              id="efectivo"
+              className="peer sr-only"
+            />
             <Label
               htmlFor="efectivo"
               className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
@@ -42,7 +56,11 @@ export default function PaymentMethod() {
             </Label>
           </div>
           <div>
-            <RadioGroupItem value="tarjeta" id="tarjeta" className="peer sr-only" />
+            <RadioGroupItem
+              value="tarjeta"
+              id="tarjeta"
+              className="peer sr-only"
+            />
             <Label
               htmlFor="tarjeta"
               className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"

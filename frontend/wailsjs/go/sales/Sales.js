@@ -26,6 +26,10 @@ export function ResetCart() {
   return window['go']['sales']['Sales']['ResetCart']();
 }
 
+export function SaveOrder(arg1) {
+  return window['go']['sales']['Sales']['SaveOrder'](arg1);
+}
+
 export function Start(arg1) {
   return window['go']['sales']['Sales']['Start'](arg1);
 }

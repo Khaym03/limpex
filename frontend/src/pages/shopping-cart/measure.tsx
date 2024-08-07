@@ -49,7 +49,7 @@ export default function Measure() {
     if(!selectedProduct) return
     
     if(bsInput){
-      const quantity = parseInt(((bsInput / selectedProduct.Price) * 1000 ).toString())
+      const quantity = parseInt(((bsInput / selectedProduct.sale_price) * 1000 ).toString())
       addToShoppingCart(selectedProduct,quantity)
     }
 

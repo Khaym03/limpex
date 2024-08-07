@@ -25,14 +25,14 @@ export function DeleteProductDialog() {
       console.error('Producto no seleccionado o lista de productos vacía.')
       return
     }
-    const selectedProd = products.find(p => p.Id === prodId)
+    const selectedProd = products.find(p => p.id === prodId)
 
     const msg = (await DeleteProductById(prodId)) as Message
 
     if (msg.Success) {
       const { dismiss } = toast({
         title: 'Borrado',
-        description: `Se a borrado ${selectedProd?.Name} correctamente.`
+        description: `Se a borrado ${selectedProd?.name} correctamente.`
       })
 
       setTimeout(() => dismiss(), 2000)

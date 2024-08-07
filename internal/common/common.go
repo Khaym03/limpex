@@ -3,6 +3,7 @@ package common
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"github.com/khaym03/limpex/internal/core/domain"
 )
@@ -21,6 +22,10 @@ func MakeMessage(err error) domain.Message {
 	}
 }
 
+func CurrentTimestamp() string {
+	return time.Now().Format(time.RFC3339)
+}
+
 func JSToStruc(v any, shape interface{}) {
 	data, err := json.Marshal(v)
 	if err != nil {
@@ -31,4 +36,12 @@ func JSToStruc(v any, shape interface{}) {
 	if err != nil {
 		fmt.Println(err)
 	}
+}
+
+func StructToJS(v any) string {
+	data, err := json.Marshal(v)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return string(data)
 }

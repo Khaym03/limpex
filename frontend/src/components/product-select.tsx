@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/select'
 
 interface IProductSelect  {
-    products: CleaningProduct[],
+    products: Product[],
     onSelect: (id: number) => void
 }
 
@@ -19,8 +19,8 @@ export function ProductSelect({ products, onSelect }:IProductSelect) {
       </SelectTrigger>
       <SelectContent>
         {products.map(p => (
-          <SelectItem key={p.Id} value={p.Id.toString()}>
-            {p.Name}
+          <SelectItem key={p.id} value={p.id.toString()}>
+            {p.name}
           </SelectItem>
         ))}
       </SelectContent>

@@ -7,9 +7,10 @@ import { ShoppingCart as ShoppingCartIcon } from 'lucide-react'
 import { X } from 'lucide-react'
 import { animated, useSpring } from '@react-spring/web'
 import { SalesCtx } from '@/context/sales-provider'
+import { domain } from 'wailsjs/go/models'
 
 interface IItem {
-  item: OrderItemPayload
+  item: domain.OrderItemPayload
 }
 
 const EmptyCart = () => (
@@ -22,10 +23,13 @@ const EmptyCart = () => (
 const Item = ({ item }: IItem) => {
   const { products } = useCleaningProducts()
 
-  const product = products.find(p => item.ProductID === p.Id)
+  const product = products.find(p => {
+    console.log(item, p.id)
+    return item.product_id === p.id
+  })
 
   const handler = () => {
-    RemoveItemFromCart(item.ProductID)
+    RemoveItemFromCart(item.product_id)
   }
 
   const animation = useSpring({
@@ -44,15 +48,15 @@ const Item = ({ item }: IItem) => {
       >
         <CardHeader className="py-3 flex flex-row">
           <CardTitle className="text-black text-base capitalize ">
-            {product?.Name}
+            {product?.name}
           </CardTitle>
           <X size={'1.125rem'} className="ml-auto" />
         </CardHeader>
 
         <CardContent className="text-sm border-t text-muted-foreground flex py-2 justify-between">
-          <span className=" text-muted-foreground">{item.Subtotal} $</span>
+          <span className=" text-muted-foreground">{item.subtotal} $</span>
           <span>-</span>
-          <span className=" text-muted-foreground">{`${item.Quantity} Ml`}</span>
+          <span className=" text-muted-foreground">{`${item.quantity} Ml`}</span>
         </CardContent>
       </Card>
     </animated.div>
@@ -66,7 +70,7 @@ export default function Cart() {
     <Card className="grid grid-cols-3 auto-rows-[94px] overflow-y-auto gap-2 bg-zinc-100 p-2 shadow-inner relative h-[316px] rounded-md">
       {cartItems.length > 0 ? (
         cartItems.map(item => {
-          return <Item key={item.ProductID} item={item} />
+          return <Item key={item.product_id} item={item} />
         })
       ) : (
         <EmptyCart />

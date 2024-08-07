@@ -3,15 +3,28 @@ package ports
 import "github.com/khaym03/limpex/internal/core/domain"
 
 type ProductStore interface {
-	CreateProduct(name string, price float64) (int64, error)
-	CreateCleaningProduct(name string, price float64, color string) error
-	GetCleaningProducts() []domain.CleaningProduct
+	CreateProduct(domain.ProductPayload) (int64, error)
+	GetCleaningProducts() []domain.Product
 	DeleteById(id int64) error
-	GetById(id int64) (*domain.CleaningProduct, error)
-	UpdateCleaningProduct(id int64, name string, price float64, color string) error
+	GetById(id int64) (*domain.Product, error)
+	UpdateCleaningProduct(domain.Product) error
 }
 
 type CostumerStore interface {
 	CreateCostumer(domain.CostumerPayload) error
 	GetCostumers() []domain.Costumer
+}
+
+type OrderStore interface {
+	SaveOrder(*domain.OrderPayload) error
+	GetOrderById(id int64) (*domain.Order, error)
+}
+
+type ShoppingCart interface {
+	AddItem(o *domain.OrderItemPayload)
+	RemoveItem(id int64)
+	Items() []domain.OrderItemPayload
+	Clear()
+	SaveItems(orderId int64) error
+	CalcTotal() float64
 }

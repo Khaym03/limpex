@@ -2,7 +2,8 @@
 CREATE TABLE IF NOT EXISTS products (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE,
-    price REAL NOT NULL
+    purchase_price REAL NOT NULL,  
+    sale_price REAL NOT NULL       
 );
 
 -- +goose Down

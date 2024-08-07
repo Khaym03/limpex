@@ -17,7 +17,7 @@ import { TbBottleFilled } from 'react-icons/tb'
 
 
 interface IQuanButton {
-  product: CleaningProduct
+  product: Product
   quantity: number
 }
 
@@ -51,20 +51,20 @@ export default function ProductSlice() {
     >
       <CarouselContent className="px-2 py-3">
         {products &&
-          animation((style, p) => (
+          animation((style, p: Product) => (
             <CarouselItem
-              key={p.Id}
+              key={p.id}
               className="md:basis-1/4 sm:basis-1/4 lg:basis-1/6"
             >
               <animated.div style={{...style}}>
                 <Card
                   className={`[&>*]:select-none relative aspect-[2/3] overflow-hidden flex flex-col gap-2 cursor-pointer border-2  transition ${
-                    selectedProduct?.Id === p.Id
+                    selectedProduct?.id === p.id
                       ? 'border-black -translate-y-2'
                       : 'border-transparent'
                   }`}
                   onClick={() => {
-                    if (selectedProduct?.Id === p.Id) setSelectedProduct(null)
+                    if (selectedProduct?.id === p.id) setSelectedProduct(null)
                     else setSelectedProduct(p)
                   }}
                 >
@@ -79,9 +79,9 @@ export default function ProductSlice() {
 
                   <div className="text-left px-6 py-4 flex flex-col">
                     <span className="text-black font-medium capitalize text-base">
-                      {p.Name}
+                      {p.name}
                     </span>
-                    <span className="text-zinc-500 font-medium text-sm">{`${p.Price} $`}</span>
+                    <span className="text-zinc-500 font-medium text-sm">{`${p.sale_price} $`}</span>
                   </div>
                 </Card>
               </animated.div>

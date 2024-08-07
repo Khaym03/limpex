@@ -1,36 +1,47 @@
 import { createContext, useEffect, useState } from 'react'
-import { GetCartItems, GetCostumers } from 'wailsjs/go/sales/Sales'
+import { GetCartItems, GetCostumers, SaveOrder } from 'wailsjs/go/sales/Sales'
 import { EventsOff, EventsOn } from 'wailsjs/runtime/runtime'
+import {domain} from "wailsjs/go/models"
+import { useToast } from '@/components/ui/use-toast'
+
+
 
 type SalesCtxType = {
-  selectedProduct: CleaningProduct | null
+  selectedProduct: Product | null
   setSelectedProduct: React.Dispatch<
-    React.SetStateAction<CleaningProduct | null>
+    React.SetStateAction<Product | null>
   >
-  cartItems: OrderItemPayload[]
-  setCartItems: React.Dispatch<React.SetStateAction<OrderItemPayload[]>>
+  cartItems: domain.OrderItemPayload[]
+  setCartItems: React.Dispatch<React.SetStateAction<domain.OrderItemPayload[]>>
 
+  paymentMethod: PaymentMethod
+  setPaymentMethod: React.Dispatch<React.SetStateAction<PaymentMethod>>
+  save: (costumerId?: number) => Promise<void>
   // costumers: Costumer[]
   // setCostumers: React.Dispatch<React.SetStateAction<Costumer[]>>
 }
 
-const defaultContextValue: SalesCtxType = {
+const defaultValue: SalesCtxType = {
   selectedProduct: null,
-  setSelectedProduct: () => {},
+  setSelectedProduct: () => {}, 
   cartItems: [],
-  setCartItems: () => {},
-  // costumers: [],
-  // setCostumers: () => {}
-}
+  setCartItems: () => {}, 
+  paymentMethod: "bio-pago",
+  setPaymentMethod: () => {}, 
+  save: async () => {}, 
+};
 
-export const SalesCtx = createContext(defaultContextValue)
+
+export const SalesCtx = createContext<SalesCtxType>(defaultValue)
 
 export default function SalesProvider({ children }: any) {
   const [selectedProduct, setSelectedProduct] =
-    useState<null | CleaningProduct>(null)
+    useState<null | Product>(null)
 
-  const [cartItems, setCartItems] = useState<OrderItemPayload[]>([])
-  
+  const [cartItems, setCartItems] = useState<domain.OrderItemPayload[]>([])
+
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("bio-pago")
+  useEffect(() => console.log(paymentMethod), [paymentMethod])
 
   useEffect(() => {
     GetCartItems().then(items => {
@@ -38,6 +49,29 @@ export default function SalesProvider({ children }: any) {
     })
   }, [])
 
+
+  const { toast } = useToast()
+
+  const save = async (costumerId?: number) => {
+    const orderPayload: domain.OrderPayload = {
+      costumer_id: costumerId,
+      payment_method: paymentMethod
+    }
+
+    const msg = await SaveOrder(orderPayload)
+    if (msg.Success) {
+      const { dismiss } = toast({
+        title: 'Creado exitosamente'
+      })
+
+      setTimeout(dismiss, 3000)
+    } else {
+      toast({
+        title: 'Error',
+        description: msg.Error
+      })
+    }
+  }
  
 
   useEffect(() => {
@@ -63,6 +97,9 @@ export default function SalesProvider({ children }: any) {
         setSelectedProduct,
         cartItems,
         setCartItems,
+        paymentMethod,
+        setPaymentMethod,
+        save
         // costumers,
         // setCostumers
       }}

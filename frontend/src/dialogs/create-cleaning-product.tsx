@@ -15,38 +15,50 @@ import { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
 import {} from '@radix-ui/react-dialog'
 import { CreateCleaningProduct } from 'wailsjs/go/main/App'
 import { useToast } from '@/components/ui/use-toast'
+import { cp } from 'fs'
 
 export function CreateProductDialog() {
-  const [productName, setProductName] = useState('')
-  const [productPrice, setProductPrice] = useState(0)
+  const [name, setName] = useState('')
+  const [purchasePrice, setPurchasePrice] = useState(0)
+  const [salePrice, setSalePrice] = useState(0)
   const [disable, setDisable] = useState(true)
   const { toast } = useToast()
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target
 
-    if (id === 'price') {
+    if (id === 'purchase-price') {
       const priceValue = parseFloat(value)
-      setProductPrice(isNaN(priceValue) || priceValue < 0 ? 0 : priceValue)
+      setPurchasePrice(isNaN(priceValue) || priceValue < 0 ? 0 : priceValue)
     }
+
+    if (id === 'sale-price') {
+      const priceValue = parseFloat(value)
+      setSalePrice(isNaN(priceValue) || priceValue < 0 ? 0 : priceValue)
+    }
+
     if (id === 'name') {
-      setProductName(value)
+      setName(value)
     }
   }
 
   const resetForm = () => {
-    setProductName('')
-    setProductPrice(0)
+    setName('')
+    setPurchasePrice(0)
+    setSalePrice(0)
     setDisable(true)
   }
 
   const handleCreation = async (e: MouseEvent<HTMLButtonElement>) => {
-    const msg = (await CreateCleaningProduct(
-      productName,
-      productPrice,
-      'text-slate-700'
-    )) as Message
+    const pp: ProductPaylaod = {
+      name: name,
+      purchase_price: purchasePrice,
+      sale_price: salePrice
+    }
 
+    const msg = (await CreateCleaningProduct(pp)) as Message
+
+    
     if (msg.Success) {
       const { dismiss } = toast({
         title: 'Creado exitosamente'
@@ -64,13 +76,13 @@ export function CreateProductDialog() {
   }
 
   useEffect(() => {
-    setDisable(!productName || !productPrice)
-  }, [productName, productPrice])
+    setDisable(!name || !purchasePrice || !salePrice)
+  }, [name, purchasePrice, salePrice])
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant='ghost'>Crear Producto</Button>
+        <Button variant="ghost">Crear Producto</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -88,16 +100,32 @@ export function CreateProductDialog() {
             <Input
               id="name"
               onChange={handleInputChange}
-              value={productName}
+              value={name}
               className="col-span-3"
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4 relative">
-            <Label htmlFor="price" className="text-right">
-              Precio
+            <Label htmlFor="purchase-price" className="text-right">
+              Precio de compra
             </Label>
             <Input
-              id="price"
+              id="purchase-price"
+              onChange={handleInputChange}
+              placeholder="00.00"
+              className="col-span-3 appearance-none"
+              type="number"
+            />
+            <div className="pointer-events-none flex items-center absolute right-4">
+              <span className="text-slate-400 text-sm">$</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-4 items-center gap-4 relative">
+            <Label htmlFor="sale-price" className="text-right">
+              Precio de venta
+            </Label>
+            <Input
+              id="sale-price"
               onChange={handleInputChange}
               placeholder="00.00"
               className="col-span-3 appearance-none"

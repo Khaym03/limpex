@@ -15,19 +15,24 @@ import {
   DropdownMenuSeparator
 } from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
+import { useToast } from '@/components/ui/use-toast'
 import { SalesCtx } from '@/context/sales-provider'
 import { useCleaningProducts } from '@/hooks/produtc'
 import { CreditCard } from 'lucide-react'
 import { useContext } from 'react'
+import { domain } from 'wailsjs/go/models'
+import { SaveOrder } from 'wailsjs/go/sales/Sales'
+
+
 
 export default function Preorder() {
-  const { cartItems } = useContext(SalesCtx)
+  const { cartItems, save } = useContext(SalesCtx)
   const { products } = useCleaningProducts()
 
-  const total = () => cartItems.reduce((a, b) => a + b.Subtotal, 0).toFixed(2)
+  const total = () => cartItems.reduce((a, b) => a + b.subtotal, 0).toFixed(2)
 
-  const prodName = (item: OrderItemPayload) =>
-    products?.find(p => p.Id === item.ProductID)?.Name || ''
+  const prodName = (item: domain.OrderItemPayload) =>
+    products?.find(p => p.id === item.product_id)?.name || ''
 
   return (
     <Card className="flex flex-col overflow-hidden md:w-[336px] lg:w-[336px]">
@@ -45,7 +50,7 @@ export default function Preorder() {
           <ul className="grid gap-3">
             {cartItems &&
               cartItems.map(item => (
-               <Item item={item} prodName={prodName(item)}/>
+                <Item item={item} prodName={prodName(item)} />
               ))}
           </ul>
           <Separator className="my-2" />
@@ -58,24 +63,26 @@ export default function Preorder() {
         </div>
       </CardContent>
       <CardFooter className="border-t py-4 flex items-end justify-end">
-        <Button className="">Archivar</Button>
+        <Button onClick={() => save()} className="">
+          Archivar
+        </Button>
       </CardFooter>
     </Card>
   )
 }
 
 interface ItemProps {
-  item: OrderItemPayload
+  item: domain.OrderItemPayload
   prodName: string
 }
 
-function Item({item, prodName}: ItemProps) {
+function Item({ item, prodName }: ItemProps) {
   return (
-    <li key={item.ProductID} className="flex items-center justify-between">
+    <li key={item.product_id} className="flex items-center justify-between">
       <span className="text-muted-foreground">
-        {prodName} x <span>{item.Quantity / 1000}</span>
+        {prodName} x <span>{item.quantity / 1000}</span>
       </span>
-      <span>${item.Subtotal.toFixed(2)}</span>
+      <span>${item.subtotal.toFixed(2)}</span>
     </li>
   )
 }

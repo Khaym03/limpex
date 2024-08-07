@@ -1,27 +1,33 @@
-interface CleaningProduct  {
-    Id: number,
-    Name: string,
-    Price: number,
-    CleaningProductData: {
-        Color: string
-    }
+interface ProductPaylaod {
+  name: string
+  purchase_price: number
+  sale_price: number
+}
+
+interface Product {
+  id: number
+  name: string
+  purchase_price: number
+  sale_price: number
 }
 
 interface Costumer {
-    Id: number,
-    Name: string,
-    CreatedAt: string,
-    CI: string
+  Id: number
+  Name: string
+  CreatedAt: string
+  CI: string
 }
 
 interface Message {
-    Success: boolean
-    Error: string
+  Success: boolean
+  Error: string
 }
 
 interface OrderItemPayload {
-    ProductID: number
-    Quantity: number
-    UnitPrice: number
-    Subtotal: number
+  ProductID: number
+  Quantity: number
+  UnitPrice: number
+  Subtotal: number
 }
+
+type PaymentMethod = "bio-pago" | "cash" | "card" | "transfer"

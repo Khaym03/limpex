@@ -3,7 +3,6 @@ package costumer
 import (
 	"database/sql"
 	"fmt"
-	"time"
 
 	"github.com/khaym03/limpex/internal/core/domain"
 )
@@ -18,13 +17,10 @@ func NewService(db *sql.DB) *Service {
 
 // CI is optional.
 func (s *Service) CreateCostumer(cp domain.CostumerPayload) error {
-	createdAt := time.Now().Format(time.RFC3339)
-
 	_, err := s.db.Exec(
-		"INSERT INTO costumers(name,ci,createdAt) VALUES(?,?,?)",
+		"INSERT INTO costumers(name,ci) VALUES(?,?)",
 		cp.Name,
 		cp.CI,
-		createdAt,
 	)
 	if err != nil {
 		return err

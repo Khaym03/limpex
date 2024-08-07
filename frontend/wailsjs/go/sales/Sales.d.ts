@@ -15,4 +15,6 @@ export function RemoveItemFromCart(arg1:number):Promise<void>;
 
 export function ResetCart():Promise<void>;
 
+export function SaveOrder(arg1:domain.OrderPayload):Promise<domain.Message>;
+
 export function Start(arg1:context.Context):Promise<void>;
