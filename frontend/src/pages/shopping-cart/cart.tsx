@@ -14,8 +14,8 @@ interface IItem {
 }
 
 const EmptyCart = () => (
-  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-2">
-    <ShoppingCartIcon size={'4rem'} />
+  <div className="absolute text-slate-500 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-2">
+    <ShoppingCartIcon size={'3rem'} />
     <span className="text-lg text-center">Vacio</span>
   </div>
 )
@@ -67,7 +67,7 @@ export default function Cart() {
   const { cartItems } = useContext(SalesCtx)
 
   return (
-    <Card className="grid grid-cols-3 auto-rows-[94px] overflow-y-auto gap-2 bg-zinc-100 p-2 shadow-inner relative h-[316px] rounded-md">
+    <Card className="grid grid-cols-3 auto-rows-[94px] overflow-y-auto gap-2 bg-zinc-100 p-2 shadow-inner relative rounded-md">
       {cartItems.length > 0 ? (
         cartItems.map(item => {
           return <Item key={item.product_id} item={item} />

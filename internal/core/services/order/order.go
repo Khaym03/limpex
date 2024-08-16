@@ -35,6 +35,11 @@ func (s *service) SaveOrder(op *domain.OrderPayload) error {
 		return err
 	}
 
+	// Save the order but dont mark as paid
+	if op.CostumerID != nil {
+		return nil
+	}
+
 	err = s.MarkAsPaid(id)
 	if err != nil {
 		return err

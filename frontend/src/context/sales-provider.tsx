@@ -3,6 +3,7 @@ import { GetCartItems, GetCostumers, SaveOrder } from 'wailsjs/go/sales/Sales'
 import { EventsOff, EventsOn } from 'wailsjs/runtime/runtime'
 import {domain} from "wailsjs/go/models"
 import { useToast } from '@/components/ui/use-toast'
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -51,6 +52,7 @@ export default function SalesProvider({ children }: any) {
 
 
   const { toast } = useToast()
+  const navigate = useNavigate()
 
   const save = async (costumerId?: number) => {
     const orderPayload: domain.OrderPayload = {
@@ -65,6 +67,8 @@ export default function SalesProvider({ children }: any) {
       })
 
       setTimeout(dismiss, 3000)
+      
+      navigate('/shopping-cart')
     } else {
       toast({
         title: 'Error',

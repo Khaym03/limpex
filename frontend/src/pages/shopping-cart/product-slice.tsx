@@ -54,7 +54,7 @@ export default function ProductSlice() {
           animation((style, p: Product) => (
             <CarouselItem
               key={p.id}
-              className="md:basis-1/4 sm:basis-1/4 lg:basis-1/6"
+              className="md:basis-1/4 sm:basis-1/4 lg:basis-1/5"
             >
               <animated.div style={{...style}}>
                 <Card

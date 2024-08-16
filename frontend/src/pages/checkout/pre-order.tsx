@@ -49,8 +49,8 @@ export default function Preorder() {
           <div className="font-semibold">Detalles de al orden</div>
           <ul className="grid gap-3">
             {cartItems &&
-              cartItems.map(item => (
-                <Item item={item} prodName={prodName(item)} />
+              cartItems.map((item) => (
+                <Item key={item.product_id} item={item} prodName={prodName(item)} />
               ))}
           </ul>
           <Separator className="my-2" />
