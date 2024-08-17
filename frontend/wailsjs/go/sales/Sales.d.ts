@@ -11,6 +11,10 @@ export function GetCartItems():Promise<Array<domain.OrderItemPayload>>;
 
 export function GetCostumers():Promise<Array<domain.Costumer>>;
 
+export function ListOrders():Promise<Array<domain.Order>>;
+
+export function ListOrdersByDate(arg1:domain.DateArg):Promise<Array<domain.Order>>;
+
 export function RemoveItemFromCart(arg1:number):Promise<void>;
 
 export function ResetCart():Promise<void>;

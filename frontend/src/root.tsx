@@ -22,6 +22,11 @@ const links = [
     Icon: ShoppingCartIcon
   },
   {
+    name: 'today-info',
+    link: '/today-info',
+    Icon: ShoppingCartIcon
+  },
+  {
     name: 'ajustes',
     link: '/settings',
     Icon: Settings

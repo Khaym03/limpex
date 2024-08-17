@@ -1,6 +1,10 @@
 package ports
 
-import "github.com/khaym03/limpex/internal/core/domain"
+import (
+	"time"
+
+	"github.com/khaym03/limpex/internal/core/domain"
+)
 
 type ProductStore interface {
 	CreateProduct(domain.ProductPayload) (int64, error)
@@ -18,6 +22,9 @@ type CostumerStore interface {
 type OrderStore interface {
 	SaveOrder(*domain.OrderPayload) error
 	GetOrderById(id int64) (*domain.Order, error)
+	ListOrders() ([]domain.Order, error)
+	ListOrdersByDate(date time.Time) ([]domain.Order, error)
+	ListOrdersByDateRange(startDate, endDate time.Time) ([]domain.Order, error)
 }
 
 type ShoppingCart interface {

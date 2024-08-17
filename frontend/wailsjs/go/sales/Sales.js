@@ -18,6 +18,14 @@ export function GetCostumers() {
   return window['go']['sales']['Sales']['GetCostumers']();
 }
 
+export function ListOrders() {
+  return window['go']['sales']['Sales']['ListOrders']();
+}
+
+export function ListOrdersByDate(arg1) {
+  return window['go']['sales']['Sales']['ListOrdersByDate'](arg1);
+}
+
 export function RemoveItemFromCart(arg1) {
   return window['go']['sales']['Sales']['RemoveItemFromCart'](arg1);
 }

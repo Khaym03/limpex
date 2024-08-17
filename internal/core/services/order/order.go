@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"sync"
+	"time"
 
 	"github.com/khaym03/limpex/internal/common"
 	"github.com/khaym03/limpex/internal/core/domain"
@@ -184,4 +185,129 @@ func (s *service) MarkAsPaid(orderId int64) error {
 	}
 
 	return nil
+}
+
+func (s *service) ListOrders() ([]domain.Order, error) {
+	rows, err := s.db.Query(`SELECT * FROM orders`)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	var orders []domain.Order
+	for rows.Next() {
+		var o domain.Order
+		err := rows.Scan(
+			&o.Id,
+			&o.CostumerID,
+			&o.CreatedAt,
+			&o.UpdatedAt,
+			&o.PaymentMethod,
+			&o.Status,
+			&o.PaidAt,
+			&o.TotalAmount,
+		)
+
+		if err != nil {
+			fmt.Println(err)
+			return nil, err
+		}
+
+		items, _ := s.GetOrderItemsByOrderId(o.Id)
+		o.Items = items
+
+		orders = append(orders, o)
+	}
+
+	return orders, nil
+}
+
+func (s *service) ListOrdersByDate(date time.Time) ([]domain.Order, error) {
+	// Format date
+	dateString := date.Format("2006-01-02") // Format YYYY-MM-DD
+
+	fmt.Println("after fromat date ", dateString)
+
+	query := `SELECT * FROM orders WHERE DATE(created_at) = ?`
+	rows, err := s.db.Query(query, dateString)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	var orders []domain.Order
+	for rows.Next() {
+		var o domain.Order
+		err := rows.Scan(
+			&o.Id,
+			&o.CostumerID,
+			&o.CreatedAt,
+			&o.UpdatedAt,
+			&o.PaymentMethod,
+			&o.Status,
+			&o.PaidAt,
+			&o.TotalAmount,
+		)
+
+		if err != nil {
+			fmt.Println(err)
+			return nil, err
+		}
+
+		items, _ := s.GetOrderItemsByOrderId(o.Id)
+		o.Items = items
+
+		orders = append(orders, o)
+	}
+
+	return orders, nil
+}
+
+func (s *service) ListOrdersByDateRange(startDate, endDate time.Time) ([]domain.Order, error) {
+	endDate = endDate.Add(24 * time.Hour).Add(-time.Nanosecond)
+
+	// Formato YYYY-MM-DD HH:MM:SS
+	startDateString := startDate.Format("2006-01-02 15:04:05")
+	endDateString := endDate.Format("2006-01-02 15:04:05")
+
+	fmt.Println("Rango de fechas: desde", startDateString, "hasta", endDateString)
+
+	// Realizar la consulta SQL filtrando por el rango de fechas
+	query := `SELECT * FROM orders WHERE created_at BETWEEN ? AND ?`
+	rows, err := s.db.Query(query, startDateString, endDateString)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	var orders []domain.Order
+	for rows.Next() {
+		var o domain.Order
+		err := rows.Scan(
+			&o.Id,
+			&o.CostumerID,
+			&o.CreatedAt,
+			&o.UpdatedAt,
+			&o.PaymentMethod,
+			&o.Status,
+			&o.PaidAt,
+			&o.TotalAmount,
+		)
+
+		if err != nil {
+			fmt.Println(err)
+			return nil, err
+		}
+
+		// Obtener los ítems de la orden
+		items, _ := s.GetOrderItemsByOrderId(o.Id)
+		o.Items = items
+
+		orders = append(orders, o)
+	}
+
+	return orders, nil
 }

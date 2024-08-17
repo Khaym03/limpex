@@ -118,3 +118,11 @@ func (s *Sales) SaveOrder(op domain.OrderPayload) domain.Message {
 	runtime.EventsEmit(s.ctx, updateCart)
 	return common.MakeMessage(err)
 }
+
+func (s *Sales) ListOrders(startDate domain.DateArg, endDate domain.DateArg) []domain.Order {
+	orders, err := s.OrderStore.ListOrdersByDateRange(startDate.Date, endDate.Date)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return orders
+}

@@ -17,3 +17,20 @@ export function addToShoppingCart(product: Product, quantity: number) {
 
   AddItemToCart(newOrderItem)
 }
+
+export function formatDate(date: Date) {
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: false
+  }
+
+  const VENEZUELA_UTC = 4
+
+  date.setHours(date.getHours() - VENEZUELA_UTC)
+
+  return date.toLocaleString('es-VE', options)
+}

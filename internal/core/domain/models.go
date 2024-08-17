@@ -47,13 +47,13 @@ type OrderItemPayload struct {
 
 type Order struct {
 	Id            int64       `json:"id"`
-	CostumerID    int64       `json:"costumer_id"`
+	CostumerID    *int64      `json:"costumer_id"`
 	Items         []OrderItem `json:"items"`
 	CreatedAt     time.Time   `json:"created_at"`
 	UpdatedAt     time.Time   `json:"updated_at"`
 	PaymentMethod string      `json:"payment_method"`
 	Status        string      `json:"status"`
-	PaidAt        time.Time   `json:"paid_at"`
+	PaidAt        *time.Time  `json:"paid_at"`
 	TotalAmount   float64     `json:"total_amount"`
 }
 
@@ -73,4 +73,8 @@ type Transaction struct {
 type Message struct {
 	Success bool
 	Error   string
+}
+
+type DateArg struct {
+	Date time.Time `json:"date"`
 }
