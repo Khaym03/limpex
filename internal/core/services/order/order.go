@@ -188,81 +188,19 @@ func (s *service) MarkAsPaid(orderId int64) error {
 }
 
 func (s *service) ListOrders() ([]domain.Order, error) {
-	rows, err := s.db.Query(`SELECT * FROM orders`)
-	if err != nil {
-		fmt.Println(err)
-		return nil, err
-	}
-	defer rows.Close()
-
-	var orders []domain.Order
-	for rows.Next() {
-		var o domain.Order
-		err := rows.Scan(
-			&o.Id,
-			&o.CostumerID,
-			&o.CreatedAt,
-			&o.UpdatedAt,
-			&o.PaymentMethod,
-			&o.Status,
-			&o.PaidAt,
-			&o.TotalAmount,
-		)
-
-		if err != nil {
-			fmt.Println(err)
-			return nil, err
-		}
-
-		items, _ := s.GetOrderItemsByOrderId(o.Id)
-		o.Items = items
-
-		orders = append(orders, o)
-	}
-
-	return orders, nil
+	return s.fetchOrders(`SELECT * FROM orders`)
 }
 
 func (s *service) ListOrdersByDate(date time.Time) ([]domain.Order, error) {
-	// Format date
-	dateString := date.Format("2006-01-02") // Format YYYY-MM-DD
+	startDate := time.Date(date.Year(), date.Month(), date.Day(), 0, 0, 0, 0, date.Location())
+	endDate := time.Date(date.Year(), date.Month(), date.Day(), 23, 59, 59, 999999999, date.Location())
 
-	fmt.Println("after fromat date ", dateString)
+	startDateString := startDate.Format("2006-01-02 15:04:05")
+	endDateString := endDate.Format("2006-01-02 15:04:05")
 
-	query := `SELECT * FROM orders WHERE DATE(created_at) = ?`
-	rows, err := s.db.Query(query, dateString)
-	if err != nil {
-		fmt.Println(err)
-		return nil, err
-	}
-	defer rows.Close()
+	query := `SELECT * FROM orders WHERE created_at >= ? AND created_at <= ?`
 
-	var orders []domain.Order
-	for rows.Next() {
-		var o domain.Order
-		err := rows.Scan(
-			&o.Id,
-			&o.CostumerID,
-			&o.CreatedAt,
-			&o.UpdatedAt,
-			&o.PaymentMethod,
-			&o.Status,
-			&o.PaidAt,
-			&o.TotalAmount,
-		)
-
-		if err != nil {
-			fmt.Println(err)
-			return nil, err
-		}
-
-		items, _ := s.GetOrderItemsByOrderId(o.Id)
-		o.Items = items
-
-		orders = append(orders, o)
-	}
-
-	return orders, nil
+	return s.fetchOrders(query, startDateString, endDateString)
 }
 
 func (s *service) ListOrdersByDateRange(startDate, endDate time.Time) ([]domain.Order, error) {
@@ -272,11 +210,14 @@ func (s *service) ListOrdersByDateRange(startDate, endDate time.Time) ([]domain.
 	startDateString := startDate.Format("2006-01-02 15:04:05")
 	endDateString := endDate.Format("2006-01-02 15:04:05")
 
-	fmt.Println("Rango de fechas: desde", startDateString, "hasta", endDateString)
+	return s.fetchOrders(
+		`SELECT * FROM orders WHERE created_at BETWEEN ? AND ?`,
+		startDateString,
+		endDateString)
+}
 
-	// Realizar la consulta SQL filtrando por el rango de fechas
-	query := `SELECT * FROM orders WHERE created_at BETWEEN ? AND ?`
-	rows, err := s.db.Query(query, startDateString, endDateString)
+func (s *service) fetchOrders(query string, args ...interface{}) ([]domain.Order, error) {
+	rows, err := s.db.Query(query, args...)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
@@ -302,7 +243,7 @@ func (s *service) ListOrdersByDateRange(startDate, endDate time.Time) ([]domain.
 			return nil, err
 		}
 
-		// Obtener los ítems de la orden
+		// Get order items
 		items, _ := s.GetOrderItemsByOrderId(o.Id)
 		o.Items = items
 

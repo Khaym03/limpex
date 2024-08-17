@@ -119,8 +119,16 @@ func (s *Sales) SaveOrder(op domain.OrderPayload) domain.Message {
 	return common.MakeMessage(err)
 }
 
-func (s *Sales) ListOrders(startDate domain.DateArg, endDate domain.DateArg) []domain.Order {
-	orders, err := s.OrderStore.ListOrdersByDateRange(startDate.Date, endDate.Date)
+func (s *Sales) ListOrders() []domain.Order {
+	orders, err := s.OrderStore.ListOrders()
+	if err != nil {
+		fmt.Println(err)
+	}
+	return orders
+}
+
+func (s *Sales) ListOrdersByDate(startDate domain.DateArg) []domain.Order {
+	orders, err := s.OrderStore.ListOrdersByDate(startDate.Date)
 	if err != nil {
 		fmt.Println(err)
 	}
