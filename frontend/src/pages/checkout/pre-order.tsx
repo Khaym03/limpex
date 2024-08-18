@@ -63,7 +63,7 @@ export default function Preorder() {
         </div>
       </CardContent>
       <CardFooter className="border-t py-4 flex items-end justify-end">
-        <Button onClick={() => save()} className="">
+        <Button onClick={() => save()} disabled={cartItems.length < 1}>
           Archivar
         </Button>
       </CardFooter>

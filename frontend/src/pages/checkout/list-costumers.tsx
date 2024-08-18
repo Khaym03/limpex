@@ -84,7 +84,7 @@ export default function ListCostumers() {
         </div>
         <CreateCostumerDialog />
       </CardHeader>
-      <CardContent className="grid grid-cols-2 gap-2 overflow-y-auto">
+      <CardContent className="grid grid-cols-2 gap-2 overflow-y-auto h-[153px] max-h-[153px]">
         {costumers &&
           costumers.map(c => <CostumerCard key={c.id} costumer={c} />)}
       </CardContent>

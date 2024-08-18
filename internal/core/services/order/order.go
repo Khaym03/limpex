@@ -192,31 +192,22 @@ func (s *service) ListOrders() ([]domain.Order, error) {
 }
 
 func (s *service) ListOrdersByDate(date time.Time, clientTimeZone string) ([]domain.Order, error) {
-	// Cargar la ubicación de la zona horaria del cliente
 	loc, err := time.LoadLocation(clientTimeZone)
 	if err != nil {
 		return nil, fmt.Errorf("invalid time zone: %v", err)
 	}
 
-	// Convertir la fecha a la zona horaria del cliente
+	// Set start and end dates in the customer's time zone
 	clientDate := date.In(loc)
 
-	// Definir las fechas de inicio y fin en la zona horaria del cliente
+	// Set start and end dates in the customer's time zone
 	startDate := time.Date(clientDate.Year(), clientDate.Month(), clientDate.Day(), 0, 0, 0, 0, loc)
 	endDate := time.Date(clientDate.Year(), clientDate.Month(), clientDate.Day(), 23, 59, 59, 999999999, loc)
 
-	// Convertir las fechas a UTC para la consulta
+	// Convert dates to UTC for query
 	startDateUTC := startDate.UTC()
 	endDateUTC := endDate.UTC()
 
-	fmt.Println("Start Date (UTC):", startDateUTC)
-	fmt.Println("End Date (UTC):", endDateUTC)
-
-	// Formatear las fechas para la consulta SQL
-	// startDateString := startDateUTC.Format("2006-01-02 15:04:05")
-	// endDateString := endDateUTC.Format("2006-01-02 15:04:05")
-
-	// Realizar la consulta
 	query := `SELECT * FROM orders WHERE created_at BETWEEN ? AND ?`
 
 	return s.fetchOrders(query, startDateUTC, endDateUTC)

@@ -46,11 +46,11 @@ const Item = ({ item }: IItem) => {
       font-medium rounded-lg cursor-pointer transition-transform
     `}
       >
-        <CardHeader className="py-3 flex flex-row">
+        <CardHeader className="py-2 flex flex-row">
           <CardTitle className="text-black text-base capitalize ">
             {product?.name}
           </CardTitle>
-          <X size={'1.125rem'} className="ml-auto" />
+          {/* <X size={'1.125rem'} className="ml-auto" /> */}
         </CardHeader>
 
         <CardContent className="text-sm border-t text-muted-foreground flex py-2 justify-between">
@@ -67,7 +67,7 @@ export default function Cart() {
   const { cartItems } = useContext(SalesCtx)
 
   return (
-    <Card className="grid grid-cols-3 auto-rows-[94px] overflow-y-auto gap-2 bg-zinc-100 p-2 shadow-inner relative rounded-md">
+    <Card className="grid grid-cols-3 auto-rows-[79px] overflow-y-auto gap-2 bg-zinc-100 p-2 shadow-inner relative rounded-md h-[271px] max-h-[271px]">
       {cartItems.length > 0 ? (
         cartItems.map(item => {
           return <Item key={item.product_id} item={item} />

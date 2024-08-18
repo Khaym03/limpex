@@ -17,7 +17,7 @@ export default function Checkout() {
   return (
     <animated.section
       style={{ ...useFadeIn() }}
-      className="flex justify-center items-center h-screen  p-8"
+      className="flex justify-center items-center"
     >
       <div className="flex flex-row-reverse gap-4">
         <Preorder />

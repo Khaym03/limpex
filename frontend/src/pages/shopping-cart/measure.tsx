@@ -68,7 +68,7 @@ export default function Measure() {
 
       <CardContent className="flex flex-col gap-4 py-0">
         <div className="grid gap-3 w-full">
-          <Label htmlFor="bs">Ingrese Bs</Label>
+          {/* <Label htmlFor="bs">Ingrese Bs</Label> */}
           <Input
             id="bs"
             type="number"
@@ -80,7 +80,7 @@ export default function Measure() {
         </div>
 
         <div className="grid gap-3 w-full">
-          <Label htmlFor="ml">Ingrese Ml</Label>
+          {/* <Label htmlFor="ml">Ingrese Ml</Label> */}
           <Input
             id="ml"
             type="number"
@@ -92,7 +92,7 @@ export default function Measure() {
         </div>
       </CardContent>
 
-      <CardFooter className="border-t px-6 py-4">
+      <CardFooter className="border-t px-6 py-2">
         <Button disabled={disabled} className="w-full" onClick={calcHowMuchCanBuy}>Agregar</Button>
       </CardFooter>
     </Card>

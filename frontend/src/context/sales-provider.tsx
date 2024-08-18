@@ -50,11 +50,11 @@ export default function SalesProvider({ children }: any) {
     })
   }, [])
 
-
   const { toast } = useToast()
   const navigate = useNavigate()
 
   const save = async (costumerId?: number) => {
+    if(cartItems.length < 1) return 
     const orderPayload: domain.OrderPayload = {
       costumer_id: costumerId,
       payment_method: paymentMethod
@@ -68,7 +68,7 @@ export default function SalesProvider({ children }: any) {
 
       setTimeout(dismiss, 3000)
       
-      navigate('/shopping-cart')
+      navigate('/shopping-cart/product-selection')
     } else {
       toast({
         title: 'Error',

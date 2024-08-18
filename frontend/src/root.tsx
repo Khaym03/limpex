@@ -1,6 +1,6 @@
 import SalesProvider from '@/context/sales-provider'
 import { Link, Outlet } from 'react-router-dom'
-import { Home, Settings, ShoppingCart as ShoppingCartIcon } from 'lucide-react'
+import { Home, Settings, ShoppingCart as ShoppingCartIcon, Newspaper } from 'lucide-react'
 import {
   Tooltip,
   TooltipContent,
@@ -13,18 +13,18 @@ import { useState } from 'react'
 const links = [
   {
     name: 'home',
-    link: '/shopping-cart',
-    Icon: Home
-  },
-  {
-    name: 'checkout',
-    link: '/checkout',
+    link: '/shopping-cart/product-selection',
     Icon: ShoppingCartIcon
   },
+  // {
+  //   name: 'checkout',
+  //   link: '/checkout',
+  //   Icon: ShoppingCartIcon
+  // },
   {
     name: 'today-info',
     link: '/today-info',
-    Icon: ShoppingCartIcon
+    Icon: Newspaper
   },
   {
     name: 'ajustes',

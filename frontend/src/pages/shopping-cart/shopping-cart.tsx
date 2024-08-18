@@ -6,7 +6,7 @@ import { Trash2, Receipt } from 'lucide-react'
 import { ResetCart } from 'wailsjs/go/sales/Sales'
 import { animated, useSpring } from '@react-spring/web'
 import { InsertAnimation } from '@/lib/animations'
-import { Link } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
 
 const CartActions = () => {
   return (
@@ -20,7 +20,7 @@ const CartActions = () => {
         Limpiar
       </Button>
       <Button asChild>
-        <Link className="h-full flex flex-col gap-2 text-base" to={'/checkout'}>
+        <Link className="h-full flex flex-col gap-2 text-base" to={'/shopping-cart/checkout'}>
           <Receipt size={'2rem'} />
           Ir a caja
         </Link>
@@ -36,18 +36,16 @@ export default function ShoppingCart() {
   })
 
   return (
-    <div className="flex justify-center items-center h-screen p-6">
-      <animated.div className="flex flex-col  gap-4 justify-center items-center">
-        <ProductSlice />
-        <animated.div
-          style={{ ...fase }}
-          className="grid grid-cols-[1.25fr,3fr,0.75fr] gap-6 w-11/12 mx-auto"
-        >
-          <Measure />
-          <Cart />
-          <CartActions />
-        </animated.div>
+    <animated.div className="flex flex-col  gap-4 justify-center items-center">
+      <ProductSlice />
+      <animated.div
+        style={{ ...fase }}
+        className="grid grid-cols-[1.25fr,3fr,0.75fr] gap-6 w-11/12 mx-auto"
+      >
+        <Measure />
+        <Cart />
+        <CartActions />
       </animated.div>
-    </div>
+    </animated.div>
   )
 }
