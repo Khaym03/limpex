@@ -40,8 +40,7 @@ export const columns: ColumnDef<domain.Order>[] = [
     accessorKey: 'created_at',
     header: () => <div className="">created_at</div>,
     cell: ({ row }) => {
-      console.log(row.getValue('paid_at'))
-      const date = new Date(row.getValue('paid_at'))
+      const date = new Date(row.getValue('created_at'))
       return <div className=" font-medium">{formatDate(date)}</div>
     }
   },
@@ -49,7 +48,7 @@ export const columns: ColumnDef<domain.Order>[] = [
     accessorKey: 'updated_at',
     header: () => <div className="">updated_at</div>,
     cell: ({ row }) => {
-      const date = new Date(row.getValue('paid_at'))
+      const date = new Date(row.getValue('updated_at'))
       return <div className=" font-medium">{formatDate(date)}</div>
     }
   },

@@ -18,6 +18,10 @@ export function addToShoppingCart(product: Product, quantity: number) {
   AddItemToCart(newOrderItem)
 }
 
+export function getUserTimeZone() {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
+
 export function formatDate(date: Date) {
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
@@ -25,12 +29,12 @@ export function formatDate(date: Date) {
     day: 'numeric',
     hour: 'numeric',
     minute: 'numeric',
-    hour12: false
+    hour12: false,
+    timeZone: getUserTimeZone()
   }
 
-  const VENEZUELA_UTC = 4
-
-  date.setHours(date.getHours() - VENEZUELA_UTC)
+  const localOffset = date.getTimezoneOffset() / 60
+  date.setHours(date.getHours() - localOffset)
 
   return date.toLocaleString('es-VE', options)
 }

@@ -76,5 +76,6 @@ type Message struct {
 }
 
 type DateArg struct {
-	Date time.Time `json:"date"`
+	Date           time.Time `json:"date"`
+	ClientTimeZone string    `json:"client_time_zone"`
 }

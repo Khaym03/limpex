@@ -40,6 +40,7 @@ export namespace domain {
 	export class DateArg {
 	    // Go type: time
 	    date: any;
+	    client_time_zone: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new DateArg(source);
@@ -48,6 +49,7 @@ export namespace domain {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.date = this.convertValues(source["date"], null);
+	        this.client_time_zone = source["client_time_zone"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

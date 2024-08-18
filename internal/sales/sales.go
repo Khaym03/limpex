@@ -127,8 +127,9 @@ func (s *Sales) ListOrders() []domain.Order {
 	return orders
 }
 
-func (s *Sales) ListOrdersByDate(startDate domain.DateArg) []domain.Order {
-	orders, err := s.OrderStore.ListOrdersByDate(startDate.Date)
+func (s *Sales) ListOrdersByDate(d domain.DateArg) []domain.Order {
+	fmt.Println(d)
+	orders, err := s.OrderStore.ListOrdersByDate(d.Date, d.ClientTimeZone)
 	if err != nil {
 		fmt.Println(err)
 	}

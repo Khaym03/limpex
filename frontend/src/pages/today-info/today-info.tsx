@@ -5,6 +5,7 @@ import DataTable from './data-table'
 import { columns } from './columns'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { getUserTimeZone } from '@/lib/utils'
 
 export default function TodayInfo() {
   const [data, setData] = useState<domain.Order[]>([])
@@ -16,9 +17,11 @@ export default function TodayInfo() {
   const todayOrders = async () => {
     const date = new Date()
 
-    date.setHours(date.getHours() + 4)
+    // date.setHours(date.getHours() - (date.getTimezoneOffset() / 60))
+    // console.log(date.toISOString())
     const today: domain.DateArg = new domain.DateArg({
-      date: date.toISOString()
+      date: date.toISOString(),
+      client_time_zone: getUserTimeZone()
     })
     
     const data = await ListOrdersByDate(today)
@@ -27,7 +30,7 @@ export default function TodayInfo() {
   }
   return (
     <section className="p-10">
-      <header>
+      <header className='flex gap-2'>
         <Button variant={'outline'} onClick={allOrders}>
           todas las ordenes
         </Button>
@@ -35,7 +38,7 @@ export default function TodayInfo() {
           ordenes de hoy
         </Button>
       </header>
-      <div>
+      <div className='mt-4 bg-white'>
         <DataTable columns={columns} data={data} />
       </div>
     </section>

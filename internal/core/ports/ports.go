@@ -23,7 +23,7 @@ type OrderStore interface {
 	SaveOrder(*domain.OrderPayload) error
 	GetOrderById(id int64) (*domain.Order, error)
 	ListOrders() ([]domain.Order, error)
-	ListOrdersByDate(date time.Time) ([]domain.Order, error)
+	ListOrdersByDate(date time.Time, clientTimeZone string) ([]domain.Order, error)
 	ListOrdersByDateRange(startDate, endDate time.Time) ([]domain.Order, error)
 }
 
