@@ -26,6 +26,10 @@ export function ListOrdersByDate(arg1) {
   return window['go']['sales']['Sales']['ListOrdersByDate'](arg1);
 }
 
+export function ListOrdersByDateRange(arg1, arg2) {
+  return window['go']['sales']['Sales']['ListOrdersByDateRange'](arg1, arg2);
+}
+
 export function RemoveItemFromCart(arg1) {
   return window['go']['sales']['Sales']['RemoveItemFromCart'](arg1);
 }

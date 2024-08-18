@@ -2,25 +2,6 @@ import { formatDate } from '@/lib/utils'
 import { ColumnDef } from '@tanstack/react-table'
 import { domain } from 'wailsjs/go/models'
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Payment = {
-  id: string
-  amount: number
-  status: 'pending' | 'processing' | 'success' | 'failed'
-  email: string
-}
-
-const options: Intl.DateTimeFormatOptions = {
-  year: 'numeric',
-  month: 'numeric',
-  day: 'numeric',
-  hour: 'numeric',
-  minute: 'numeric',
-  // second: 'numeric',
-  hour12: false // Cambiar a true para formato de 12 horas
-}
-
 export const columns: ColumnDef<domain.Order>[] = [
   {
     accessorKey: 'id',
@@ -31,7 +12,7 @@ export const columns: ColumnDef<domain.Order>[] = [
     header: () => <div className="">costumer_id</div>,
     cell: ({ row }) => {
       const costumer =
-        (row.getValue('costumer_id') as number) || 'cliente no resgistrado'
+        (row.getValue('costumer_id') as number) || 'no resgistrado'
 
       return <div className=" font-medium">{costumer}</div>
     }
@@ -71,7 +52,7 @@ export const columns: ColumnDef<domain.Order>[] = [
         </div>
       ) : (
         <div className=" font-medium">
-          no pagado
+          a espera del pago
         </div>
       )
     }

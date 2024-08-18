@@ -197,33 +197,28 @@ func (s *service) ListOrdersByDate(date time.Time, clientTimeZone string) ([]dom
 		return nil, fmt.Errorf("invalid time zone: %v", err)
 	}
 
-	// Set start and end dates in the customer's time zone
-	clientDate := date.In(loc)
-
-	// Set start and end dates in the customer's time zone
-	startDate := time.Date(clientDate.Year(), clientDate.Month(), clientDate.Day(), 0, 0, 0, 0, loc)
-	endDate := time.Date(clientDate.Year(), clientDate.Month(), clientDate.Day(), 23, 59, 59, 999999999, loc)
-
-	// Convert dates to UTC for query
-	startDateUTC := startDate.UTC()
-	endDateUTC := endDate.UTC()
+	startDateUTC, endDateUTC := convertToUTC(date, loc)
 
 	query := `SELECT * FROM orders WHERE created_at BETWEEN ? AND ?`
 
 	return s.fetchOrders(query, startDateUTC, endDateUTC)
 }
 
-func (s *service) ListOrdersByDateRange(startDate, endDate time.Time) ([]domain.Order, error) {
-	endDate = endDate.Add(24 * time.Hour).Add(-time.Nanosecond)
+func (s *service) ListOrdersByDateRange(startDate, endDate time.Time, clientTimeZone string) ([]domain.Order, error) {
+	loc, err := time.LoadLocation(clientTimeZone)
+	if err != nil {
+		return nil, fmt.Errorf("invalid time zone: %v", err)
+	}
 
-	// Formato YYYY-MM-DD HH:MM:SS
-	startDateString := startDate.Format("2006-01-02 15:04:05")
-	endDateString := endDate.Format("2006-01-02 15:04:05")
+	startDateUTC, _ := convertToUTC(startDate, loc)
+	_, endDateUTC := convertToUTC(endDate, loc)
 
-	return s.fetchOrders(
-		`SELECT * FROM orders WHERE created_at BETWEEN ? AND ?`,
-		startDateString,
-		endDateString)
+	startDateString := startDateUTC.Format("2006-01-02 15:04:05")
+	endDateString := endDateUTC.Format("2006-01-02 15:04:05")
+
+	query := `SELECT * FROM orders WHERE created_at BETWEEN ? AND ?`
+
+	return s.fetchOrders(query, startDateString, endDateString)
 }
 
 func (s *service) fetchOrders(query string, args ...interface{}) ([]domain.Order, error) {
@@ -261,4 +256,16 @@ func (s *service) fetchOrders(query string, args ...interface{}) ([]domain.Order
 	}
 
 	return orders, nil
+}
+
+func convertToUTC(date time.Time, loc *time.Location) (time.Time, time.Time) {
+	clientDate := date.In(loc)
+
+	startDate := time.Date(clientDate.Year(), clientDate.Month(), clientDate.Day(), 0, 0, 0, 0, loc)
+	endDate := time.Date(clientDate.Year(), clientDate.Month(), clientDate.Day(), 23, 59, 59, 999999999, loc)
+
+	startDateUTC := startDate.UTC()
+	endDateUTC := endDate.UTC()
+
+	return startDateUTC, endDateUTC
 }
