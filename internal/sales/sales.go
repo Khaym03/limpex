@@ -112,6 +112,15 @@ func (s *Sales) GetCostumers() []domain.Costumer {
 	return s.CostumerStore.GetCostumers()
 }
 
+func (s *Sales) GetCostumerById(id int64) *domain.Costumer {
+	c, err := s.CostumerStore.GetCostumerById(id)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return c
+}
+
 func (s *Sales) SaveOrder(op domain.OrderPayload) domain.Message {
 	err := s.OrderStore.SaveOrder(&op)
 

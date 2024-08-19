@@ -14,6 +14,10 @@ export function GetCartItems() {
   return window['go']['sales']['Sales']['GetCartItems']();
 }
 
+export function GetCostumerById(arg1) {
+  return window['go']['sales']['Sales']['GetCostumerById'](arg1);
+}
+
 export function GetCostumers() {
   return window['go']['sales']['Sales']['GetCostumers']();
 }

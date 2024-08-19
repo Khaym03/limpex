@@ -19,7 +19,7 @@ export function addToShoppingCart(product: Product, quantity: number) {
 }
 
 export function getUserTimeZone() {
-  return Intl.DateTimeFormat().resolvedOptions().timeZone;
+  return Intl.DateTimeFormat().resolvedOptions().timeZone
 }
 
 export function formatDate(date: Date) {
@@ -37,4 +37,11 @@ export function formatDate(date: Date) {
   date.setHours(date.getHours() - localOffset)
 
   return date.toLocaleString('es-VE', options)
+}
+
+export function formatCurrecy(amount: number) {
+  return new Intl.NumberFormat('en-EN', {
+    style: 'currency',
+    currency: 'USD'
+  }).format(amount)
 }

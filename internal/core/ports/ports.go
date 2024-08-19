@@ -17,6 +17,7 @@ type ProductStore interface {
 type CostumerStore interface {
 	CreateCostumer(domain.CostumerPayload) error
 	GetCostumers() []domain.Costumer
+	GetCostumerById(id int64) (*domain.Costumer, error)
 }
 
 type OrderStore interface {

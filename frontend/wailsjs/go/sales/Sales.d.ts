@@ -9,6 +9,8 @@ export function CreateCostumer(arg1:any):Promise<domain.Message>;
 
 export function GetCartItems():Promise<Array<domain.OrderItemPayload>>;
 
+export function GetCostumerById(arg1:number):Promise<domain.Costumer>;
+
 export function GetCostumers():Promise<Array<domain.Costumer>>;
 
 export function ListOrders():Promise<Array<domain.Order>>;

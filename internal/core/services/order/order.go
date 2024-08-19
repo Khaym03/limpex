@@ -95,7 +95,12 @@ func (s *service) createOrder(op *domain.OrderPayload) (int64, error) {
 }
 
 func (s *service) GetOrderItemsByOrderId(orderId int64) ([]domain.OrderItem, error) {
-	rows, err := s.db.Query(`SELECT * FROM order_items WHERE order_id = ?`, orderId)
+	rows, err := s.db.Query(`
+		SELECT id, product_id, order_id, quantity, unit_price, subtotal
+		FROM order_items
+		WHERE order_id = ?`,
+		orderId,
+	)
 	if err != nil {
 		return nil, err
 	}

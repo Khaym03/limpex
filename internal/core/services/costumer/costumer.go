@@ -57,3 +57,29 @@ func (s *Service) GetCostumers() []domain.Costumer {
 
 	return costumers
 }
+
+func (s *Service) GetCostumerById(id int64) (*domain.Costumer, error) {
+	costumer, err := s.db.Query(`SELECT * FROM costumers WHERE id = ?`, id)
+	if err != nil {
+		return nil, err
+	}
+	defer costumer.Close()
+
+	var c domain.Costumer
+	for costumer.Next() {
+		err = costumer.Scan(
+			&c.Id,
+			&c.Name,
+			&c.CreatedAt,
+			&c.CI,
+		)
+
+		if err != nil {
+			fmt.Println(err)
+			return nil, err
+		}
+	}
+
+	return &c, nil
+
+}
