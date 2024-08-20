@@ -15,13 +15,13 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
-import { CreditCard, MoreVertical } from 'lucide-react'
+import { CreditCard, MoreVertical, MousePointerClick } from 'lucide-react'
 import { domain } from 'wailsjs/go/models'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { useCleaningProducts } from '@/hooks/produtc'
 import { useCustomerDetails } from '@/hooks/costumer'
-import { formatCurrecy } from '@/lib/utils'
+import { formatCurrecy, formatTheHoursToClientTimeZone } from '@/lib/utils'
 import { PAYMENT_METHODS, PaymentMethodType } from '@/config/app-config'
 
 import {
@@ -30,6 +30,7 @@ import {
   AccordionItem,
   AccordionTrigger
 } from '@/components/ui/accordion'
+import { Skeleton } from '@/components/ui/skeleton'
 
 interface OrderDetailsProps {
   selectedOrder: domain.Order | null
@@ -44,19 +45,11 @@ export default function OrderDetails({ selectedOrder }: OrderDetailsProps) {
   const { costumer } = useCustomerDetails(selectedOrder?.costumer_id)
 
   return selectedOrder ? (
-    <Card className="overflow-hidden min-w-[296px]">
+    <Card className="flex flex-col overflow-hidden min-w-[296px]">
       <CardHeader className="flex flex-row items-start bg-muted/50">
         <div className="grid gap-0.5">
           <CardTitle className="group flex items-center gap-2 text-lg">
             Order {`#${selectedOrder?.id}`}
-            {/* <Button
-            size="icon"
-            variant="outline"
-            className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
-          >
-             <Copy className="h-3 w-3" /> 
-             <span className="sr-only">Copy Order ID</span> 
-          </Button> */}
           </CardTitle>
           <CardDescription>
             Fecha: {format(selectedOrder.created_at, 'PPP', { locale: es })}
@@ -85,7 +78,7 @@ export default function OrderDetails({ selectedOrder }: OrderDetailsProps) {
           </DropdownMenu>
         </div>
       </CardHeader>
-      <CardContent className="p-6 text-sm h-[390px] max-h-[390px] overflow-y-auto">
+      <CardContent className="p-6 grow text-sm overflow-y-auto">
         <div className="grid gap-3">
           <Accordion type="single" collapsible>
             <AccordionItem value="order-items">
@@ -99,7 +92,7 @@ export default function OrderDetails({ selectedOrder }: OrderDetailsProps) {
                         className="flex items-center justify-between"
                       >
                         <span className="text-muted-foreground">
-                          {prodName(item)} x <span>{item.quantity}</span>
+                          {prodName(item)} x <span>{ (item.quantity / 1000).toFixed(1)}</span>
                         </span>
                         <span>{formatCurrecy(item.subtotal)}</span>
                       </li>
@@ -123,7 +116,7 @@ export default function OrderDetails({ selectedOrder }: OrderDetailsProps) {
           <dl className="grid gap-3">
             <div className="flex items-center justify-between">
               <dt className="text-muted-foreground">Client</dt>
-              <dd>{costumer?.name || '???'}</dd>
+              <dd>{costumer?.name || 'Desconocido'}</dd>
             </div>
             <div className="flex items-center justify-between">
               <dt className="text-muted-foreground">CI</dt>
@@ -133,7 +126,7 @@ export default function OrderDetails({ selectedOrder }: OrderDetailsProps) {
         </div>
 
         <Accordion type="single" collapsible>
-          <AccordionItem  value="item-1">
+          <AccordionItem value="item-1">
             <AccordionTrigger>Informacion del pago</AccordionTrigger>
             <AccordionContent>
               <dl className="grid gap-3">
@@ -161,12 +154,22 @@ export default function OrderDetails({ selectedOrder }: OrderDetailsProps) {
       <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
         <div className="text-xs text-muted-foreground">
           Actualizado:{' '}
-          {format(selectedOrder.created_at, 'PPPp', { locale: es })}
+          {format(
+            formatTheHoursToClientTimeZone(new Date(selectedOrder.created_at)),
+            'PPPp',
+            { locale: es }
+          )}
         </div>
       </CardFooter>
     </Card>
   ) : (
-    <Card className='min-w-[296px]'>vacio</Card>
+    <Card className="flex flex-col justify-center items-center h-full min-w-[296px]">
+      <MousePointerClick size={68} />
+      <CardDescription className="w-[180px] text-balance text-center mt-4">
+        Si deseas ver lso detalles de una orden puedes hacer click sobre una de
+        ellas.
+      </CardDescription>
+    </Card>
   )
 }
 

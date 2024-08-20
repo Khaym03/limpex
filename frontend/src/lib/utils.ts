@@ -22,6 +22,16 @@ export function getUserTimeZone() {
   return Intl.DateTimeFormat().resolvedOptions().timeZone
 }
 
+export function formatTheHoursToClientTimeZone(date: Date): Date {
+  const clone = new Date(date)
+
+  const localOffset = clone.getTimezoneOffset() / 60
+
+  clone.setHours(clone.getHours() - localOffset)
+
+  return clone
+}
+
 export function formatDate(date: Date) {
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
@@ -33,10 +43,7 @@ export function formatDate(date: Date) {
     timeZone: getUserTimeZone()
   }
 
-  const localOffset = date.getTimezoneOffset() / 60
-  date.setHours(date.getHours() - localOffset)
-
-  return date.toLocaleString('es-VE', options)
+  return formatTheHoursToClientTimeZone(date).toLocaleString('es-VE', options)
 }
 
 export function formatCurrecy(amount: number) {

@@ -85,7 +85,7 @@ function Costumer({ costumer }: CostumerProps) {
   const renderCostumerInfo = (name: string, ci: string) => (
     <div className="flex flex-col font-medium">
       <span className="text-sm capitalize">{name}</span>
-      <span className="text-muted-foreground text-xm">{`V-${ci}`}</span>
+      <span className="text-muted-foreground text-xs">{`V-${ci}`}</span>
     </div>
   )
 

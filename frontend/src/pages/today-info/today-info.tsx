@@ -54,7 +54,7 @@ export default function TodayInfo() {
       client_time_zone: getUserTimeZone()
     })
 
-    const data = await ListOrdersByDate(today)
+    const data = await ListOrdersByDate(today) ?? []
 
     setData(data)
   }
@@ -77,7 +77,7 @@ export default function TodayInfo() {
       client_time_zone: getUserTimeZone()
     })
 
-    const data = await ListOrdersByDateRange(from, to)
+    const data = await ListOrdersByDateRange(from, to) ?? []
 
     setData(data)
   }
@@ -105,14 +105,12 @@ export default function TodayInfo() {
             </Button>
           </div>
         </header>
-        <div className="flex gap-8 mt-4 h-[530px]  max-h-[530px]">
-          <Card className="p-4 grow">
-            <DataTable
-              columns={columns}
-              data={data}
-              setSelectedOrder={setSelectedOrder}
-            />
-          </Card>
+        <div className="flex gap-8 mt-4 h-[553px]">
+          <DataTable
+            columns={columns}
+            data={data}
+            setSelectedOrder={setSelectedOrder}
+          />
 
           <OrderDetails selectedOrder={selectedOrder} />
         </div>
