@@ -1,4 +1,3 @@
-// import { DatePicker } from '@/components/date-picker'
 import { domain } from 'wailsjs/go/models'
 import {
   ListOrders,
@@ -14,23 +13,8 @@ import { DatePicker } from '@/components/date-picker'
 import { Search } from 'lucide-react'
 import { DateRangePicker } from '@/components/date-range-picker'
 import { DateRange } from 'react-day-picker'
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardTitle,
-  CardDescription
-} from '@/components/ui/card'
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell
-} from '@/components/ui/table'
-import { Badge } from '@/components/ui/badge'
 import OrderDetails from './order-details'
+import { useSpring, animated } from '@react-spring/web'
 
 export default function TodayInfo() {
   const [data, setData] = useState<domain.Order[]>([])
@@ -43,7 +27,7 @@ export default function TodayInfo() {
   })
 
   const allOrders = async () => {
-    setData(await ListOrders())
+    setData(await ListOrders() ?? [])
   }
 
   const queryOrdersByDate = async () => {
@@ -82,8 +66,14 @@ export default function TodayInfo() {
     setData(data)
   }
 
+  const fase = useSpring({
+    from: { opacity: 0 },
+    to: { opacity: 1 }
+  })
+
+
   return (
-    <section className="flex items-center p-10 h-screen">
+    <animated.section style={{...fase}} className="flex items-center p-10 h-screen">
       <div className="container max-w-5xl">
         <header className="flex justify-between">
           <Button onClick={allOrders}>Todas las ordenes</Button>
@@ -119,6 +109,6 @@ export default function TodayInfo() {
           />
         </div>
       </div>
-    </section>
+    </animated.section>
   )
 }

@@ -1,48 +1,48 @@
 import { createContext, useEffect, useState } from 'react'
 import { GetCartItems, GetCostumers, SaveOrder } from 'wailsjs/go/sales/Sales'
 import { EventsOff, EventsOn } from 'wailsjs/runtime/runtime'
-import {domain} from "wailsjs/go/models"
+import { domain } from 'wailsjs/go/models'
 import { useToast } from '@/components/ui/use-toast'
-import { useNavigate } from 'react-router-dom';
-
-
+import { useNavigate } from 'react-router-dom'
+import { ShoppingCartNavValue } from '@/pages/shopping-cart/shopping-cart'
 
 type SalesCtxType = {
   selectedProduct: Product | null
-  setSelectedProduct: React.Dispatch<
-    React.SetStateAction<Product | null>
-  >
+  setSelectedProduct: React.Dispatch<React.SetStateAction<Product | null>>
   cartItems: domain.OrderItemPayload[]
   setCartItems: React.Dispatch<React.SetStateAction<domain.OrderItemPayload[]>>
 
   paymentMethod: PaymentMethod
   setPaymentMethod: React.Dispatch<React.SetStateAction<PaymentMethod>>
   save: (costumerId?: number) => Promise<void>
-  // costumers: Costumer[]
-  // setCostumers: React.Dispatch<React.SetStateAction<Costumer[]>>
+
+  tabNavValue: ShoppingCartNavValue
+  setTabNavValue: React.Dispatch<React.SetStateAction<ShoppingCartNavValue>>
 }
 
 const defaultValue: SalesCtxType = {
   selectedProduct: null,
-  setSelectedProduct: () => {}, 
+  setSelectedProduct: () => {},
   cartItems: [],
-  setCartItems: () => {}, 
-  paymentMethod: "bio-pago",
-  setPaymentMethod: () => {}, 
-  save: async () => {}, 
-};
-
+  setCartItems: () => {},
+  paymentMethod: 'bio-pago',
+  setPaymentMethod: () => {},
+  save: async () => {},
+  tabNavValue: '/shopping-cart/product-selection',
+  setTabNavValue: () => {}
+}
 
 export const SalesCtx = createContext<SalesCtxType>(defaultValue)
 
 export default function SalesProvider({ children }: any) {
-  const [selectedProduct, setSelectedProduct] =
-    useState<null | Product>(null)
+  const [selectedProduct, setSelectedProduct] = useState<null | Product>(null)
 
   const [cartItems, setCartItems] = useState<domain.OrderItemPayload[]>([])
 
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("bio-pago")
-  useEffect(() => console.log(paymentMethod), [paymentMethod])
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('bio-pago')
+  const [tabNavValue, setTabNavValue] = useState<ShoppingCartNavValue>(
+    '/shopping-cart/product-selection'
+  )
 
   useEffect(() => {
     GetCartItems().then(items => {
@@ -54,7 +54,7 @@ export default function SalesProvider({ children }: any) {
   const navigate = useNavigate()
 
   const save = async (costumerId?: number) => {
-    if(cartItems.length < 1) return 
+    if (cartItems.length < 1) return
     const orderPayload: domain.OrderPayload = {
       costumer_id: costumerId,
       payment_method: paymentMethod
@@ -67,8 +67,9 @@ export default function SalesProvider({ children }: any) {
       })
 
       setTimeout(dismiss, 3000)
-      
+
       navigate('/shopping-cart/product-selection')
+      setTabNavValue('/shopping-cart/product-selection')
     } else {
       toast({
         title: 'Error',
@@ -76,7 +77,6 @@ export default function SalesProvider({ children }: any) {
       })
     }
   }
- 
 
   useEffect(() => {
     const updateCart = async () => {
@@ -92,8 +92,6 @@ export default function SalesProvider({ children }: any) {
     }
   }, [cartItems])
 
-
-
   return (
     <SalesCtx.Provider
       value={{
@@ -103,9 +101,9 @@ export default function SalesProvider({ children }: any) {
         setCartItems,
         paymentMethod,
         setPaymentMethod,
-        save
-        // costumers,
-        // setCostumers
+        save,
+        tabNavValue,
+        setTabNavValue
       }}
     >
       {children}

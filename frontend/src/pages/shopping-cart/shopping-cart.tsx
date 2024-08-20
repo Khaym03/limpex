@@ -6,9 +6,18 @@ import { Trash2, Receipt } from 'lucide-react'
 import { ResetCart } from 'wailsjs/go/sales/Sales'
 import { animated, useSpring } from '@react-spring/web'
 import { InsertAnimation } from '@/lib/animations'
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
+import { SalesCtx } from '@/context/sales-provider'
+
+export type ShoppingCartNavValue =
+  | '/shopping-cart/product-selection'
+  | '/shopping-cart/checkout'
 
 const CartActions = () => {
+  const navigate = useNavigate()
+  const {setTabNavValue} = useContext(SalesCtx)
+
   return (
     <div className="grid grid-row-2 gap-4 grow text-lg h-full">
       <Button
@@ -19,11 +28,15 @@ const CartActions = () => {
         <Trash2 size={'2rem'} />
         Limpiar
       </Button>
-      <Button asChild>
-        <Link className="h-full flex flex-col gap-2 text-base" to={'/shopping-cart/checkout'}>
-          <Receipt size={'2rem'} />
-          Ir a caja
-        </Link>
+      <Button
+        className="h-full flex flex-col gap-2 text-base"
+        onClick={() => {
+          navigate('/shopping-cart/checkout')
+          setTabNavValue('/shopping-cart/checkout')
+        }}
+      >
+        <Receipt size={'2rem'} />
+        Ir a caja
       </Button>
     </div>
   )
