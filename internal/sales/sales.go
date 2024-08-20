@@ -151,3 +151,8 @@ func (s *Sales) ListOrdersByDateRange(fromDate domain.DateArg, toDate domain.Dat
 	}
 	return orders
 }
+
+func (s *Sales) DeleteOrder(id int64) domain.Message {
+	err := s.OrderStore.DeleteOrder(id)
+	return common.MakeMessage(err)
+}

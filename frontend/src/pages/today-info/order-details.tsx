@@ -31,18 +31,40 @@ import {
   AccordionTrigger
 } from '@/components/ui/accordion'
 import { Skeleton } from '@/components/ui/skeleton'
+import { DeleteOrder } from 'wailsjs/go/sales/Sales'
+import { useToast } from '@/components/ui/use-toast'
 
 interface OrderDetailsProps {
   selectedOrder: domain.Order | null
+  setSelectedOrder: React.Dispatch<React.SetStateAction<domain.Order | null>>
+  setData: React.Dispatch<React.SetStateAction<domain.Order[]>>
 }
 
-export default function OrderDetails({ selectedOrder }: OrderDetailsProps) {
-  // if(!selectedOrder) return
+export default function OrderDetails({ selectedOrder, setSelectedOrder, setData }: OrderDetailsProps) {
   const { products } = useCleaningProducts()
   const prodName = (item: domain.OrderItem) =>
-    products?.find(p => p.id === item.product_id)?.name || ' ???'
+    products?.find(p => p.id === item.product_id)?.name || '???'
 
   const { costumer } = useCustomerDetails(selectedOrder?.costumer_id)
+  const {toast} = useToast()
+
+  const deleteOrder = async () => {
+    if(!selectedOrder) return
+    
+    const msg = (await DeleteOrder(selectedOrder.id))
+
+    if (msg.Success) {
+      const { dismiss } = toast({
+        title: 'Borrado',
+        description: `Se a borrado la Order #${selectedOrder.id} correctamente.`
+      })
+      
+      // Trigger a visual update
+      setSelectedOrder(null)
+      setData([])
+      setTimeout(() => dismiss(), 2000)
+    }
+  }
 
   return selectedOrder ? (
     <Card className="flex flex-col overflow-hidden min-w-[296px]">
@@ -73,7 +95,7 @@ export default function OrderDetails({ selectedOrder }: OrderDetailsProps) {
               <DropdownMenuItem>Edit</DropdownMenuItem>
               <DropdownMenuItem>Export</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Trash</DropdownMenuItem>
+              <DropdownMenuItem onClick={deleteOrder}>Borrar</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

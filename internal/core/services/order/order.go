@@ -274,3 +274,13 @@ func convertToUTC(date time.Time, loc *time.Location) (time.Time, time.Time) {
 
 	return startDateUTC, endDateUTC
 }
+
+func (s *service) DeleteOrder(id int64) error {
+	_, err := s.db.Exec(`DELETE FROM orders WHERE id = ?`, id)
+	if err != nil {
+		fmt.Println(err)
+		return fmt.Errorf("failed to delete order with id %d: %w", id, err)
+	}
+
+	return nil
+}

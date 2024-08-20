@@ -54,7 +54,7 @@ export default function TodayInfo() {
       client_time_zone: getUserTimeZone()
     })
 
-    const data = await ListOrdersByDate(today) ?? []
+    const data = (await ListOrdersByDate(today)) ?? []
 
     setData(data)
   }
@@ -77,7 +77,7 @@ export default function TodayInfo() {
       client_time_zone: getUserTimeZone()
     })
 
-    const data = await ListOrdersByDateRange(from, to) ?? []
+    const data = (await ListOrdersByDateRange(from, to)) ?? []
 
     setData(data)
   }
@@ -112,7 +112,11 @@ export default function TodayInfo() {
             setSelectedOrder={setSelectedOrder}
           />
 
-          <OrderDetails selectedOrder={selectedOrder} />
+          <OrderDetails
+            selectedOrder={selectedOrder}
+            setSelectedOrder={setSelectedOrder}
+            setData={setData}
+          />
         </div>
       </div>
     </section>
