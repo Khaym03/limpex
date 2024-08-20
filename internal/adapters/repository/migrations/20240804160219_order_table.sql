@@ -5,7 +5,7 @@ CREATE TABLE
         costumer_id INTEGER,
         created_at DATETIME DEFAULT (DATETIME('now','utc')),
         updated_at DATETIME DEFAULT (DATETIME('now','utc')),
-        payment_method TEXT NOT NULL,
+        payment_method TEXT,
         status TEXT NOT NULL,
         paid_at DATETIME,
         total_amount REAL NOT NULL,

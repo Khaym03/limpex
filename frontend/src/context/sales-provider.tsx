@@ -55,9 +55,10 @@ export default function SalesProvider({ children }: any) {
 
   const save = async (costumerId?: number) => {
     if (cartItems.length < 1) return
+
     const orderPayload: domain.OrderPayload = {
       costumer_id: costumerId,
-      payment_method: paymentMethod
+      payment_method: costumerId ? undefined : paymentMethod
     }
 
     const msg = await SaveOrder(orderPayload)

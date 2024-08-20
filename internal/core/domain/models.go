@@ -51,15 +51,15 @@ type Order struct {
 	Items         []OrderItem `json:"items"`
 	CreatedAt     time.Time   `json:"created_at"`
 	UpdatedAt     time.Time   `json:"updated_at"`
-	PaymentMethod string      `json:"payment_method"`
+	PaymentMethod *string     `json:"payment_method"`
 	Status        string      `json:"status"`
 	PaidAt        *time.Time  `json:"paid_at"`
 	TotalAmount   float64     `json:"total_amount"`
 }
 
 type OrderPayload struct {
-	CostumerID    *int64 `json:"costumer_id"`
-	PaymentMethod string `json:"payment_method"`
+	CostumerID    *int64  `json:"costumer_id"`
+	PaymentMethod *string `json:"payment_method"`
 }
 
 type Transaction struct {

@@ -66,7 +66,6 @@ func (s *service) GetOrderById(id int64) (*domain.Order, error) {
 }
 
 func (s *service) createOrder(op *domain.OrderPayload) (int64, error) {
-	fmt.Println(op, s.shoppingCart.CalcTotal())
 	result, err := s.db.Exec(`
 		INSERT INTO orders(costumer_id, payment_method, status, total_amount)
 		VALUES (?, ?, ?, ?)

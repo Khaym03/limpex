@@ -101,7 +101,7 @@ export namespace domain {
 	    created_at: any;
 	    // Go type: time
 	    updated_at: any;
-	    payment_method: string;
+	    payment_method?: string;
 	    status: string;
 	    // Go type: time
 	    paid_at?: any;
@@ -163,7 +163,7 @@ export namespace domain {
 	}
 	export class OrderPayload {
 	    costumer_id?: number;
-	    payment_method: string;
+	    payment_method?: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new OrderPayload(source);
