@@ -30,4 +30,3 @@ interface OrderItemPayload {
   Subtotal: number
 }
 
-type PaymentMethod = "bio-pago" | "cash" | "card" | "transfer"

@@ -38,6 +38,14 @@ export function ListOrdersByDateRange(arg1, arg2) {
   return window['go']['sales']['Sales']['ListOrdersByDateRange'](arg1, arg2);
 }
 
+export function ListOrdersByStatus(arg1) {
+  return window['go']['sales']['Sales']['ListOrdersByStatus'](arg1);
+}
+
+export function MarkAsPaid(arg1, arg2) {
+  return window['go']['sales']['Sales']['MarkAsPaid'](arg1, arg2);
+}
+
 export function RemoveItemFromCart(arg1) {
   return window['go']['sales']['Sales']['RemoveItemFromCart'](arg1);
 }

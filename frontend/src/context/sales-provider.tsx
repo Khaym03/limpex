@@ -5,6 +5,7 @@ import { domain } from 'wailsjs/go/models'
 import { useToast } from '@/components/ui/use-toast'
 import { useNavigate } from 'react-router-dom'
 import { ShoppingCartNavValue } from '@/pages/shopping-cart/shopping-cart'
+import { PaymentMethodType } from '@/config/app-config'
 
 type SalesCtxType = {
   selectedProduct: Product | null
@@ -12,8 +13,8 @@ type SalesCtxType = {
   cartItems: domain.OrderItemPayload[]
   setCartItems: React.Dispatch<React.SetStateAction<domain.OrderItemPayload[]>>
 
-  paymentMethod: PaymentMethod
-  setPaymentMethod: React.Dispatch<React.SetStateAction<PaymentMethod>>
+  paymentMethod: PaymentMethodType
+  setPaymentMethod: React.Dispatch<React.SetStateAction<PaymentMethodType>>
   save: (costumerId?: number) => Promise<void>
 
   tabNavValue: ShoppingCartNavValue
@@ -39,7 +40,7 @@ export default function SalesProvider({ children }: any) {
 
   const [cartItems, setCartItems] = useState<domain.OrderItemPayload[]>([])
 
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('bio-pago')
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodType>('bio-pago')
   const [tabNavValue, setTabNavValue] = useState<ShoppingCartNavValue>(
     '/shopping-cart/product-selection'
   )

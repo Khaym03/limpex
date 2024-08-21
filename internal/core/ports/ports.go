@@ -26,7 +26,9 @@ type OrderStore interface {
 	ListOrders() ([]domain.Order, error)
 	ListOrdersByDate(date time.Time, clientTimeZone string) ([]domain.Order, error)
 	ListOrdersByDateRange(startDate, endDate time.Time, clientTimeZone string) ([]domain.Order, error)
+	ListOrdersByStatus(status string) ([]domain.Order, error)
 	DeleteOrder(id int64) error
+	MarkAsPaid(orderId int64, paymentMethod string) error
 }
 
 type ShoppingCart interface {

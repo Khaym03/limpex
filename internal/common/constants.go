@@ -2,10 +2,9 @@ package common
 
 const (
 	// Payment methods
-	Bio      = "bio-pago"
-	Cash     = "cash"
-	Card     = "card"
-	Transfer = "transfer"
+	Bio  = "bio-pago"
+	Cash = "effectivo"
+	Card = "tarjeta"
 
 	// Order status
 	Paid    = "paid"

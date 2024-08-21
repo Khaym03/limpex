@@ -21,3 +21,5 @@ export const PAYMENT_METHODS: PaymentMethodDetails[] = [
         Icon: CreditCard
     },
 ]
+
+export type OrderStatus = 'paid' | 'pending' | 'not-paid'

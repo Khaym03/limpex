@@ -2,7 +2,8 @@ import { domain } from 'wailsjs/go/models'
 import {
   ListOrders,
   ListOrdersByDate,
-  ListOrdersByDateRange
+  ListOrdersByDateRange,
+  ListOrdersByStatus
 } from 'wailsjs/go/sales/Sales'
 import DataTable from './data-table'
 import { columns } from './columns'
@@ -15,6 +16,8 @@ import { DateRangePicker } from '@/components/date-range-picker'
 import { DateRange } from 'react-day-picker'
 import OrderDetails from './order-details'
 import { useSpring, animated } from '@react-spring/web'
+import { OrderStatus } from '@/config/app-config'
+import { FileStack, FileClock } from 'lucide-react'
 
 export default function TodayInfo() {
   const [data, setData] = useState<domain.Order[]>([])
@@ -27,7 +30,7 @@ export default function TodayInfo() {
   })
 
   const allOrders = async () => {
-    setData(await ListOrders() ?? [])
+    setData((await ListOrders()) ?? [])
   }
 
   const queryOrdersByDate = async () => {
@@ -71,12 +74,36 @@ export default function TodayInfo() {
     to: { opacity: 1 }
   })
 
+  const queryOrderByStatus = async (status: OrderStatus) => {
+    const data = (await ListOrdersByStatus(status)) ?? []
+
+    setData(data)
+  }
 
   return (
-    <animated.section style={{...fase}} className="flex items-center p-10 h-screen">
+    <animated.section
+      style={{ ...fase }}
+      className="flex items-center p-10 h-screen"
+    >
       <div className="container max-w-5xl">
         <header className="flex justify-between">
-          <Button onClick={allOrders}>Todas las ordenes</Button>
+          <Button
+            className="font-normal"
+            size={'icon'}
+            variant={'outline'}
+            onClick={allOrders}
+          >
+            <FileStack />
+          </Button>
+          <Button
+            className="font-normal"
+            size={'icon'}
+            variant={'outline'}
+            onClick={() => queryOrderByStatus('pending')}
+          >
+            <FileClock />
+          </Button>
+
           <div className="flex gap-2">
             <DatePicker date={date} setDate={setDate} />
             <Button onClick={queryOrdersByDate} size={'icon'} disabled={!date}>

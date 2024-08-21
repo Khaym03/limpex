@@ -41,7 +41,7 @@ func (s *service) SaveOrder(op *domain.OrderPayload) error {
 		return nil
 	}
 
-	err = s.MarkAsPaid(id)
+	err = s.MarkAsPaid(id, *op.PaymentMethod)
 	if err != nil {
 		return err
 	}
@@ -180,10 +180,17 @@ func (s *service) UpdateOrder(o *domain.Order) error {
 	return nil
 }
 
-func (s *service) MarkAsPaid(orderId int64) error {
-	query := "UPDATE orders SET paid_at = (DATETIME('now','utc')), status = ? WHERE id = ?"
+func (s *service) MarkAsPaid(orderId int64, paymentMethod string) error {
+	query := `
+		UPDATE orders
+		SET paid_at = (DATETIME('now','utc')),
+		updated_at = (DATETIME('now','utc')),
+		status = ?,
+		payment_method = ?
+		WHERE id = ?
+	`
 
-	_, err := s.db.Exec(query, common.Paid, orderId)
+	_, err := s.db.Exec(query, common.Paid, paymentMethod, orderId)
 	if err != nil {
 		return err
 	}
@@ -223,6 +230,10 @@ func (s *service) ListOrdersByDateRange(startDate, endDate time.Time, clientTime
 	query := `SELECT * FROM orders WHERE created_at BETWEEN ? AND ?`
 
 	return s.fetchOrders(query, startDateString, endDateString)
+}
+
+func (s *service) ListOrdersByStatus(status string) ([]domain.Order, error) {
+	return s.fetchOrders(`SELECT * FROM orders WHERE status = ?`, status)
 }
 
 func (s *service) fetchOrders(query string, args ...interface{}) ([]domain.Order, error) {

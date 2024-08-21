@@ -2,28 +2,30 @@ import {
   Card,
   CardHeader,
   CardTitle,
-  CardDescription,
   CardContent
 } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { PaymentMethodType } from '@/config/app-config'
+import { cn } from '@/lib/utils'
 import { Fingerprint, CreditCard, HandCoins } from 'lucide-react'
 
 interface PaymentMethodsProps {
-  onChagePaymentMethod: React.Dispatch<React.SetStateAction<PaymentMethod>>
+  onChagePaymentMethod: React.Dispatch<React.SetStateAction<PaymentMethodType>>
+  className?: string
 }
 
 export default function PaymentMethods({
-  onChagePaymentMethod
+  onChagePaymentMethod, className
 }: PaymentMethodsProps) {
   return (
-    <Card className="h-max">
+    <Card className={cn("h-max", className)}>
       <CardHeader>
         <CardTitle>Metodos de pago</CardTitle>
       </CardHeader>
       <CardContent className="grid gap-6">
         <RadioGroup
-          onValueChange={v => onChagePaymentMethod(v as PaymentMethod)}
+          onValueChange={v => onChagePaymentMethod(v as PaymentMethodType)}
           defaultValue="bio-pago"
           className="grid grid-cols-3 gap-4"
         >

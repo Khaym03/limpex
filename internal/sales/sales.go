@@ -53,29 +53,13 @@ func NewSales() *Sales {
 }
 
 func (s *Sales) Start(ctx context.Context) {
-
 	s.ctx = ctx
-
-	// runtime.EventsOn(ctx, RemoveFromCart, func(optionalData ...interface{}) {
-	// 	data := optionalData[0].(map[string]any)
-
-	// 	id, err := ExtractId(data)
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 	}
-
-	// 	s.Cart.RemoveItem(id)
-
-	// 	fmt.Println(s.Cart.Items())
-	// })
 }
 
 func (s *Sales) AddItemToCart(orderItemPayload any) {
 	var oip domain.OrderItemPayload
 
 	common.JSToStruc(orderItemPayload, &oip)
-
-	fmt.Println(oip)
 
 	s.ShoppingCart.AddItem(&oip)
 
@@ -152,7 +136,20 @@ func (s *Sales) ListOrdersByDateRange(fromDate domain.DateArg, toDate domain.Dat
 	return orders
 }
 
+func (s *Sales) ListOrdersByStatus(status string) []domain.Order {
+	orders, err := s.OrderStore.ListOrdersByStatus(status)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return orders
+}
+
 func (s *Sales) DeleteOrder(id int64) domain.Message {
 	err := s.OrderStore.DeleteOrder(id)
+	return common.MakeMessage(err)
+}
+
+func (s *Sales) MarkAsPaid(id int64, paymentMethod string) domain.Message {
+	err := s.OrderStore.MarkAsPaid(id, paymentMethod)
 	return common.MakeMessage(err)
 }

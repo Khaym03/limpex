@@ -31,8 +31,9 @@ import {
   AccordionTrigger
 } from '@/components/ui/accordion'
 import { Skeleton } from '@/components/ui/skeleton'
-import { DeleteOrder } from 'wailsjs/go/sales/Sales'
+import { DeleteOrder, MarkAsPaid } from 'wailsjs/go/sales/Sales'
 import { useToast } from '@/components/ui/use-toast'
+import { PayWholeOrder } from '@/dialogs/pay-whole-order'
 
 interface OrderDetailsProps {
   selectedOrder: domain.Order | null
@@ -40,25 +41,49 @@ interface OrderDetailsProps {
   setData: React.Dispatch<React.SetStateAction<domain.Order[]>>
 }
 
-export default function OrderDetails({ selectedOrder, setSelectedOrder, setData }: OrderDetailsProps) {
+export default function OrderDetails({
+  selectedOrder,
+  setSelectedOrder,
+  setData
+}: OrderDetailsProps) {
   const { products } = useCleaningProducts()
   const prodName = (item: domain.OrderItem) =>
     products?.find(p => p.id === item.product_id)?.name || '???'
 
   const { costumer } = useCustomerDetails(selectedOrder?.costumer_id)
-  const {toast} = useToast()
+  const { toast } = useToast()
+
+  console.log(selectedOrder?.status === 'pending')
 
   const deleteOrder = async () => {
-    if(!selectedOrder) return
-    
-    const msg = (await DeleteOrder(selectedOrder.id))
+    if (!selectedOrder) return
+
+    const msg = await DeleteOrder(selectedOrder.id)
 
     if (msg.Success) {
       const { dismiss } = toast({
         title: 'Borrado',
         description: `Se a borrado la Order #${selectedOrder.id} correctamente.`
       })
-      
+
+      // Trigger a visual update
+      setSelectedOrder(null)
+      setData([])
+      setTimeout(() => dismiss(), 2000)
+    }
+  }
+
+  const markOrderAsPaid = async (payment: PaymentMethodType) => {
+    if (!selectedOrder) return
+
+    const msg = await MarkAsPaid(selectedOrder.id, payment)
+
+    if (msg.Success) {
+      const { dismiss } = toast({
+        title: 'Pagado',
+        description: `Se a marcado como pagado la Order #${selectedOrder.id} correctamente.`
+      })
+
       // Trigger a visual update
       setSelectedOrder(null)
       setData([])
@@ -78,12 +103,6 @@ export default function OrderDetails({ selectedOrder, setSelectedOrder, setData 
           </CardDescription>
         </div>
         <div className="ml-auto flex items-center gap-1">
-          {/* <Button size="sm" variant="outline" className="h-8 gap-1">
-          <Truck className="h-3.5 w-3.5" />
-          <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-            Track Order
-          </span>
-        </Button> */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="icon" variant="outline" className="h-8 w-8">
@@ -114,7 +133,8 @@ export default function OrderDetails({ selectedOrder, setSelectedOrder, setData 
                         className="flex items-center justify-between"
                       >
                         <span className="text-muted-foreground">
-                          {prodName(item)} x <span>{ (item.quantity / 1000).toFixed(1)}</span>
+                          {prodName(item)} x{' '}
+                          <span>{(item.quantity / 1000).toFixed(1)}</span>
                         </span>
                         <span>{formatCurrecy(item.subtotal)}</span>
                       </li>
@@ -163,7 +183,13 @@ export default function OrderDetails({ selectedOrder, setSelectedOrder, setData 
                     <dt className="text-muted-foreground">Fecha de pago:</dt>
                     <dd className="">
                       {selectedOrder.paid_at
-                        ? format(selectedOrder.paid_at, 'PPPp', { locale: es })
+                        ? format(
+                            formatTheHoursToClientTimeZone(
+                              new Date(selectedOrder.paid_at)
+                            ),
+                            'PPPp',
+                            { locale: es }
+                          )
                         : 'desconocido'}
                     </dd>
                   </div>
@@ -172,6 +198,10 @@ export default function OrderDetails({ selectedOrder, setSelectedOrder, setData 
             </AccordionContent>
           </AccordionItem>
         </Accordion>
+
+        {selectedOrder?.status === 'pending' && (
+          <PayWholeOrder markOrderAsPaid={markOrderAsPaid} />
+        )}
       </CardContent>
       <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
         <div className="text-xs text-muted-foreground">
@@ -188,7 +218,7 @@ export default function OrderDetails({ selectedOrder, setSelectedOrder, setData 
     <Card className="flex flex-col justify-center items-center h-full min-w-[296px]">
       <MousePointerClick size={68} />
       <CardDescription className="w-[180px] text-balance text-center mt-4">
-        Si deseas ver lso detalles de una orden puedes hacer click sobre una de
+        Si deseas ver los detalles de una orden puedes hacer click sobre una de
         ellas.
       </CardDescription>
     </Card>
@@ -207,7 +237,12 @@ function PaymentMethodComponent({
   )
 
   if (!paymentMethodDetails) {
-    return <dt>Desconocido</dt>
+    return (
+      <div className="flex items-center justify-between">
+        <dt className="text-muted-foreground">Metodo:</dt>
+        <dt>Desconocido</dt>
+      </div>
+    )
   }
 
   return (

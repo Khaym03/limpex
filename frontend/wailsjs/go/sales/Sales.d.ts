@@ -21,6 +21,10 @@ export function ListOrdersByDate(arg1:domain.DateArg):Promise<Array<domain.Order
 
 export function ListOrdersByDateRange(arg1:domain.DateArg,arg2:domain.DateArg):Promise<Array<domain.Order>>;
 
+export function ListOrdersByStatus(arg1:string):Promise<Array<domain.Order>>;
+
+export function MarkAsPaid(arg1:number,arg2:string):Promise<domain.Message>;
+
 export function RemoveItemFromCart(arg1:number):Promise<void>;
 
 export function ResetCart():Promise<void>;
