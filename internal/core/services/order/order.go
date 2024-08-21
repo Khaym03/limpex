@@ -41,8 +41,21 @@ func (s *service) SaveOrder(op *domain.OrderPayload) error {
 		return nil
 	}
 
-	err = s.MarkAsPaid(id, *op.PaymentMethod)
+	items, err := s.GetOrderItemsByOrderId(id)
 	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	err = s.AddPayment(id, common.CalcTotalAmount(items))
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	err = s.CheckAndUpdateOrderStatus(id, *op.PaymentMethod)
+	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 
@@ -128,16 +141,11 @@ func (s *service) GetOrderItemsByOrderId(orderId int64) ([]domain.OrderItem, err
 }
 
 func (s *service) getOrderById(id int64) (*domain.Order, error) {
-	row, err := s.db.Query(`SELECT * FROM orders WHERE id = ?`, id)
-
-	if err != nil {
-		return nil, err
-	}
-	defer row.Close()
-
 	var o domain.Order
 
-	err = row.Scan(
+	row := s.db.QueryRow(`SELECT * FROM orders WHERE id = ?`, id)
+
+	err := row.Scan(
 		&o.Id,
 		&o.CostumerID,
 		&o.CreatedAt,
@@ -175,6 +183,71 @@ func (s *service) UpdateOrder(o *domain.Order) error {
 
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (s *service) AddPayment(orderId int64, amount float64) error {
+	// Verifica que la orden exista
+	_, err := s.getOrderById(orderId)
+	if err != nil {
+		return err
+	}
+
+	// Registra el pago
+	_, err = s.db.Exec(`
+        INSERT INTO order_payments (order_id, amount)
+        VALUES (?, ?)`,
+		orderId,
+		amount,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *service) GetTotalPayments(orderId int64) (float64, error) {
+	rows, err := s.db.Query(`
+        SELECT SUM(amount) FROM order_payments WHERE order_id = ?`,
+		orderId,
+	)
+	if err != nil {
+		return 0, err
+	}
+	defer rows.Close()
+
+	var total sql.NullFloat64 // sql.NullFloat64 to handle nil values
+	if rows.Next() {
+		if err := rows.Scan(&total); err != nil {
+			return 0, err
+		}
+	} else if err := rows.Err(); err != nil {
+		return 0, err
+	}
+
+	if !total.Valid {
+		return 0, nil
+	}
+
+	return total.Float64, nil
+}
+
+func (s *service) CheckAndUpdateOrderStatus(orderId int64, paymentMethod string) error {
+	order, err := s.getOrderById(orderId)
+	if err != nil {
+		return err
+	}
+
+	totalPayments, err := s.GetTotalPayments(orderId)
+	if err != nil {
+		return err
+	}
+
+	if totalPayments >= order.TotalAmount {
+		return s.MarkAsPaid(orderId, paymentMethod)
 	}
 
 	return nil
@@ -286,11 +359,24 @@ func convertToUTC(date time.Time, loc *time.Location) (time.Time, time.Time) {
 }
 
 func (s *service) DeleteOrder(id int64) error {
-	_, err := s.db.Exec(`DELETE FROM orders WHERE id = ?`, id)
+	row, err := s.db.Exec(`DELETE FROM orders WHERE id = ?`, id)
 	if err != nil {
-		fmt.Println(err)
 		return fmt.Errorf("failed to delete order with id %d: %w", id, err)
 	}
 
+	// Since when delete a order from here dont delete the order_items related
+	// implement this fix until could find a better solution
+	if affected, err := row.RowsAffected(); affected <= 1 {
+		fmt.Println(err)
+		s.deleteRaletedOrderItems(id)
+	}
+
 	return nil
+}
+
+func (s *service) deleteRaletedOrderItems(id int64) {
+	_, err := s.db.Exec(`DELETE FROM order_items WHERE order_id = ?`, id)
+	if err != nil {
+		fmt.Println(err)
+	}
 }

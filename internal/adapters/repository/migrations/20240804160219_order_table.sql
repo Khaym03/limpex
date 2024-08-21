@@ -9,7 +9,7 @@ CREATE TABLE
         status TEXT NOT NULL,
         paid_at DATETIME,
         total_amount REAL NOT NULL,
-        FOREIGN KEY (costumer_id) REFERENCES costumers (id) ON DELETE SET NULL
+        FOREIGN KEY (costumer_id) REFERENCES costumers (id) ON DELETE CASCADE
     );
 
 -- +goose Down

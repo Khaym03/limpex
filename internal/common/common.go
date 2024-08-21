@@ -45,3 +45,13 @@ func StructToJS(v any) string {
 	}
 	return string(data)
 }
+
+func CalcTotalAmount(items []domain.OrderItem) float64 {
+	var total float64 = 0
+
+	for _, item := range items {
+		total += item.Subtotal
+	}
+
+	return total
+}

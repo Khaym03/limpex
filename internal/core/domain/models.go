@@ -62,12 +62,11 @@ type OrderPayload struct {
 	PaymentMethod *string `json:"payment_method"`
 }
 
-type Transaction struct {
-	Id        int64
-	OrderID   int64     // ID de la orden asociada
-	Amount    float64   // Monto de la transacción
-	Type      string    // "pago", "ajuste", etc.
-	CreatedAt time.Time // Fecha de la transacción
+type OrderPayments struct {
+	Id        int64     `json:"id"`
+	OrderID   int64     `json:"order_id"`
+	Amount    float64   `json:"amount"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 type Message struct {

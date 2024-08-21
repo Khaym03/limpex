@@ -70,6 +70,13 @@ export default function OrderDetails({
       setSelectedOrder(null)
       setData([])
       setTimeout(() => dismiss(), 2000)
+    } else {
+      const { dismiss } = toast({
+        title: 'Error',
+        description: msg.Error
+      })
+
+
     }
   }
 
