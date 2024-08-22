@@ -253,6 +253,20 @@ func (s *service) CheckAndUpdateOrderStatus(orderId int64, paymentMethod string)
 	return nil
 }
 
+func (s *service) MakeAPartialPayment(orderId int64, amount float64, paymentMethod string) error {
+	err := s.AddPayment(orderId, amount)
+	if err != nil {
+		return err
+	}
+
+	err = s.CheckAndUpdateOrderStatus(orderId, paymentMethod)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (s *service) MarkAsPaid(orderId int64, paymentMethod string) error {
 	query := `
 		UPDATE orders

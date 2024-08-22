@@ -9,7 +9,7 @@ import ShoppingCartRoot from './pages/shopping-cart/root'
 import Settings from './pages/settings/settings'
 import { Toaster } from '@/components/ui/toaster'
 import Checkout from './pages/checkout/checkout'
-import TodayInfo from './pages/today-info/today-info'
+import TodayInfo from './pages/orders-manage/orders-manager'
 
 const container = document.getElementById('root')
 

@@ -15,6 +15,8 @@ export function GetCostumerById(arg1:number):Promise<domain.Costumer>;
 
 export function GetCostumers():Promise<Array<domain.Costumer>>;
 
+export function GetTotalPayments(arg1:number):Promise<number>;
+
 export function ListOrders():Promise<Array<domain.Order>>;
 
 export function ListOrdersByDate(arg1:domain.DateArg):Promise<Array<domain.Order>>;
@@ -23,7 +25,7 @@ export function ListOrdersByDateRange(arg1:domain.DateArg,arg2:domain.DateArg):P
 
 export function ListOrdersByStatus(arg1:string):Promise<Array<domain.Order>>;
 
-export function MarkAsPaid(arg1:number,arg2:string):Promise<domain.Message>;
+export function MakeAPartialPayment(arg1:number,arg2:number,arg3:string):Promise<domain.Message>;
 
 export function RemoveItemFromCart(arg1:number):Promise<void>;
 

@@ -26,6 +26,10 @@ export function GetCostumers() {
   return window['go']['sales']['Sales']['GetCostumers']();
 }
 
+export function GetTotalPayments(arg1) {
+  return window['go']['sales']['Sales']['GetTotalPayments'](arg1);
+}
+
 export function ListOrders() {
   return window['go']['sales']['Sales']['ListOrders']();
 }
@@ -42,8 +46,8 @@ export function ListOrdersByStatus(arg1) {
   return window['go']['sales']['Sales']['ListOrdersByStatus'](arg1);
 }
 
-export function MarkAsPaid(arg1, arg2) {
-  return window['go']['sales']['Sales']['MarkAsPaid'](arg1, arg2);
+export function MakeAPartialPayment(arg1, arg2, arg3) {
+  return window['go']['sales']['Sales']['MakeAPartialPayment'](arg1, arg2, arg3);
 }
 
 export function RemoveItemFromCart(arg1) {

@@ -1,6 +1,11 @@
 import SalesProvider from '@/context/sales-provider'
 import { Link, Outlet } from 'react-router-dom'
-import { Home, Settings, ShoppingCart as ShoppingCartIcon, Newspaper } from 'lucide-react'
+import {
+  Home,
+  Settings,
+  ShoppingCart as ShoppingCartIcon,
+  Newspaper
+} from 'lucide-react'
 import {
   Tooltip,
   TooltipContent,
@@ -8,7 +13,7 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip'
 import { useState } from 'react'
-
+import OrdersMangerProvider from './context/orders-manager-provider'
 
 const links = [
   {
@@ -67,7 +72,9 @@ export default function Root() {
       </aside>
       <main className="h-screen ml-14 font-medium relative">
         <SalesProvider>
-          <Outlet />
+          <OrdersMangerProvider>
+            <Outlet />
+          </OrdersMangerProvider>
         </SalesProvider>
       </main>
     </div>

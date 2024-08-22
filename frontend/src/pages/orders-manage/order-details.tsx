@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
-import { CreditCard, MoreVertical, MousePointerClick } from 'lucide-react'
+import { MoreVertical, MousePointerClick } from 'lucide-react'
 import { domain } from 'wailsjs/go/models'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
@@ -30,30 +30,26 @@ import {
   AccordionItem,
   AccordionTrigger
 } from '@/components/ui/accordion'
-import { Skeleton } from '@/components/ui/skeleton'
-import { DeleteOrder, MarkAsPaid } from 'wailsjs/go/sales/Sales'
+import { DeleteOrder } from 'wailsjs/go/sales/Sales'
 import { useToast } from '@/components/ui/use-toast'
 import { PayWholeOrder } from '@/dialogs/pay-whole-order'
+import { useContext } from 'react'
+import { OrdersManagerCtx } from '@/context/orders-manager-provider'
 
 interface OrderDetailsProps {
-  selectedOrder: domain.Order | null
-  setSelectedOrder: React.Dispatch<React.SetStateAction<domain.Order | null>>
   setData: React.Dispatch<React.SetStateAction<domain.Order[]>>
 }
 
-export default function OrderDetails({
-  selectedOrder,
-  setSelectedOrder,
-  setData
-}: OrderDetailsProps) {
+export default function OrderDetails({setData}: OrderDetailsProps) {
+  const { selectedOrder, setSelectedOrder } =
+    useContext(OrdersManagerCtx)
+
   const { products } = useCleaningProducts()
   const prodName = (item: domain.OrderItem) =>
     products?.find(p => p.id === item.product_id)?.name || '???'
 
   const { costumer } = useCustomerDetails(selectedOrder?.costumer_id)
   const { toast } = useToast()
-
-  console.log(selectedOrder?.status === 'pending')
 
   const deleteOrder = async () => {
     if (!selectedOrder) return
@@ -75,28 +71,9 @@ export default function OrderDetails({
         title: 'Error',
         description: msg.Error
       })
-
-
     }
   }
 
-  const markOrderAsPaid = async (payment: PaymentMethodType) => {
-    if (!selectedOrder) return
-
-    const msg = await MarkAsPaid(selectedOrder.id, payment)
-
-    if (msg.Success) {
-      const { dismiss } = toast({
-        title: 'Pagado',
-        description: `Se a marcado como pagado la Order #${selectedOrder.id} correctamente.`
-      })
-
-      // Trigger a visual update
-      setSelectedOrder(null)
-      setData([])
-      setTimeout(() => dismiss(), 2000)
-    }
-  }
 
   return selectedOrder ? (
     <Card className="flex flex-col overflow-hidden min-w-[296px]">
@@ -207,7 +184,10 @@ export default function OrderDetails({
         </Accordion>
 
         {selectedOrder?.status === 'pending' && (
-          <PayWholeOrder markOrderAsPaid={markOrderAsPaid} />
+          <PayWholeOrder reset={() => {
+            setSelectedOrder(null)
+            setData([])
+          }} />
         )}
       </CardContent>
       <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">

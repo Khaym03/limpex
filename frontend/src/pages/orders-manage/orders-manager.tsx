@@ -3,11 +3,12 @@ import {
   ListOrders,
   ListOrdersByDate,
   ListOrdersByDateRange,
-  ListOrdersByStatus
+  ListOrdersByStatus,
+  
 } from 'wailsjs/go/sales/Sales'
 import DataTable from './data-table'
 import { columns } from './columns'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { getUserTimeZone } from '@/lib/utils'
 import { DatePicker } from '@/components/date-picker'
@@ -18,12 +19,12 @@ import OrderDetails from './order-details'
 import { useSpring, animated } from '@react-spring/web'
 import { OrderStatus } from '@/config/app-config'
 import { FileStack, FileClock } from 'lucide-react'
+import { OrdersManagerCtx } from '@/context/orders-manager-provider'
 
-export default function TodayInfo() {
+export default function OrdersManger() {
   const [data, setData] = useState<domain.Order[]>([])
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [invalidRange, setInvalidRange] = useState(false)
-  const [selectedOrder, setSelectedOrder] = useState<domain.Order | null>(null)
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: undefined,
     to: undefined
@@ -123,17 +124,9 @@ export default function TodayInfo() {
           </div>
         </header>
         <div className="flex gap-8 mt-4 h-[553px]">
-          <DataTable
-            columns={columns}
-            data={data}
-            setSelectedOrder={setSelectedOrder}
-          />
+          <DataTable columns={columns} data={data} />
 
-          <OrderDetails
-            selectedOrder={selectedOrder}
-            setSelectedOrder={setSelectedOrder}
-            setData={setData}
-          />
+          <OrderDetails setData={setData} />
         </div>
       </div>
     </animated.section>

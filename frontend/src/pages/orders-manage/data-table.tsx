@@ -14,23 +14,24 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { domain } from 'wailsjs/go/models'
 import { Button } from '@/components/ui/button'
 import PaginationButton from '@/components/pagination-button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { OrdersManagerCtx } from '@/context/orders-manager-provider'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  setSelectedOrder: React.Dispatch<React.SetStateAction<domain.Order | null>>
+  // setSelectedOrder: React.Dispatch<React.SetStateAction<domain.Order | null>>
 }
 
 export default function DataTable<TData, TValue>({
   columns,
   data,
-  setSelectedOrder
 }: DataTableProps<TData, TValue>) {
+  const {setSelectedOrder} = useContext(OrdersManagerCtx)
   const [pageSize, setPageSize] = useState(6) // Estado para el tamaño de la página
   const [pageIndex, setPageIndex] = useState(0) // Estado para el índice de la página
 

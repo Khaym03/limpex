@@ -29,6 +29,8 @@ type OrderStore interface {
 	ListOrdersByStatus(status string) ([]domain.Order, error)
 	DeleteOrder(id int64) error
 	MarkAsPaid(orderId int64, paymentMethod string) error
+	MakeAPartialPayment(orderId int64, amount float64, paymentMethod string) error
+	GetTotalPayments(orderId int64) (float64, error)
 }
 
 type ShoppingCart interface {

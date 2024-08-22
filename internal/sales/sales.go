@@ -149,7 +149,16 @@ func (s *Sales) DeleteOrder(id int64) domain.Message {
 	return common.MakeMessage(err)
 }
 
-func (s *Sales) MarkAsPaid(id int64, paymentMethod string) domain.Message {
-	err := s.OrderStore.MarkAsPaid(id, paymentMethod)
+func (s *Sales) MakeAPartialPayment(orderId int64, amount float64, paymentMethod string) domain.Message {
+	err := s.OrderStore.MakeAPartialPayment(orderId, amount, paymentMethod)
 	return common.MakeMessage(err)
+}
+
+func (s *Sales) GetTotalPayments(orderId int64) float64 {
+	total, err := s.OrderStore.GetTotalPayments(orderId)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return total
 }
