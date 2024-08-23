@@ -31,6 +31,7 @@ type OrderStore interface {
 	MarkAsPaid(orderId int64, paymentMethod string) error
 	MakeAPartialPayment(orderId int64, amount float64, paymentMethod string) error
 	GetTotalPayments(orderId int64) (float64, error)
+	SalesSummaryByDate(startDate, endDate time.Time, clientTimeZone string) ([]domain.SaleSummary, error)
 }
 
 type ShoppingCart interface {

@@ -4,6 +4,7 @@ import (
 	"embed"
 	"fmt"
 
+	"github.com/khaym03/limpex/internal/metrics"
 	"github.com/khaym03/limpex/internal/sales"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -24,6 +25,7 @@ func main() {
 	app := NewApp()
 
 	salesHandler := sales.NewSales()
+	metricsHandler := metrics.Handler()
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -38,6 +40,7 @@ func main() {
 		Bind: []interface{}{
 			app,
 			salesHandler,
+			metricsHandler,
 		},
 	})
 

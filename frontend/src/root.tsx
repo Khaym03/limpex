@@ -1,7 +1,7 @@
 import SalesProvider from '@/context/sales-provider'
 import { Link, Outlet } from 'react-router-dom'
 import {
-  Home,
+  ChartLine,
   Settings,
   ShoppingCart as ShoppingCartIcon,
   Newspaper
@@ -13,7 +13,7 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip'
 import { useState } from 'react'
-import OrdersMangerProvider from './context/orders-manager-provider'
+
 
 const links = [
   {
@@ -21,11 +21,11 @@ const links = [
     link: '/shopping-cart/product-selection',
     Icon: ShoppingCartIcon
   },
-  // {
-  //   name: 'checkout',
-  //   link: '/checkout',
-  //   Icon: ShoppingCartIcon
-  // },
+  {
+    name: 'metrics',
+    link: '/metrics',
+    Icon: ChartLine
+  },
   {
     name: 'today-info',
     link: '/today-info',
@@ -72,9 +72,7 @@ export default function Root() {
       </aside>
       <main className="h-screen ml-14 font-medium relative">
         <SalesProvider>
-          <OrdersMangerProvider>
-            <Outlet />
-          </OrdersMangerProvider>
+          <Outlet />
         </SalesProvider>
       </main>
     </div>

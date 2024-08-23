@@ -134,9 +134,6 @@ export function PayWholeOrder({ reset }: PayWholeOrderProps) {
                 </AlertDialogAction>
               </div>
             </div>
-            {/* <CardFooter className="border-t flex items-center">
-              
-            </CardFooter> */}
           </div>
         </AlertDialogHeader>
         <AlertDialogFooter>

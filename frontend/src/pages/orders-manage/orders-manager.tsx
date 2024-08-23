@@ -19,7 +19,7 @@ import OrderDetails from './order-details'
 import { useSpring, animated } from '@react-spring/web'
 import { OrderStatus } from '@/config/app-config'
 import { FileStack, FileClock } from 'lucide-react'
-import { OrdersManagerCtx } from '@/context/orders-manager-provider'
+import OrdersMangerProvider, { OrdersManagerCtx } from '@/context/orders-manager-provider'
 
 export default function OrdersManger() {
   const [data, setData] = useState<domain.Order[]>([])
@@ -82,7 +82,8 @@ export default function OrdersManger() {
   }
 
   return (
-    <animated.section
+    <OrdersMangerProvider>
+       <animated.section
       style={{ ...fase }}
       className="flex items-center p-10 h-screen"
     >
@@ -130,5 +131,7 @@ export default function OrdersManger() {
         </div>
       </div>
     </animated.section>
+    </OrdersMangerProvider>
+   
   )
 }

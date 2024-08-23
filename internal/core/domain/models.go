@@ -78,3 +78,8 @@ type DateArg struct {
 	Date           time.Time `json:"date"`
 	ClientTimeZone string    `json:"client_time_zone"`
 }
+
+type SaleSummary struct {
+	Date  string  `json:"date"`
+	Total float64 `json:"total"`
+}

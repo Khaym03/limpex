@@ -9,6 +9,7 @@ import (
 	"github.com/khaym03/limpex/internal/core/domain"
 	"github.com/khaym03/limpex/internal/core/ports"
 	"github.com/khaym03/limpex/internal/core/services/product"
+	"github.com/khaym03/limpex/internal/metrics"
 	"github.com/khaym03/limpex/internal/sales"
 )
 
@@ -31,6 +32,9 @@ func (a *App) startup(ctx context.Context) {
 
 	salesHanler := sales.NewSales()
 	salesHanler.Start(ctx)
+
+	metricsHandler := metrics.Handler()
+	metricsHandler.Start(ctx)
 
 }
 

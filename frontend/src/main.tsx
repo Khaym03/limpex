@@ -10,6 +10,7 @@ import Settings from './pages/settings/settings'
 import { Toaster } from '@/components/ui/toaster'
 import Checkout from './pages/checkout/checkout'
 import TodayInfo from './pages/orders-manage/orders-manager'
+import Metrics from './pages/metricts/metrics'
 
 const container = document.getElementById('root')
 
@@ -24,7 +25,7 @@ const router = createBrowserRouter([
         { path: '/shopping-cart/product-selection', element: <ShoppingCart /> },
         { path: '/shopping-cart/checkout', element: <Checkout /> }
       ] },
-      
+      { path: '/metrics', element: <Metrics /> },
       { path: '/checkout', element: <Checkout /> },
       { path: '/today-info', element: <TodayInfo /> },
       { path: '/settings', element: <Settings /> }
