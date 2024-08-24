@@ -1,3 +1,4 @@
+import CurrencyDisplay from '@/components/currency-display'
 import { Card } from '@/components/ui/card'
 import {
   Carousel,
@@ -13,8 +14,6 @@ import { addToShoppingCart } from '@/lib/utils'
 import { animated } from '@react-spring/web'
 import { MouseEvent, useContext } from 'react'
 import { TbBottleFilled } from 'react-icons/tb'
-
-
 
 interface IQuanButton {
   product: Product
@@ -56,7 +55,7 @@ export default function ProductSlice() {
               key={p.id}
               className="md:basis-1/4 sm:basis-1/4 lg:basis-1/5"
             >
-              <animated.div style={{...style}}>
+              <animated.div style={{ ...style }}>
                 <Card
                   className={`[&>*]:select-none relative aspect-[2/3] overflow-hidden flex flex-col gap-2 cursor-pointer border-2  transition ${
                     selectedProduct?.id === p.id
@@ -81,7 +80,9 @@ export default function ProductSlice() {
                     <span className="text-black font-medium capitalize text-base">
                       {p.name}
                     </span>
-                    <span className="text-zinc-500 font-medium text-sm">{`${p.sale_price} $`}</span>
+                    <span className="text-zinc-500 font-medium text-sm">
+                      <CurrencyDisplay amount={p.sale_price} />
+                    </span>
                   </div>
                 </Card>
               </animated.div>

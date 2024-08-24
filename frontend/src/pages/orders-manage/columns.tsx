@@ -1,5 +1,6 @@
+import CurrencyDisplay from '@/components/currency-display'
 import { Badge } from '@/components/ui/badge'
-import { formatCurrecy, formatDate } from '@/lib/utils'
+import { formatDate } from '@/lib/utils'
 import { ColumnDef } from '@tanstack/react-table'
 import { useEffect, useState } from 'react'
 import { domain } from 'wailsjs/go/models'
@@ -32,10 +33,7 @@ export const columns: ColumnDef<domain.Order>[] = [
     cell: ({ row }) => {
       const date = new Date(row.getValue('created_at'))
       return (
-        <div
-          onClick={() => console.log('x')}
-          className=" font-medium"
-        >
+        <div onClick={() => console.log('x')} className=" font-medium">
           {formatDate(date)}
         </div>
       )
@@ -72,7 +70,7 @@ export const columns: ColumnDef<domain.Order>[] = [
     header: () => <div className="">total_amount</div>,
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue('total_amount'))
-      return <div className=" font-medium">{formatCurrecy(amount)}</div>
+      return <CurrencyDisplay amount={amount} />
     }
   }
 ]

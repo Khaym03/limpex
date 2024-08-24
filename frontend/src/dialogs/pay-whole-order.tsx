@@ -1,3 +1,4 @@
+import CurrencyDisplay from '@/components/currency-display'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,7 +24,6 @@ import { Label } from '@/components/ui/label'
 import { useToast } from '@/components/ui/use-toast'
 import { PaymentMethodType } from '@/config/app-config'
 import { OrdersManagerCtx } from '@/context/orders-manager-provider'
-import { formatCurrecy } from '@/lib/utils'
 import PaymentMethods from '@/pages/checkout/payment-method'
 import { ChangeEvent, useContext, useEffect, useState } from 'react'
 import { GetTotalPayments, MakeAPartialPayment } from 'wailsjs/go/sales/Sales'
@@ -41,6 +41,8 @@ export function PayWholeOrder({ reset }: PayWholeOrderProps) {
   const [pendingOwe, setPendingOwe] = useState(0)
 
   const [amount, setAmount] = useState(0)
+
+  console.log(`pending ${pendingOwe}, amount ${amount}`)
 
   const handleOnchange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
@@ -72,7 +74,7 @@ export function PayWholeOrder({ reset }: PayWholeOrderProps) {
         title: 'Abono',
         description: `Se le ha abonado a la Order #${
           selectedOrder.id
-        } un monto de ${formatCurrecy(amount)}.`
+        } un monto de $${amount}.`
       })
 
       reset()
@@ -116,7 +118,8 @@ export function PayWholeOrder({ reset }: PayWholeOrderProps) {
             <div>
               <div className="flex gap-2 mb-2">
                 <span className="text-muted-foreground/80">Deuda pendiente:</span>
-                <span>{formatCurrecy(pendingOwe)}</span>
+                <CurrencyDisplay amount={pendingOwe}/>
+                {/* <span>{formatCurrecy(pendingOwe)}</span> */}
               </div>
 
               <div className="flex gap-2">

@@ -1,3 +1,4 @@
+import CurrencyDisplay from '@/components/currency-display'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -23,13 +24,11 @@ import { useContext } from 'react'
 import { domain } from 'wailsjs/go/models'
 import { SaveOrder } from 'wailsjs/go/sales/Sales'
 
-
-
 export default function Preorder() {
   const { cartItems, save } = useContext(SalesCtx)
   const { products } = useCleaningProducts()
 
-  const total = () => cartItems.reduce((a, b) => a + b.subtotal, 0).toFixed(2)
+  const total = () => cartItems.reduce((a, b) => a + b.subtotal, 0)
 
   const prodName = (item: domain.OrderItemPayload) =>
     products?.find(p => p.id === item.product_id)?.name || ''
@@ -49,15 +48,20 @@ export default function Preorder() {
           <div className="font-semibold">Detalles de al orden</div>
           <ul className="grid gap-3">
             {cartItems &&
-              cartItems.map((item) => (
-                <Item key={item.product_id} item={item} prodName={prodName(item)} />
+              cartItems.map(item => (
+                <Item
+                  key={item.product_id}
+                  item={item}
+                  prodName={prodName(item)}
+                />
               ))}
           </ul>
           <Separator className="my-2" />
           <ul className="grid gap-3">
             <li className="flex items-center justify-between font-semibold">
               <span className="text-muted-foreground">Total</span>
-              <span>${total()}</span>
+
+              <CurrencyDisplay amount={total()} />
             </li>
           </ul>
         </div>
@@ -82,7 +86,8 @@ function Item({ item, prodName }: ItemProps) {
       <span className="text-muted-foreground">
         {prodName} x <span>{item.quantity / 1000}</span>
       </span>
-      <span>${item.subtotal.toFixed(2)}</span>
+
+      <CurrencyDisplay amount={item.subtotal} />
     </li>
   )
 }

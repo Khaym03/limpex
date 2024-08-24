@@ -40,16 +40,11 @@ export default function SalesProvider({ children }: any) {
 
   const [cartItems, setCartItems] = useState<domain.OrderItemPayload[]>([])
 
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodType>('bio-pago')
+  const [paymentMethod, setPaymentMethod] =
+    useState<PaymentMethodType>('bio-pago')
   const [tabNavValue, setTabNavValue] = useState<ShoppingCartNavValue>(
     '/shopping-cart/product-selection'
   )
-
-  useEffect(() => {
-    GetCartItems().then(items => {
-      items ? setCartItems(items) : setCartItems([])
-    })
-  }, [])
 
   const { toast } = useToast()
   const navigate = useNavigate()
@@ -82,9 +77,7 @@ export default function SalesProvider({ children }: any) {
 
   useEffect(() => {
     const updateCart = async () => {
-      const items = await GetCartItems()
-
-      items ? setCartItems(items) : setCartItems([])
+      setCartItems((await GetCartItems()) ?? [])
     }
 
     EventsOn('update-cart', updateCart)

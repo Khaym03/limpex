@@ -3,6 +3,6 @@
 import {domain} from '../models';
 import {context} from '../models';
 
-export function SalesSummaryByDate(arg1:domain.DateArg,arg2:domain.DateArg):Promise<Array<domain.SaleSummary>>;
+export function OrdersSummaryByDate(arg1:domain.DateArg,arg2:domain.DateArg):Promise<Array<domain.Order>>;
 
 export function Start(arg1:context.Context):Promise<void>;

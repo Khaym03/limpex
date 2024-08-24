@@ -3,12 +3,11 @@ import {
   ListOrders,
   ListOrdersByDate,
   ListOrdersByDateRange,
-  ListOrdersByStatus,
-  
+  ListOrdersByStatus
 } from 'wailsjs/go/sales/Sales'
 import DataTable from './data-table'
 import { columns } from './columns'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { getUserTimeZone } from '@/lib/utils'
 import { DatePicker } from '@/components/date-picker'
@@ -19,7 +18,7 @@ import OrderDetails from './order-details'
 import { useSpring, animated } from '@react-spring/web'
 import { OrderStatus } from '@/config/app-config'
 import { FileStack, FileClock } from 'lucide-react'
-import OrdersMangerProvider, { OrdersManagerCtx } from '@/context/orders-manager-provider'
+import OrdersMangerProvider from '@/context/orders-manager-provider'
 
 export default function OrdersManger() {
   const [data, setData] = useState<domain.Order[]>([])
@@ -83,55 +82,58 @@ export default function OrdersManger() {
 
   return (
     <OrdersMangerProvider>
-       <animated.section
-      style={{ ...fase }}
-      className="flex items-center p-10 h-screen"
-    >
-      <div className="container max-w-5xl">
-        <header className="flex justify-between">
-          <Button
-            className="font-normal"
-            size={'icon'}
-            variant={'outline'}
-            onClick={allOrders}
-          >
-            <FileStack />
-          </Button>
-          <Button
-            className="font-normal"
-            size={'icon'}
-            variant={'outline'}
-            onClick={() => queryOrderByStatus('pending')}
-          >
-            <FileClock />
-          </Button>
-
-          <div className="flex gap-2">
-            <DatePicker date={date} setDate={setDate} />
-            <Button onClick={queryOrdersByDate} size={'icon'} disabled={!date}>
-              <Search size={20} />
-            </Button>
-          </div>
-
-          <div className="flex gap-2">
-            <DateRangePicker date={dateRange} setDate={setDateRange} />
+      <animated.section
+        style={{ ...fase }}
+        className="flex items-center p-10 h-screen"
+      >
+        <div className="container max-w-5xl">
+          <header className="flex justify-between">
             <Button
-              onClick={queryOrdersByDateRange}
+              className="font-normal"
               size={'icon'}
-              disabled={invalidRange}
+              variant={'outline'}
+              onClick={allOrders}
             >
-              <Search size={20} />
+              <FileStack />
             </Button>
-          </div>
-        </header>
-        <div className="flex gap-8 mt-4 h-[553px]">
-          <DataTable columns={columns} data={data} />
+            <Button
+              className="font-normal"
+              size={'icon'}
+              variant={'outline'}
+              onClick={() => queryOrderByStatus('pending')}
+            >
+              <FileClock />
+            </Button>
 
-          <OrderDetails setData={setData} />
+            <div className="flex gap-2">
+              <DatePicker date={date} setDate={setDate} />
+              <Button
+                onClick={queryOrdersByDate}
+                size={'icon'}
+                disabled={!date}
+              >
+                <Search size={20} />
+              </Button>
+            </div>
+
+            <div className="flex gap-2">
+              <DateRangePicker date={dateRange} setDate={setDateRange} />
+              <Button
+                onClick={queryOrdersByDateRange}
+                size={'icon'}
+                disabled={invalidRange}
+              >
+                <Search size={20} />
+              </Button>
+            </div>
+          </header>
+          <div className="flex gap-8 mt-4 h-[553px]">
+            <DataTable columns={columns} data={data} />
+
+            <OrderDetails setData={setData} />
+          </div>
         </div>
-      </div>
-    </animated.section>
+      </animated.section>
     </OrdersMangerProvider>
-   
   )
 }

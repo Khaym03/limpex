@@ -395,39 +395,57 @@ func (s *service) deleteRaletedOrderItems(id int64) {
 	}
 }
 
-func (s *service) SalesSummaryByDate(startDate, endDate time.Time, clientTimeZone string) ([]domain.SaleSummary, error) {
-	fmt.Println("from: ", startDate, " to: ", endDate)
+func (s *service) OrdersSummaryByDate(startDate, endDate time.Time, clientTimeZone string) ([]domain.Order, error) {
+	// fmt.Println("from: ", startDate, " to: ", endDate)
 
-	rows, err := s.db.Query(`
-        SELECT created_at AS date, SUM(total_amount) AS total_sales
-        FROM orders
-        WHERE status = 'paid'
-        AND created_at BETWEEN ? AND ?
-        GROUP BY date
-        ORDER BY date
-    `, startDate, endDate)
+	// rows, err := s.db.Query(`
+	//     SELECT created_at AS date, SUM(total_amount) AS total_sales
+	//     FROM orders
+	//     WHERE status = 'paid'
+	//     AND created_at BETWEEN ? AND ?
+	//     GROUP BY date
+	//     ORDER BY date
+	// `, startDate, endDate)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return nil, err
+	// }
+	// defer rows.Close()
+
+	// var salesSummary []domain.SaleSummary
+	// for rows.Next() {
+	// 	var ss domain.SaleSummary
+	// 	err = rows.Scan(&ss.Date, &ss.Total)
+	// 	if err != nil {
+	// 		fmt.Println(err)
+	// 		return nil, err
+	// 	}
+
+	// 	salesSummary = append(salesSummary, ss)
+	// }
+
+	// if err = rows.Err(); err != nil {
+	// 	fmt.Println(err)
+	// 	return nil, err
+	// }
+
+	// return salesSummary, nil
+
+	loc, err := time.LoadLocation(clientTimeZone)
 	if err != nil {
-		fmt.Println(err)
-		return nil, err
-	}
-	defer rows.Close()
-
-	var salesSummary []domain.SaleSummary
-	for rows.Next() {
-		var ss domain.SaleSummary
-		err = rows.Scan(&ss.Date, &ss.Total)
-		if err != nil {
-			fmt.Println(err)
-			return nil, err
-		}
-
-		salesSummary = append(salesSummary, ss)
+		return nil, fmt.Errorf("invalid time zone: %v", err)
 	}
 
-	if err = rows.Err(); err != nil {
-		fmt.Println(err)
-		return nil, err
-	}
+	startDateUTC, _ := convertToUTC(startDate, loc)
+	_, endDateUTC := convertToUTC(endDate, loc)
 
-	return salesSummary, nil
+	startDateString := startDateUTC.Format("2006-01-02 15:04:05")
+	endDateString := endDateUTC.Format("2006-01-02 15:04:05")
+
+	query := `
+	SELECT * FROM orders
+	WHERE created_at BETWEEN ? AND ?
+	ORDER BY created_at`
+
+	return s.fetchOrders(query, startDateString, endDateString)
 }

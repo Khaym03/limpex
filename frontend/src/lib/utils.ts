@@ -46,9 +46,9 @@ export function formatDate(date: Date) {
   return formatTheHoursToClientTimeZone(date).toLocaleString('es-VE', options)
 }
 
-export function formatCurrecy(amount: number) {
-  return new Intl.NumberFormat('en-EN', {
-    style: 'currency',
-    currency: 'USD'
-  }).format(amount)
-}
+// export function formatCurrecy(amount: number) {
+//   return new Intl.NumberFormat('en-EN', {
+//     style: 'currency',
+//     currency: 'USD'
+//   }).format(amount)
+// }

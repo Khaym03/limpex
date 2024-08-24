@@ -21,7 +21,7 @@ import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { useCleaningProducts } from '@/hooks/produtc'
 import { useCustomerDetails } from '@/hooks/costumer'
-import { formatCurrecy, formatTheHoursToClientTimeZone } from '@/lib/utils'
+import {  formatTheHoursToClientTimeZone } from '@/lib/utils'
 import { PAYMENT_METHODS, PaymentMethodType } from '@/config/app-config'
 
 import {
@@ -35,6 +35,7 @@ import { useToast } from '@/components/ui/use-toast'
 import { PayWholeOrder } from '@/dialogs/pay-whole-order'
 import { useContext } from 'react'
 import { OrdersManagerCtx } from '@/context/orders-manager-provider'
+import CurrencyDisplay from '@/components/currency-display'
 
 interface OrderDetailsProps {
   setData: React.Dispatch<React.SetStateAction<domain.Order[]>>
@@ -120,7 +121,8 @@ export default function OrderDetails({setData}: OrderDetailsProps) {
                           {prodName(item)} x{' '}
                           <span>{(item.quantity / 1000).toFixed(1)}</span>
                         </span>
-                        <span>{formatCurrecy(item.subtotal)}</span>
+                        <CurrencyDisplay amount={item.subtotal}/>
+                        {/* <span>{formatCurrecy()}</span> */}
                       </li>
                     ))}
                 </ul>
@@ -131,7 +133,8 @@ export default function OrderDetails({setData}: OrderDetailsProps) {
           <ul className="grid gap-3">
             <li className="flex items-center justify-between font-semibold">
               <span className="text-muted-foreground">Total</span>
-              <span>{formatCurrecy(selectedOrder.total_amount)}</span>
+              <CurrencyDisplay amount={selectedOrder.total_amount}/>
+              {/* <span>{formatCurrecy()}</span> */}
             </li>
           </ul>
         </div>

@@ -38,8 +38,8 @@ func (m *Metrics) Start(ctx context.Context) {
 	m.ctx = ctx
 }
 
-func (m *Metrics) SalesSummaryByDate(fromDate domain.DateArg, toDate domain.DateArg) []domain.SaleSummary {
-	orders, err := m.OrderStore.SalesSummaryByDate(fromDate.Date, toDate.Date, fromDate.ClientTimeZone)
+func (m *Metrics) OrdersSummaryByDate(fromDate domain.DateArg, toDate domain.DateArg) []domain.Order {
+	orders, err := m.OrderStore.OrdersSummaryByDate(fromDate.Date, toDate.Date, fromDate.ClientTimeZone)
 	if err != nil {
 		fmt.Println(err)
 	}

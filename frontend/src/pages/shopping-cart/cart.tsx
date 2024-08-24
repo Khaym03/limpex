@@ -1,13 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useCleaningProducts } from '@/hooks/produtc'
-import { useContext, useEffect, useState } from 'react'
-import { EventsOff, EventsOn } from 'wailsjs/runtime'
-import { GetCartItems, RemoveItemFromCart } from 'wailsjs/go/sales/Sales'
+import { useContext } from 'react'
+import { RemoveItemFromCart } from 'wailsjs/go/sales/Sales'
 import { ShoppingCart as ShoppingCartIcon } from 'lucide-react'
-import { X } from 'lucide-react'
 import { animated, useSpring } from '@react-spring/web'
 import { SalesCtx } from '@/context/sales-provider'
 import { domain } from 'wailsjs/go/models'
+import CurrencyDisplay from '@/components/currency-display'
 
 interface IItem {
   item: domain.OrderItemPayload
@@ -23,10 +22,7 @@ const EmptyCart = () => (
 const Item = ({ item }: IItem) => {
   const { products } = useCleaningProducts()
 
-  const product = products.find(p => {
-    console.log(item, p.id)
-    return item.product_id === p.id
-  })
+  const product = products.find(p => item.product_id === p.id)
 
   const handler = () => {
     RemoveItemFromCart(item.product_id)
@@ -50,11 +46,12 @@ const Item = ({ item }: IItem) => {
           <CardTitle className="text-black text-base capitalize ">
             {product?.name}
           </CardTitle>
-          {/* <X size={'1.125rem'} className="ml-auto" /> */}
         </CardHeader>
 
-        <CardContent className="text-sm border-t text-muted-foreground flex py-2 justify-between">
-          <span className=" text-muted-foreground">{item.subtotal} $</span>
+        <CardContent className="text-xs border-t text-muted-foreground flex py-2 justify-between">
+          <span className=" text-muted-foreground">
+            <CurrencyDisplay amount={item.subtotal} />
+          </span>
           <span>-</span>
           <span className=" text-muted-foreground">{`${item.quantity} Ml`}</span>
         </CardContent>
