@@ -11,11 +11,12 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useContext, useEffect, useState } from 'react'
 import { UpdateCleaningProduct } from 'wailsjs/go/main/App'
 import { useToast } from '@/components/ui/use-toast'
 import { ProductSelect } from '@/components/product-select'
 import { useCleaningProducts } from '@/hooks/produtc'
+import { CurrencyCtx } from '@/context/currency-provider'
 
 export function UpdateProductDialog() {
   const { products } = useCleaningProducts()
@@ -24,7 +25,7 @@ export function UpdateProductDialog() {
   const [purchasePrice, setPurchasePrice] = useState(0)
   const [salePrice, setSalePrice] = useState(0)
 
-  // const [color, setColor] = useState('')
+  const {dollar} = useContext(CurrencyCtx)
 
   const [disable, setDisable] = useState(true)
   const { toast } = useToast()
@@ -62,7 +63,7 @@ export function UpdateProductDialog() {
       id: productId,
       name: name,
       purchase_price: purchasePrice,
-      sale_price: salePrice
+      sale_price: salePrice / dollar
     }
 
     const msg = (await UpdateCleaningProduct(p)) as Message

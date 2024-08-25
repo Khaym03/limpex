@@ -23,6 +23,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/components/ui/use-toast'
 import { PaymentMethodType } from '@/config/app-config'
+import { CurrencyCtx } from '@/context/currency-provider'
 import { OrdersManagerCtx } from '@/context/orders-manager-provider'
 import PaymentMethods from '@/pages/checkout/payment-method'
 import { ChangeEvent, useContext, useEffect, useState } from 'react'
@@ -37,12 +38,11 @@ export function PayWholeOrder({ reset }: PayWholeOrderProps) {
     useState<PaymentMethodType>('bio-pago')
 
   const { selectedOrder } = useContext(OrdersManagerCtx)
+  const { dollar, currency } = useContext(CurrencyCtx)
 
   const [pendingOwe, setPendingOwe] = useState(0)
 
   const [amount, setAmount] = useState(0)
-
-  console.log(`pending ${pendingOwe}, amount ${amount}`)
 
   const handleOnchange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
@@ -62,19 +62,25 @@ export function PayWholeOrder({ reset }: PayWholeOrderProps) {
 
   const { toast } = useToast()
   const makePartialPaymentToSelectedOrder = async (amount: number) => {
-    if (!selectedOrder || amount <= 0 || amount > pendingOwe) return
+    if (!selectedOrder || amount <= 0) return
+
+    const fixedAmount =
+      currency === 'VES' && amount !== pendingOwe
+        ? parseFloat((amount / dollar).toFixed(2))
+        : parseFloat(amount.toFixed(2))
+
+    console.log(fixedAmount, amount)
+
     const msg = await MakeAPartialPayment(
       selectedOrder.id,
-      amount,
+      fixedAmount,
       paymentMethod
     )
 
     if (msg.Success) {
       const { dismiss } = toast({
         title: 'Abono',
-        description: `Se le ha abonado a la Order #${
-          selectedOrder.id
-        } un monto de $${amount}.`
+        description: `Se le ha abonado a la Order #${selectedOrder.id} un monto de $${amount}.`
       })
 
       reset()
@@ -103,7 +109,7 @@ export function PayWholeOrder({ reset }: PayWholeOrderProps) {
           />
 
           <div className="flex flex-col gap-4 font-medium pb-6">
-            <div className='flex flex-col gap-2'>
+            <div className="flex flex-col gap-2">
               <CardTitle>
                 Abonar{' '}
                 <span className="text-sm text-muted-foreground">
@@ -112,13 +118,16 @@ export function PayWholeOrder({ reset }: PayWholeOrderProps) {
               </CardTitle>
               <CardDescription>
                 Tienes la opcion de abonar para ir disminuyendo la deuda
-                acumlulada. Para hacerlo solo agrega un monto y haz click en Abonar.
+                acumlulada. Para hacerlo solo agrega un monto y haz click en
+                Abonar.
               </CardDescription>
             </div>
             <div>
               <div className="flex gap-2 mb-2">
-                <span className="text-muted-foreground/80">Deuda pendiente:</span>
-                <CurrencyDisplay amount={pendingOwe}/>
+                <span className="text-muted-foreground/80">
+                  Deuda pendiente:
+                </span>
+                <CurrencyDisplay amount={pendingOwe} />
                 {/* <span>{formatCurrecy(pendingOwe)}</span> */}
               </div>
 

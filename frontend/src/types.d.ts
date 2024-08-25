@@ -30,3 +30,5 @@ interface OrderItemPayload {
   Subtotal: number
 }
 
+type Currency = 'USD' | 'VES'
+

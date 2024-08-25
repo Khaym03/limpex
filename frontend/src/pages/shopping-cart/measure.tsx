@@ -12,17 +12,19 @@ import { Label } from '@/components/ui/label'
 import { ChangeEvent, useContext, useEffect, useState } from 'react'
 import { SalesCtx } from '@/context/sales-provider'
 import { addToShoppingCart } from '@/lib/utils'
+import { CurrencyCtx } from '@/context/currency-provider'
 
 export default function Measure() {
   const [bsInput, setBsInput] = useState(0)
   const [MlInput, setMlInput] = useState(0)
+  const { currency, dollar } = useContext(CurrencyCtx)
 
   const resetInputs = () => {
     setBsInput(0)
     setMlInput(0)
   }
 
-  const {selectedProduct} = useContext(SalesCtx)
+  const { selectedProduct } = useContext(SalesCtx)
 
   const [disabled, setDisabled] = useState(!selectedProduct)
 
@@ -30,8 +32,6 @@ export default function Measure() {
     resetInputs()
     setDisabled(!selectedProduct)
   }, [selectedProduct])
-
-  
 
   const OnChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.currentTarget.id == 'bs') {
@@ -46,18 +46,22 @@ export default function Measure() {
   }
 
   const calcHowMuchCanBuy = () => {
-    if(!selectedProduct) return
-    
-    if(bsInput){
-      const quantity = parseInt(((bsInput / selectedProduct.sale_price) * 1000 ).toString())
-      addToShoppingCart(selectedProduct,quantity)
+    if (!selectedProduct) return
+
+    const salePriceInBs =
+      currency === 'VES'
+        ? selectedProduct.sale_price * dollar
+        : selectedProduct.sale_price
+
+    if (bsInput) {
+      const quantity = Math.floor((bsInput / salePriceInBs) * 1000)
+      addToShoppingCart(selectedProduct, quantity)
     }
 
-    if(MlInput) {
-      addToShoppingCart(selectedProduct,MlInput)
+    if (MlInput) {
+      addToShoppingCart(selectedProduct, MlInput)
     }
   }
-
 
   return (
     <Card className="grid gap-3 w-full font-semibold">
@@ -93,7 +97,13 @@ export default function Measure() {
       </CardContent>
 
       <CardFooter className="border-t px-6 py-2">
-        <Button disabled={disabled} className="w-full" onClick={calcHowMuchCanBuy}>Agregar</Button>
+        <Button
+          disabled={disabled}
+          className="w-full"
+          onClick={calcHowMuchCanBuy}
+        >
+          Agregar
+        </Button>
       </CardFooter>
     </Card>
   )

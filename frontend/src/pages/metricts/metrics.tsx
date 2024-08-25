@@ -4,7 +4,7 @@ import MainChart from "./main-chart";
 
 export default function Metrics() {
   return <MetricsProvider>
-    <section className="container">
+    <section className="container flex justify-center items-center h-screen">
     <MainChart/>
     </section>
   </MetricsProvider>

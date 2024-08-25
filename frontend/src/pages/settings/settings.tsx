@@ -8,12 +8,13 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { CurrencyCtx } from '@/context/currency-provider'
 import { CreateProductDialog } from '@/dialogs/create-cleaning-product'
 import { DeleteProductDialog } from '@/dialogs/delete-cleaning-product'
 import { UpdateProductDialog } from '@/dialogs/update-cleaning-product'
 import { useFadeIn } from '@/lib/animations'
 import { useSpring, animated } from '@react-spring/web'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Dollar, Update } from 'wailsjs/go/currency/currency'
 
@@ -47,22 +48,18 @@ const Nav = () => {
 
 export default function Settings() {
   const [newPrice, setNewPrice] = useState(0)
-  const [dollar, setDollar] = useState(0)
   const [isUpdated, setIsUpdated] = useState(false)
+
+  const { dollar, setDollar } = useContext(CurrencyCtx)
 
   useEffect(() => {
     const fetchDollarValue = async () => {
-        try {
-            const dollarValue = await Dollar();
-            setDollar(dollarValue);
-        } catch (error) {
-            console.error('Error al obtener el valor del dólar:', error);
-            setDollar(0); // O maneja el error según tus necesidades
-        }
-    };
+      const dollarValue = await Dollar()
+      setDollar(dollarValue)
+    }
 
-    fetchDollarValue();
-}, [isUpdated]);
+    fetchDollarValue()
+  }, [isUpdated])
 
   const fadeIn = useFadeIn()
 
@@ -112,12 +109,16 @@ export default function Settings() {
                 placeholder="Ingresa un valor ejem: 36.64"
                 value={newPrice === 0 ? '' : newPrice}
                 onChange={handleOnchange}
-                type='number'
+                type="number"
               />
-              <Button onClick={() => {
-                Update(newPrice)
-                setIsUpdated(v => !v)
-              }}>Actualizar</Button>
+              <Button
+                onClick={() => {
+                  Update(newPrice)
+                  setIsUpdated(v => !v)
+                }}
+              >
+                Actualizar
+              </Button>
             </CardFooter>
           </Card>
         </main>

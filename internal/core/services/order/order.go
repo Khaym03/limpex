@@ -3,6 +3,7 @@ package order
 import (
 	"database/sql"
 	"fmt"
+	"math"
 	"sync"
 	"time"
 
@@ -246,7 +247,7 @@ func (s *service) CheckAndUpdateOrderStatus(orderId int64, paymentMethod string)
 		return err
 	}
 
-	if totalPayments >= order.TotalAmount {
+	if math.Round(totalPayments*100) >= math.Round(order.TotalAmount*100) {
 		return s.MarkAsPaid(orderId, paymentMethod)
 	}
 

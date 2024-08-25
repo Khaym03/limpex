@@ -23,7 +23,6 @@ import { useCleaningProducts } from '@/hooks/produtc'
 import { useCustomerDetails } from '@/hooks/costumer'
 import {  formatTheHoursToClientTimeZone } from '@/lib/utils'
 import { PAYMENT_METHODS, PaymentMethodType } from '@/config/app-config'
-
 import {
   Accordion,
   AccordionContent,
@@ -33,17 +32,18 @@ import {
 import { DeleteOrder } from 'wailsjs/go/sales/Sales'
 import { useToast } from '@/components/ui/use-toast'
 import { PayWholeOrder } from '@/dialogs/pay-whole-order'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { OrdersManagerCtx } from '@/context/orders-manager-provider'
 import CurrencyDisplay from '@/components/currency-display'
 
-interface OrderDetailsProps {
-  setData: React.Dispatch<React.SetStateAction<domain.Order[]>>
-}
 
-export default function OrderDetails({setData}: OrderDetailsProps) {
-  const { selectedOrder, setSelectedOrder } =
+
+export default function OrderDetails() {
+  const { selectedOrder, setSelectedOrder, setOrders } =
     useContext(OrdersManagerCtx)
+
+
+    console.log(selectedOrder)
 
   const { products } = useCleaningProducts()
   const prodName = (item: domain.OrderItem) =>
@@ -65,7 +65,7 @@ export default function OrderDetails({setData}: OrderDetailsProps) {
 
       // Trigger a visual update
       setSelectedOrder(null)
-      setData([])
+      setOrders([])
       setTimeout(() => dismiss(), 2000)
     } else {
       const { dismiss } = toast({
@@ -75,7 +75,7 @@ export default function OrderDetails({setData}: OrderDetailsProps) {
     }
   }
 
-
+  
   return selectedOrder ? (
     <Card className="flex flex-col overflow-hidden min-w-[296px]">
       <CardHeader className="flex flex-row items-start bg-muted/50">
@@ -189,7 +189,7 @@ export default function OrderDetails({setData}: OrderDetailsProps) {
         {selectedOrder?.status === 'pending' && (
           <PayWholeOrder reset={() => {
             setSelectedOrder(null)
-            setData([])
+            setOrders([])
           }} />
         )}
       </CardContent>
