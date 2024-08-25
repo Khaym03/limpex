@@ -4,7 +4,8 @@ import {
   ChartLine,
   Settings,
   ShoppingCart as ShoppingCartIcon,
-  Newspaper
+  Newspaper,
+  Box
 } from 'lucide-react'
 import {
   Tooltip,
@@ -13,7 +14,7 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip'
 import { useContext, useState } from 'react'
-import CurrencyProvider, { CurrencyCtx } from './context/currency-provider'
+import CurrencyProvider from './context/currency-provider'
 import CurrencyToggleButton from './components/currency-toggle-button'
 
 const links = [
@@ -33,6 +34,11 @@ const links = [
     Icon: Newspaper
   },
   {
+    name: 'products',
+    link: '/products',
+    Icon: Box
+  },
+  {
     name: 'ajustes',
     link: '/settings',
     Icon: Settings
@@ -46,7 +52,7 @@ export default function Root() {
     <CurrencyProvider>
       <div className="flex h-screen w-full flex-col bg-muted/40">
         <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
-          <nav className="flex flex-col items-center gap-4 px-2 sm:py-4">
+          <nav className="flex flex-col items-center gap-4 px-2 sm:py-4 h-full">
             <TooltipProvider>
               {links.map(l => (
                 <Tooltip key={l.link}>
@@ -74,11 +80,11 @@ export default function Root() {
           </nav>
         </aside>
         <main className="h-screen ml-14 font-medium relative">
-          {/* <CurrencyProvider> */}
+       
           <SalesProvider>
             <Outlet />
           </SalesProvider>
-          {/* </CurrencyProvider> */}
+       
         </main>
       </div>
     </CurrencyProvider>

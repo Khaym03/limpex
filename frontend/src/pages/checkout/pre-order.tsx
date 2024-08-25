@@ -2,27 +2,16 @@ import CurrencyDisplay from '@/components/currency-display'
 import { Button } from '@/components/ui/button'
 import {
   Card,
-  CardDescription,
   CardHeader,
   CardTitle,
   CardContent,
   CardFooter
 } from '@/components/ui/card'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-  DropdownMenuItem,
-  DropdownMenuSeparator
-} from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
-import { useToast } from '@/components/ui/use-toast'
 import { SalesCtx } from '@/context/sales-provider'
 import { useCleaningProducts } from '@/hooks/produtc'
-import { CreditCard } from 'lucide-react'
 import { useContext } from 'react'
 import { domain } from 'wailsjs/go/models'
-import { SaveOrder } from 'wailsjs/go/sales/Sales'
 
 export default function Preorder() {
   const { cartItems, save } = useContext(SalesCtx)

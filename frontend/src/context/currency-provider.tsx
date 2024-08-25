@@ -25,7 +25,7 @@ interface CurrencyProviderProps {
 }
 
 export default function CurrencyProvider({ children }: CurrencyProviderProps) {
-  const [currency, setCurrency] = useState<Currency>('USD')
+  const [currency, setCurrency] = useState<Currency>('VES')
   const [dollar, setDollar] = useState(0)
 
   const toggleCurrency = () => {

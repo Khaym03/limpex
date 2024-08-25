@@ -11,6 +11,7 @@ import { Toaster } from '@/components/ui/toaster'
 import Checkout from './pages/checkout/checkout'
 import TodayInfo from './pages/orders-manage/orders-manager'
 import Metrics from './pages/metricts/metrics'
+import Products from './pages/products/products'
 
 const container = document.getElementById('root')
 
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
       { path: '/metrics', element: <Metrics /> },
       { path: '/checkout', element: <Checkout /> },
       { path: '/today-info', element: <TodayInfo /> },
+      { path: '/products', element: <Products /> },
       { path: '/settings', element: <Settings /> }
     ]
   }

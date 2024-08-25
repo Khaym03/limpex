@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button'
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -12,8 +11,6 @@ import { CurrencyCtx } from '@/context/currency-provider'
 import { CreateProductDialog } from '@/dialogs/create-cleaning-product'
 import { DeleteProductDialog } from '@/dialogs/delete-cleaning-product'
 import { UpdateProductDialog } from '@/dialogs/update-cleaning-product'
-import { useFadeIn } from '@/lib/animations'
-import { useSpring, animated } from '@react-spring/web'
 import { ChangeEvent, useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Dollar, Update } from 'wailsjs/go/currency/currency'
@@ -61,18 +58,13 @@ export default function Settings() {
     fetchDollarValue()
   }, [isUpdated])
 
-  const fadeIn = useFadeIn()
-
   const handleOnchange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
     setNewPrice(Number(value))
   }
 
   return (
-    <animated.section
-      style={{ ...fadeIn }}
-      className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10"
-    >
+    <section className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
       <Header />
 
       <div className="mx-auto grid w-full max-w-6xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
@@ -123,6 +115,6 @@ export default function Settings() {
           </Card>
         </main>
       </div>
-    </animated.section>
+    </section>
   )
 }

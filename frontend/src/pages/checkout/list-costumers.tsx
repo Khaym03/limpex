@@ -2,13 +2,10 @@ import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
-  CardTitle
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { CreateCostumerDialog } from '@/dialogs/create-costumer'
-import { useCostumers } from '@/hooks/costumer'
 import { useContext, useEffect, useState } from 'react'
 import { GetCostumers } from 'wailsjs/go/sales/Sales'
 import { EventsOff, EventsOn } from 'wailsjs/runtime/runtime'
@@ -57,11 +54,7 @@ export default function ListCostumers() {
 
   useEffect(() => {
     const updateCostumers = async () => {
-      const c = await GetCostumers()
-
-      console.log(c, 'trigered')
-
-      c ? setCostumers(c) : setCostumers([])
+      setCostumers(await GetCostumers() ?? [])
     }
 
     EventsOn('update-costumers', updateCostumers)

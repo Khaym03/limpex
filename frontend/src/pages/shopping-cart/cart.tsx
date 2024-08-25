@@ -3,7 +3,6 @@ import { useCleaningProducts } from '@/hooks/produtc'
 import { useContext } from 'react'
 import { RemoveItemFromCart } from 'wailsjs/go/sales/Sales'
 import { ShoppingCart as ShoppingCartIcon } from 'lucide-react'
-import { animated, useSpring } from '@react-spring/web'
 import { SalesCtx } from '@/context/sales-provider'
 import { domain } from 'wailsjs/go/models'
 import CurrencyDisplay from '@/components/currency-display'
@@ -28,35 +27,28 @@ const Item = ({ item }: IItem) => {
     RemoveItemFromCart(item.product_id)
   }
 
-  const animation = useSpring({
-    from: { opacity: 0, y: -10 },
-    to: { opacity: 1, y: 0 }
-  })
-
   return (
-    <animated.div style={{ ...animation }}>
-      <Card
-        onClick={handler}
-        className={`
+    <Card
+      onClick={handler}
+      className={`
       flex flex-col  [&>*]:select-none
       font-medium rounded-lg cursor-pointer transition-transform
     `}
-      >
-        <CardHeader className="py-2 flex flex-row">
-          <CardTitle className="text-black text-base capitalize ">
-            {product?.name}
-          </CardTitle>
-        </CardHeader>
+    >
+      <CardHeader className="py-2 flex flex-row">
+        <CardTitle className="text-black text-base capitalize ">
+          {product?.name}
+        </CardTitle>
+      </CardHeader>
 
-        <CardContent className="text-xs border-t text-muted-foreground flex py-2 justify-between">
-          <span className=" text-muted-foreground">
-            <CurrencyDisplay amount={item.subtotal} />
-          </span>
-          <span>-</span>
-          <span className=" text-muted-foreground">{`${item.quantity} Ml`}</span>
-        </CardContent>
-      </Card>
-    </animated.div>
+      <CardContent className="text-xs border-t text-muted-foreground flex py-2 justify-between">
+        <span className=" text-muted-foreground">
+          <CurrencyDisplay amount={item.subtotal} />
+        </span>
+        <span>-</span>
+        <span className=" text-muted-foreground">{`${item.quantity} Ml`}</span>
+      </CardContent>
+    </Card>
   )
 }
 
