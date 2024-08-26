@@ -8,14 +8,12 @@ export default function Checkout() {
   const { setPaymentMethod } = useContext(SalesCtx)
 
   return (
-    <section className="flex justify-center items-center">
-      <div className="flex flex-row-reverse gap-4">
-        <Preorder />
-        <section className="flex flex-col gap-4">
-          <PaymentMethods onChagePaymentMethod={setPaymentMethod} />
-          <ListCostumers />
-        </section>
-      </div>
-    </section>
+    <div className="flex justify-center gap-4 w-full">
+      <section className="flex flex-col gap-4 ">
+        <PaymentMethods onChagePaymentMethod={setPaymentMethod} />
+        <ListCostumers />
+      </section>
+      <Preorder />
+    </div>
   )
 }

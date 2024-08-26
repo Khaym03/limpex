@@ -10,7 +10,9 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { SalesCtx } from '@/context/sales-provider'
 import { useCleaningProducts } from '@/hooks/produtc'
+import { Undo2 } from 'lucide-react'
 import { useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { domain } from 'wailsjs/go/models'
 
 export default function Preorder() {
@@ -21,6 +23,8 @@ export default function Preorder() {
 
   const prodName = (item: domain.OrderItemPayload) =>
     products?.find(p => p.id === item.product_id)?.name || ''
+
+  const navigate = useNavigate()
 
   return (
     <Card className="flex flex-col overflow-hidden md:w-[336px] lg:w-[336px]">
@@ -55,7 +59,10 @@ export default function Preorder() {
           </ul>
         </div>
       </CardContent>
-      <CardFooter className="border-t py-4 flex items-end justify-end">
+      <CardFooter className="border-t py-4 flex gap-4 items-end justify-end">
+        <Button variant={'outline'} onClick={() => navigate('/shopping-cart/product-selection')}>
+        <Undo2 size={16} className='mr-2' /> volver al carrito
+        </Button>
         <Button onClick={() => save()} disabled={cartItems.length < 1}>
           Archivar
         </Button>

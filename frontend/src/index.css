@@ -67,3 +67,26 @@
       @apply bg-background text-foreground;
     }
   }
+
+  /* Tamaño de la barra de desplazamiento */
+::-webkit-scrollbar {
+  width: 8px; /* Ancho de la barra vertical */
+  height: 8px; /* Alto de la barra horizontal */
+}
+
+/* Estilo de la pista */
+::-webkit-scrollbar-track {
+  background: #f9fbfd; /* Color de la pista */
+  border-radius: 10px; /* Bordes redondeados */
+}
+
+/* Estilo del pulgar */
+::-webkit-scrollbar-thumb {
+  background: hsl(240 5% 64.9%); /* Color del pulgar */
+  border-radius: 10px; /* Bordes redondeados */
+}
+
+/* Efecto al pasar el mouse sobre el pulgar */
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(240 3.8% 46.1%); /* Color del pulgar al pasar el mouse */
+}

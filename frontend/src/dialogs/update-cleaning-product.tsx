@@ -17,9 +17,16 @@ import { useToast } from '@/components/ui/use-toast'
 import { ProductSelect } from '@/components/product-select'
 import { useCleaningProducts } from '@/hooks/produtc'
 import { CurrencyCtx } from '@/context/currency-provider'
+import { ca } from 'date-fns/locale'
 
-export function UpdateProductDialog() {
-  const { products } = useCleaningProducts()
+interface UpdateProductDialogProps {
+  callback?: () => void
+}
+
+
+export function UpdateProductDialog({callback}: UpdateProductDialogProps) {
+  const [btnClicked, setBtnClicked] = useState(false)
+  const { products } = useCleaningProducts([btnClicked])
   const [productId, setProductId] = useState(0)
   const [name, setName] = useState('')
   const [purchasePrice, setPurchasePrice] = useState(0)
@@ -82,6 +89,8 @@ export function UpdateProductDialog() {
     }
 
     resetForm()
+    setBtnClicked(v => !v)
+    if(callback) callback()
   }
 
   useEffect(() => {
@@ -102,7 +111,7 @@ export function UpdateProductDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost">Editar Producto</Button>
+        <Button variant="link"  className='w-min'>Editar Producto</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

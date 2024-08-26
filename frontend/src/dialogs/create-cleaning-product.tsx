@@ -15,9 +15,13 @@ import { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
 import {} from '@radix-ui/react-dialog'
 import { CreateCleaningProduct } from 'wailsjs/go/main/App'
 import { useToast } from '@/components/ui/use-toast'
-import { cp } from 'fs'
 
-export function CreateProductDialog() {
+interface CreateProductDialogProps {
+  callback?: () => void
+}
+
+
+export function CreateProductDialog({callback}: CreateProductDialogProps) {
   const [name, setName] = useState('')
   const [purchasePrice, setPurchasePrice] = useState(0)
   const [salePrice, setSalePrice] = useState(0)
@@ -73,6 +77,9 @@ export function CreateProductDialog() {
     }
 
     resetForm()
+    if(callback) {
+      callback()
+    }
   }
 
   useEffect(() => {
@@ -82,7 +89,7 @@ export function CreateProductDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost">Crear Producto</Button>
+        <Button variant='link' className='w-min'>Crear Producto</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

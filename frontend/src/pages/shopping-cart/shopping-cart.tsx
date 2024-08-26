@@ -4,9 +4,7 @@ import Cart from './cart'
 import { Button } from '@/components/ui/button'
 import { Trash2, Receipt } from 'lucide-react'
 import { ResetCart } from 'wailsjs/go/sales/Sales'
-import { Link, Outlet, useNavigate } from 'react-router-dom'
-import { useContext } from 'react'
-import { SalesCtx } from '@/context/sales-provider'
+import { useNavigate } from 'react-router-dom'
 
 export type ShoppingCartNavValue =
   | '/shopping-cart/product-selection'
@@ -14,7 +12,6 @@ export type ShoppingCartNavValue =
 
 const CartActions = () => {
   const navigate = useNavigate()
-  const { setTabNavValue } = useContext(SalesCtx)
 
   return (
     <div className="grid grid-row-2 gap-4 grow text-lg h-full">
@@ -30,7 +27,6 @@ const CartActions = () => {
         className="h-full flex flex-col gap-2 text-base"
         onClick={() => {
           navigate('/shopping-cart/checkout')
-          setTabNavValue('/shopping-cart/checkout')
         }}
       >
         <Receipt size={'2rem'} />
@@ -42,9 +38,9 @@ const CartActions = () => {
 
 export default function ShoppingCart() {
   return (
-    <div className="flex flex-col  gap-4 justify-center items-center">
+    <div className="flex flex-col w-full  gap-4 justify-center items-center max-w-6xl md:p-10">
       <ProductSlice />
-      <div className="grid grid-cols-[1.25fr,3fr,0.75fr] gap-6 w-11/12 mx-auto">
+      <div className="grid  grid-cols-[1.25fr,3fr,0.75fr] gap-6">
         <Measure />
         <Cart />
         <CartActions />

@@ -4,7 +4,7 @@ import { EventsOff, EventsOn } from 'wailsjs/runtime/runtime'
 import { domain } from 'wailsjs/go/models'
 import { useToast } from '@/components/ui/use-toast'
 import { useNavigate } from 'react-router-dom'
-import { ShoppingCartNavValue } from '@/pages/shopping-cart/shopping-cart'
+
 import { PaymentMethodType } from '@/config/app-config'
 
 type SalesCtxType = {
@@ -17,8 +17,7 @@ type SalesCtxType = {
   setPaymentMethod: React.Dispatch<React.SetStateAction<PaymentMethodType>>
   save: (costumerId?: number) => Promise<void>
 
-  tabNavValue: ShoppingCartNavValue
-  setTabNavValue: React.Dispatch<React.SetStateAction<ShoppingCartNavValue>>
+ 
 }
 
 const defaultValue: SalesCtxType = {
@@ -29,8 +28,7 @@ const defaultValue: SalesCtxType = {
   paymentMethod: 'bio-pago',
   setPaymentMethod: () => {},
   save: async () => {},
-  tabNavValue: '/shopping-cart/product-selection',
-  setTabNavValue: () => {}
+ 
 }
 
 export const SalesCtx = createContext<SalesCtxType>(defaultValue)
@@ -42,9 +40,6 @@ export default function SalesProvider({ children }: any) {
 
   const [paymentMethod, setPaymentMethod] =
     useState<PaymentMethodType>('bio-pago')
-  const [tabNavValue, setTabNavValue] = useState<ShoppingCartNavValue>(
-    '/shopping-cart/product-selection'
-  )
 
   const { toast } = useToast()
   const navigate = useNavigate()
@@ -66,7 +61,7 @@ export default function SalesProvider({ children }: any) {
       setTimeout(dismiss, 3000)
 
       navigate('/shopping-cart/product-selection')
-      setTabNavValue('/shopping-cart/product-selection')
+    
     } else {
       toast({
         title: 'Error',
@@ -97,8 +92,7 @@ export default function SalesProvider({ children }: any) {
         paymentMethod,
         setPaymentMethod,
         save,
-        tabNavValue,
-        setTabNavValue
+       
       }}
     >
       {children}

@@ -23,11 +23,11 @@ const links = [
     link: '/shopping-cart/product-selection',
     Icon: ShoppingCartIcon
   },
-  {
-    name: 'metrics',
-    link: '/metrics',
-    Icon: ChartLine
-  },
+  // {
+  //   name: 'metrics',
+  //   link: '/metrics',
+  //   Icon: ChartLine
+  // },
   {
     name: 'today-info',
     link: '/today-info',

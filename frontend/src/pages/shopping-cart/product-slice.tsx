@@ -42,7 +42,7 @@ export default function ProductSlice() {
       opts={{
         align: 'start'
       }}
-      className=" w-11/12 mx-auto"
+      className=" w-full mx-auto"
     >
       <CarouselContent className="px-2 py-3">
         {products &&

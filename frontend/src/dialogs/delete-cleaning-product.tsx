@@ -15,8 +15,14 @@ import { useCleaningProducts } from '@/hooks/produtc'
 import { useToast } from '@/components/ui/use-toast'
 import { ProductSelect } from '@/components/product-select'
 
-export function DeleteProductDialog() {
-  const { products } = useCleaningProducts()
+interface DeleteProductDialogProps {
+  callback?: () => void
+}
+
+
+export function DeleteProductDialog({callback}:DeleteProductDialogProps) {
+  const [btnClicked, setBtnClicked] = useState(false)
+  const { products } = useCleaningProducts([btnClicked])
   const [prodId, setProdId] = useState(0)
   const { toast } = useToast()
 
@@ -35,14 +41,18 @@ export function DeleteProductDialog() {
         description: `Se a borrado ${selectedProd?.name} correctamente.`
       })
 
+
+      setProdId(0)
       setTimeout(() => dismiss(), 2000)
+      setBtnClicked(v => !v)
+      if(callback) callback()
     }
   }
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost">Borra Producto</Button>
+        <Button variant="link"  className='w-min'>Borra Producto</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

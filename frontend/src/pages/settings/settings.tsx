@@ -64,27 +64,12 @@ export default function Settings() {
   }
 
   return (
-    <section className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
+    <section className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
       <Header />
 
       <div className="mx-auto grid w-full max-w-6xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
         <Nav />
         <main className="flex flex-col gap-4">
-          {/* Products CRUD */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Productos</CardTitle>
-              <CardDescription>
-                Todo lo referente a la entidad producto.
-              </CardDescription>
-            </CardHeader>
-            <CardFooter className="border-t px-6 py-4 flex gap-2">
-              <CreateProductDialog />
-              <DeleteProductDialog />
-              <UpdateProductDialog />
-            </CardFooter>
-          </Card>
-
           <Card>
             <CardHeader>
               <CardTitle>Dollar</CardTitle>
