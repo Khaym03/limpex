@@ -19,11 +19,11 @@ export function formatCurrency(amount: number, currency: string) {
     }).format(currency === 'VES' ? amount * dollar : amount);
 }
 
-interface CurrencyDisplayProps {
+interface CurrencyDisplayProps extends React.HTMLAttributes<HTMLDivElement>  {
     amount: number
 }
 
-export default function CurrencyDisplay({ amount }:CurrencyDisplayProps) {
+export default function CurrencyDisplay({ amount, ...props }:CurrencyDisplayProps) {
   const { currency } = useContext(CurrencyCtx)
 
   const [dollar, setDollar] = useState<number>(0); 
@@ -50,5 +50,5 @@ export default function CurrencyDisplay({ amount }:CurrencyDisplayProps) {
   }).format(currency === 'VES' ? amount * dollar : amount);
 
 
-  return <div>{formattedAmount}</div>;
+  return <div {...props}>{formattedAmount}</div>;
 }

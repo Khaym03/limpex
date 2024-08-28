@@ -26,6 +26,10 @@ export function GetCostumers() {
   return window['go']['sales']['Sales']['GetCostumers']();
 }
 
+export function GetOrdersByCustomerAndStatus(arg1, arg2) {
+  return window['go']['sales']['Sales']['GetOrdersByCustomerAndStatus'](arg1, arg2);
+}
+
 export function GetTotalPayments(arg1) {
   return window['go']['sales']['Sales']['GetTotalPayments'](arg1);
 }

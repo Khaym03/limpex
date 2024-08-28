@@ -11,7 +11,7 @@ export default function CurrencyToggleButton() {
     <div className="flex flex-col items-center mt-auto">
       <Label htmlFor="currency-switch" className={`mb-2 ${
         currency === 'USD' ?
-        'text-black' : 'text-muted-foreground'
+        '' : 'text-muted-foreground'
       }`}>
         {' '}
         <DollarSign />

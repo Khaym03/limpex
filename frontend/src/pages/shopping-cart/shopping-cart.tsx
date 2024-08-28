@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Trash2, Receipt } from 'lucide-react'
 import { ResetCart } from 'wailsjs/go/sales/Sales'
 import { useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 
 export type ShoppingCartNavValue =
   | '/shopping-cart/product-selection'
@@ -36,15 +37,31 @@ const CartActions = () => {
   )
 }
 
+const container = {
+  hidden: { opacity: 0.5, x: -30 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      delayChildren: 0.5
+    }
+  }
+}
+
 export default function ShoppingCart() {
   return (
-    <div className="flex flex-col w-full  gap-4 justify-center items-center max-w-6xl md:p-10">
+    <motion.div
+      className="flex flex-col w-full  gap-4 justify-center items-center max-w-6xl md:p-10"
+      variants={container}
+      initial="hidden"
+      animate="visible"
+    >
       <ProductSlice />
       <div className="grid  grid-cols-[1.25fr,3fr,0.75fr] gap-6">
         <Measure />
         <Cart />
         <CartActions />
       </div>
-    </div>
+    </motion.div>
   )
 }

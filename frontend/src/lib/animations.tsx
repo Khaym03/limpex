@@ -1,16 +1,13 @@
-import { useSpring, useTransition } from '@react-spring/web'
-
-export const InsertAnimation = (data: any) => {
-  return useTransition(data, {
-    from: { opacity: 0, y: -10 },
-    enter: { opacity: 1, y: 0 } ,
-    delay: 200
-
+export const fadeInAnimationVariants = {
+  initial: {
+    opacity: 0,
+    y: 20
+  },
+  animate: (i: number) => ({
+    y: 0,
+    opacity: 1,
+    transition: {
+      delay: 0.03 * i
+    }
   })
 }
-
-export const useFadeIn = () =>
-  useSpring({
-    from: { opacity: 0, y: -10 },
-    to: { opacity: 1, y: 0 }
-  })

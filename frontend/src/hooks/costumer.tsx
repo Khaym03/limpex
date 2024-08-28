@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { GetCostumerById, GetCostumers } from 'wailsjs/go/sales/Sales'
 import { domain } from 'wailsjs/go/models'
 
-export const useCostumers = () => {
+export const useCustomers = () => {
   const [costumers, setCostumers] = useState<domain.Costumer[]>([])
 
   useEffect(() => {

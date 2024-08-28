@@ -15,6 +15,8 @@ export function GetCostumerById(arg1:number):Promise<domain.Costumer>;
 
 export function GetCostumers():Promise<Array<domain.Costumer>>;
 
+export function GetOrdersByCustomerAndStatus(arg1:number,arg2:string):Promise<Array<domain.Order>>;
+
 export function GetTotalPayments(arg1:number):Promise<number>;
 
 export function ListOrders():Promise<Array<domain.Order>>;

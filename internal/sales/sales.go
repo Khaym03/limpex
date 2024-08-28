@@ -162,3 +162,12 @@ func (s *Sales) GetTotalPayments(orderId int64) float64 {
 
 	return total
 }
+
+func (s *Sales) GetOrdersByCustomerAndStatus(id int64, status string) []domain.Order {
+	orders, err := s.OrderStore.GetOrdersByCustomerAndStatus(id, status)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return orders
+}

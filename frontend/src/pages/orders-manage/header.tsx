@@ -1,4 +1,4 @@
-import { FileStack, FileClock } from 'lucide-react'
+import { FileStack, FileClock, Scale } from 'lucide-react'
 import { DatePicker } from '@/components/date-picker'
 import { Search } from 'lucide-react'
 import { DateRangePicker } from '@/components/date-range-picker'
@@ -13,6 +13,16 @@ import {
 import { Button } from '@/components/ui/button'
 import { domain } from 'wailsjs/go/models'
 import { getUserTimeZone } from '@/lib/utils'
+import { SearchCustomers } from './search-customer'
+import { motion } from 'framer-motion'
+
+const item = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1
+  }
+}
 
 export default function Header() {
   const {
@@ -34,7 +44,9 @@ export default function Header() {
   )
 
   return (
-    <header className="flex justify-between">
+    <motion.header variants={item} className="flex justify-between">
+      
+      <div className='flex gap-2'>
       <Button
         className="font-normal"
         size={'icon'}
@@ -51,11 +63,13 @@ export default function Header() {
       >
         <FileClock />
       </Button>
+      </div>
 
+      <SearchCustomers/>
       <div className="flex gap-2">
         <DatePicker date={date} setDate={setDate} />
         <Button onClick={queryOrdersByDate} size={'icon'} disabled={!date}>
-          <Search size={20} />
+          <Search size={16} />
         </Button>
       </div>
 
@@ -66,9 +80,9 @@ export default function Header() {
           size={'icon'}
           disabled={invalidRange}
         >
-          <Search size={20} />
+          <Search size={16} />
         </Button>
       </div>
-    </header>
+    </motion.header>
   )
 }

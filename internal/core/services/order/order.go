@@ -397,41 +397,6 @@ func (s *service) deleteRaletedOrderItems(id int64) {
 }
 
 func (s *service) OrdersSummaryByDate(startDate, endDate time.Time, clientTimeZone string) ([]domain.Order, error) {
-	// fmt.Println("from: ", startDate, " to: ", endDate)
-
-	// rows, err := s.db.Query(`
-	//     SELECT created_at AS date, SUM(total_amount) AS total_sales
-	//     FROM orders
-	//     WHERE status = 'paid'
-	//     AND created_at BETWEEN ? AND ?
-	//     GROUP BY date
-	//     ORDER BY date
-	// `, startDate, endDate)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	return nil, err
-	// }
-	// defer rows.Close()
-
-	// var salesSummary []domain.SaleSummary
-	// for rows.Next() {
-	// 	var ss domain.SaleSummary
-	// 	err = rows.Scan(&ss.Date, &ss.Total)
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 		return nil, err
-	// 	}
-
-	// 	salesSummary = append(salesSummary, ss)
-	// }
-
-	// if err = rows.Err(); err != nil {
-	// 	fmt.Println(err)
-	// 	return nil, err
-	// }
-
-	// return salesSummary, nil
-
 	loc, err := time.LoadLocation(clientTimeZone)
 	if err != nil {
 		return nil, fmt.Errorf("invalid time zone: %v", err)
@@ -449,4 +414,11 @@ func (s *service) OrdersSummaryByDate(startDate, endDate time.Time, clientTimeZo
 	ORDER BY created_at`
 
 	return s.fetchOrders(query, startDateString, endDateString)
+}
+
+func (s *service) GetOrdersByCustomerAndStatus(id int64, status string) ([]domain.Order, error) {
+
+	const query = `SELECT * FROM orders WHERE costumer_id = ? AND status = ?`
+
+	return s.fetchOrders(query, id, status)
 }

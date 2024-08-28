@@ -105,13 +105,13 @@ function OrderStatus({ status }: OrderStatusProps) {
     switch (status) {
       case 'paid':
         return (
-          <Badge className="text-xs bg-green-600 pointer-events-none">
+          <Badge className="text-xs bg-green-600 dark:bg-green-400 pointer-events-none">
             Pagado
           </Badge>
         )
       case 'pending':
         return (
-          <Badge className="text-xs bg-yellow-400 pointer-events-none">
+          <Badge className="text-xs bg-yellow-400 dark:bg-yellow-300 pointer-events-none">
             Pendiente
           </Badge>
         )

@@ -4,9 +4,13 @@ import { CreateProductDialog } from '@/dialogs/create-cleaning-product'
 import { DeleteProductDialog } from '@/dialogs/delete-cleaning-product'
 import { UpdateProductDialog } from '@/dialogs/update-cleaning-product'
 import { useCleaningProducts } from '@/hooks/produtc'
+import { fadeInAnimationVariants } from '@/lib/animations'
+import { delay, motion } from 'framer-motion'
 import { Box, TrendingUp } from 'lucide-react'
 import { useState } from 'react'
 import { domain } from 'wailsjs/go/models'
+
+
 
 export default function Products() {
   const [visualUpdate, setVisualUpdate] = useState(false)
@@ -15,7 +19,7 @@ export default function Products() {
   const callback = () => setVisualUpdate(v => !v)
 
   return (
-    <section className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
+    <section className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
       <Header />
 
       <div className="mx-auto grid w-full max-w-6xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
@@ -25,14 +29,16 @@ export default function Products() {
           <UpdateProductDialog callback={callback} />
         </div>
 
-        <div className="w-full grid grid-cols-2 auto-rows-min gap-3  px-3 py-2 overflow-y-auto">
-          {products.map(p => (
-            <ProductInfo key={p.id} product={p} />
+        <ul
+          className="w-full grid grid-cols-2 auto-rows-min gap-3  px-3 py-2 overflow-hidden"
+        >
+          {products.map((p, i) => (
+            <motion.li key={p.id} variants={fadeInAnimationVariants} initial='initial' animate='animate' custom={i}>
+              <ProductInfo product={p} />
+            </motion.li>
           ))}
-        </div>
+        </ul>
       </div>
-
-      {/* <div className="container flex justify-center items-center w-max"></div> */}
     </section>
   )
 }
@@ -92,7 +98,7 @@ function ProductInfo({ product }: ProductInfoProps) {
             <span className="text-sm font-medium">Ganancia</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-2xl font-semibold  text-black/80">
+            <span className="text-2xl font-semibold">
               <CurrencyDisplay amount={profit} />
             </span>
             <p className="text-sm text-zinc-600 font-medium mt-1">

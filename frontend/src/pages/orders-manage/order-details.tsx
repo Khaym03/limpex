@@ -15,13 +15,13 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
-import { MoreVertical, MousePointerClick } from 'lucide-react'
+import { CreditCardIcon, MoreVertical, MousePointerClick } from 'lucide-react'
 import { domain } from 'wailsjs/go/models'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { useCleaningProducts } from '@/hooks/produtc'
 import { useCustomerDetails } from '@/hooks/costumer'
-import {  formatTheHoursToClientTimeZone } from '@/lib/utils'
+import { formatTheHoursToClientTimeZone } from '@/lib/utils'
 import { PAYMENT_METHODS, PaymentMethodType } from '@/config/app-config'
 import {
   Accordion,
@@ -32,18 +32,14 @@ import {
 import { DeleteOrder } from 'wailsjs/go/sales/Sales'
 import { useToast } from '@/components/ui/use-toast'
 import { PayWholeOrder } from '@/dialogs/pay-whole-order'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useMemo } from 'react'
 import { OrdersManagerCtx } from '@/context/orders-manager-provider'
 import CurrencyDisplay from '@/components/currency-display'
-
-
+import { motion } from 'framer-motion'
 
 export default function OrderDetails() {
-  const { selectedOrder, setSelectedOrder, setOrders } =
+  const { selectedOrder, setSelectedOrder, setOrders, orders } =
     useContext(OrdersManagerCtx)
-
-
-    console.log(selectedOrder)
 
   const { products } = useCleaningProducts()
   const prodName = (item: domain.OrderItem) =>
@@ -75,143 +71,162 @@ export default function OrderDetails() {
     }
   }
 
-  
   return selectedOrder ? (
-    <Card className="flex flex-col overflow-hidden min-w-[296px]">
-      <CardHeader className="flex flex-row items-start bg-muted/50">
-        <div className="grid gap-0.5">
-          <CardTitle className="group flex items-center gap-2 text-lg">
-            Order {`#${selectedOrder?.id}`}
-          </CardTitle>
-          <CardDescription>
-            Fecha: {format(selectedOrder.created_at, 'PPP', { locale: es })}
-          </CardDescription>
-        </div>
-        <div className="ml-auto flex items-center gap-1">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size="icon" variant="outline" className="h-8 w-8">
-                <MoreVertical className="h-3.5 w-3.5" />
-                <span className="sr-only">More</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>Edit</DropdownMenuItem>
-              <DropdownMenuItem>Export</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={deleteOrder}>Borrar</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </CardHeader>
-      <CardContent className="p-6 grow text-sm overflow-y-auto">
-        <div className="grid gap-3">
+    <motion.div
+      initial={{ scale: 0.95 }}
+      animate={{ scale: 1 }}
+      transition={{
+        type: 'spring',
+        stiffness: 260,
+        damping: 20
+      }}
+    >
+      <Card className="flex flex-col overflow-hidden min-w-[296px] h-full">
+        <CardHeader className="flex flex-row items-start bg-muted/50">
+          <div className="grid gap-0.5">
+            <CardTitle className="group flex items-center gap-2 text-lg">
+              Order {`#${selectedOrder?.id}`}
+            </CardTitle>
+            <CardDescription>
+              Fecha: {format(selectedOrder.created_at, 'PPP', { locale: es })}
+            </CardDescription>
+          </div>
+          <div className="ml-auto flex items-center gap-1">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="icon" variant="outline" className="h-8 w-8">
+                  <MoreVertical className="h-3.5 w-3.5" />
+                  <span className="sr-only">More</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem>Edit</DropdownMenuItem>
+                <DropdownMenuItem>Export</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={deleteOrder}>
+                  Borrar
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </CardHeader>
+        <CardContent className="p-6 grow text-sm overflow-y-auto">
+          <div className="grid gap-3">
+            <Accordion type="single" collapsible>
+              <AccordionItem value="order-items">
+                <AccordionTrigger>Detalles de la orden</AccordionTrigger>
+                <AccordionContent>
+                  <ul className="grid gap-3">
+                    {selectedOrder &&
+                      selectedOrder.items.map(item => (
+                        <li
+                          key={item.id}
+                          className="flex items-center justify-between"
+                        >
+                          <span className="text-muted-foreground">
+                            {prodName(item)} x{' '}
+                            <span>{(item.quantity / 1000).toFixed(1)}</span>
+                          </span>
+                          <CurrencyDisplay amount={item.subtotal} />
+                        </li>
+                      ))}
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+
+            <ul className="grid gap-3">
+              <li className="flex items-center justify-between font-semibold">
+                <span className="text-muted-foreground">Total</span>
+                <CurrencyDisplay amount={selectedOrder.total_amount} />
+              </li>
+            </ul>
+          </div>
+
+          <Separator className="my-4" />
+          <div className="grid gap-3">
+            <div className="font-semibold">Informacion del cliente</div>
+            <dl className="grid gap-3">
+              <div className="flex items-center justify-between">
+                <dt className="text-muted-foreground">Client</dt>
+                <dd>{costumer?.name || 'Desconocido'}</dd>
+              </div>
+              <div className="flex items-center justify-between">
+                <dt className="text-muted-foreground">CI</dt>
+                <dd>{costumer?.ci || 'V-0000000'}</dd>
+              </div>
+            </dl>
+          </div>
+
           <Accordion type="single" collapsible>
-            <AccordionItem value="order-items">
-              <AccordionTrigger>Detalles de la orden</AccordionTrigger>
+            <AccordionItem value="item-1">
+              <AccordionTrigger>Informacion del pago</AccordionTrigger>
               <AccordionContent>
-                <ul className="grid gap-3">
-                  {selectedOrder &&
-                    selectedOrder.items.map(item => (
-                      <li
-                        key={item.id}
-                        className="flex items-center justify-between"
-                      >
-                        <span className="text-muted-foreground">
-                          {prodName(item)} x{' '}
-                          <span>{(item.quantity / 1000).toFixed(1)}</span>
-                        </span>
-                        <CurrencyDisplay amount={item.subtotal}/>
-                        {/* <span>{formatCurrecy()}</span> */}
-                      </li>
-                    ))}
-                </ul>
+                <dl className="grid gap-3">
+                  <div className="flex flex-col gap-2  ">
+                    <PaymentMethodComponent
+                      paymentMethod={
+                        selectedOrder.payment_method as PaymentMethodType
+                      }
+                    />
+
+                    <div className="flex flex-col gap-2 ">
+                      <dt className="text-muted-foreground">Fecha de pago:</dt>
+                      <dd className="">
+                        {selectedOrder.paid_at
+                          ? format(
+                              formatTheHoursToClientTimeZone(
+                                new Date(selectedOrder.paid_at)
+                              ),
+                              'PPPp',
+                              { locale: es }
+                            )
+                          : 'desconocido'}
+                      </dd>
+                    </div>
+                  </div>
+                </dl>
               </AccordionContent>
             </AccordionItem>
           </Accordion>
 
-          <ul className="grid gap-3">
-            <li className="flex items-center justify-between font-semibold">
-              <span className="text-muted-foreground">Total</span>
-              <CurrencyDisplay amount={selectedOrder.total_amount}/>
-              {/* <span>{formatCurrecy()}</span> */}
-            </li>
-          </ul>
-        </div>
-
-        <Separator className="my-4" />
-        <div className="grid gap-3">
-          <div className="font-semibold">Informacion del cliente</div>
-          <dl className="grid gap-3">
-            <div className="flex items-center justify-between">
-              <dt className="text-muted-foreground">Client</dt>
-              <dd>{costumer?.name || 'Desconocido'}</dd>
-            </div>
-            <div className="flex items-center justify-between">
-              <dt className="text-muted-foreground">CI</dt>
-              <dd>{costumer?.ci || 'V-0000000'}</dd>
-            </div>
-          </dl>
-        </div>
-
-        <Accordion type="single" collapsible>
-          <AccordionItem value="item-1">
-            <AccordionTrigger>Informacion del pago</AccordionTrigger>
-            <AccordionContent>
-              <dl className="grid gap-3">
-                <div className="flex flex-col gap-2  ">
-                  <PaymentMethodComponent
-                    paymentMethod={
-                      selectedOrder.payment_method as PaymentMethodType
-                    }
-                  />
-
-                  <div className="flex flex-col gap-2 ">
-                    <dt className="text-muted-foreground">Fecha de pago:</dt>
-                    <dd className="">
-                      {selectedOrder.paid_at
-                        ? format(
-                            formatTheHoursToClientTimeZone(
-                              new Date(selectedOrder.paid_at)
-                            ),
-                            'PPPp',
-                            { locale: es }
-                          )
-                        : 'desconocido'}
-                    </dd>
-                  </div>
-                </div>
-              </dl>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-
-        {selectedOrder?.status === 'pending' && (
-          <PayWholeOrder reset={() => {
-            setSelectedOrder(null)
-            setOrders([])
-          }} />
-        )}
-      </CardContent>
-      <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
-        <div className="text-xs text-muted-foreground">
-          Actualizado:{' '}
-          {format(
-            formatTheHoursToClientTimeZone(new Date(selectedOrder.created_at)),
-            'PPPp',
-            { locale: es }
+          {selectedOrder?.status === 'pending' && (
+            <PayWholeOrder
+              reset={() => {
+                setSelectedOrder(null)
+                setOrders([])
+              }}
+            />
           )}
-        </div>
-      </CardFooter>
-    </Card>
+        </CardContent>
+        <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
+          <div className="text-xs text-muted-foreground">
+            Actualizado:{' '}
+            {format(
+              formatTheHoursToClientTimeZone(
+                new Date(selectedOrder.created_at)
+              ),
+              'PPPp',
+              { locale: es }
+            )}
+          </div>
+        </CardFooter>
+      </Card>
+    </motion.div>
   ) : (
-    <Card className="flex flex-col justify-center items-center h-full min-w-[296px]">
-      <MousePointerClick size={68} />
-      <CardDescription className="w-[180px] text-balance text-center mt-4">
-        Si deseas ver los detalles de una orden puedes hacer click sobre una de
-        ellas.
-      </CardDescription>
-    </Card>
+    <div className=" rounded-xl  h-full min-w-[296px] relative">
+      {orders.length === 0 && (
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <MousePointerClick className="mx-auto" size={68} />
+          <CardDescription className="w-[180px] text-balance text-center mt-4">
+            Si deseas ver los detalles de una orden puedes hacer click sobre una
+            de ellas.
+          </CardDescription>
+        </div>
+      )}
+
+      {orders && <PaymentMethodInfo />}
+    </div>
   )
 }
 
@@ -243,5 +258,82 @@ function PaymentMethodComponent({
         {paymentMethodDetails.name}
       </dd>
     </div>
+  )
+}
+
+const container = {
+  hidden: { opacity: 0.5, y: -10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      staggerChildren: 0.03
+    }
+  }
+}
+
+function PaymentMethodInfo() {
+  const { orders } = useContext(OrdersManagerCtx)
+
+  const ordersByPaymentMethod = useMemo(() => {
+    const acc = orders.reduce((acc, order) => {
+      const paymentType = order.payment_method as PaymentMethodType
+      acc.set(paymentType, (acc.get(paymentType) || 0) + order.total_amount)
+      return acc
+    }, new Map<string, number>())
+
+    return Array.from(acc, ([name, total]) => ({ name, total }))
+  }, [orders])
+
+  return (
+    <motion.div
+      variants={container}
+      initial="hidden"
+      animate="visible"
+      className="grid grid-rows-3 gap-4 w-full h-full"
+    >
+      {ordersByPaymentMethod.map(method => (
+        <PaymentItem
+          key={method.name}
+          name={method.name}
+          total={method.total || 0}
+        />
+      ))}
+    </motion.div>
+  )
+}
+
+const item = {
+  hidden: { scale: 0.9, opacity: 0 },
+  visible: {
+    scale: 1,
+    opacity: 1
+  }
+}
+
+interface PaymentItemProps {
+  name: string
+  total: number
+}
+
+function PaymentItem({ name, total }: PaymentItemProps) {
+  const paymentMethodDetails = PAYMENT_METHODS.find(pm => pm.name === name) || {
+    name: 'Desconocido',
+    Icon: CreditCardIcon,
+    color: 'bg-gray-500'
+  }
+
+  return (
+    <motion.div variants={item}>
+      <Card className="flex flex-col h-full">
+        <CardHeader className="flex flex-row justify-between items-center py-4">
+          <CardTitle className="capitalize text-lg">{name ?? 'desconocido'}</CardTitle>
+          <paymentMethodDetails.Icon className="text-muted-foreground" />
+        </CardHeader>
+        <CardContent className="flex justify-center items-center border-t grow py-4">
+          <CurrencyDisplay className="text-2xl font-bold" amount={total} />
+        </CardContent>
+      </Card>
+    </motion.div>
   )
 }

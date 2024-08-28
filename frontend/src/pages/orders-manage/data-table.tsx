@@ -20,11 +20,11 @@ import { Button } from '@/components/ui/button'
 import PaginationButton from '@/components/pagination-button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { OrdersManagerCtx } from '@/context/orders-manager-provider'
+import InfoBar from './info-bar'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  // setSelectedOrder: React.Dispatch<React.SetStateAction<domain.Order | null>>
 }
 
 export default function DataTable<TData, TValue>({
@@ -32,8 +32,8 @@ export default function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const {setSelectedOrder} = useContext(OrdersManagerCtx)
-  const [pageSize, setPageSize] = useState(6) // Estado para el tamaño de la página
-  const [pageIndex, setPageIndex] = useState(0) // Estado para el índice de la página
+  const [pageSize, setPageSize] = useState(6) 
+  const [pageIndex, setPageIndex] = useState(0) 
 
   const table = useReactTable({
     data,
@@ -78,12 +78,12 @@ export default function DataTable<TData, TValue>({
   }
 
   return (
-    <Card className="flex flex-col grow">
-      <CardHeader>
+    <Card className="flex flex-col grow ">
+      <CardHeader className='pb-4'>
         <CardTitle>Ordenes</CardTitle>
         <CardDescription>Aca puedes ver todo lo relacionado con una order y a la vez manipular las.</CardDescription>
       </CardHeader>
-     <CardContent className='grow'>
+     <CardContent className='grow pb-0 relative'>
      <Table >
         <TableHeader>
           {table.getHeaderGroups().map(headerGroup => (
@@ -103,7 +103,7 @@ export default function DataTable<TData, TValue>({
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody className="text-sm text-black/80">
+        <TableBody className="text-sm">
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map(row => (
               <TableRow
@@ -132,6 +132,8 @@ export default function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
+
+      <InfoBar/>
      </CardContent>
 
       <CardFooter className="flex items-center justify-between border-t px-6 py-3 bg-muted/50">
