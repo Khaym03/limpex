@@ -81,5 +81,20 @@ func (s *Service) GetCustomerById(id int64) (*domain.Customer, error) {
 	}
 
 	return &c, nil
+}
 
+func (s *Service) Delete(id int64) error {
+	_, err := s.db.Exec(`DELETE FROM customers WHERE id = ?`, id)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	_, err = s.db.Exec(`UPDATE orders SET customer_id = null  WHERE customer_id = ?`, id)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	return nil
 }

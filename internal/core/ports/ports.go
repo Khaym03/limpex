@@ -18,6 +18,7 @@ type CustomerStore interface {
 	CreateCustomer(domain.CustomerPayload) error
 	GetCustomers() []domain.Customer
 	GetCustomerById(id int64) (*domain.Customer, error)
+	Delete(id int64) error
 }
 
 type OrderStore interface {

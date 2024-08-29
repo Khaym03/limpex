@@ -7,6 +7,8 @@ export function AddItemToCart(arg1:any):Promise<void>;
 
 export function CreateCustomer(arg1:any):Promise<domain.Message>;
 
+export function DeleteCustomer(arg1:number):Promise<domain.Message>;
+
 export function DeleteOrder(arg1:number):Promise<domain.Message>;
 
 export function GetCartItems():Promise<Array<domain.OrderItemPayload>>;

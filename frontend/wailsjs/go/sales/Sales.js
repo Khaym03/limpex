@@ -10,6 +10,10 @@ export function CreateCustomer(arg1) {
   return window['go']['sales']['Sales']['CreateCustomer'](arg1);
 }
 
+export function DeleteCustomer(arg1) {
+  return window['go']['sales']['Sales']['DeleteCustomer'](arg1);
+}
+
 export function DeleteOrder(arg1) {
   return window['go']['sales']['Sales']['DeleteOrder'](arg1);
 }

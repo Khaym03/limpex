@@ -16,6 +16,8 @@ import { motion } from 'framer-motion'
 import { ChangeEvent, useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Dollar, Update } from 'wailsjs/go/currency/currency'
+import { DeleteCustomerComponent } from './delete-customer'
+import SettingsProvider, { useSettings } from '@/context/settings-provider'
 
 const Header = () => {
   return (
@@ -66,47 +68,75 @@ export default function Settings() {
   }
 
   return (
-    <section className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
-      <Header />
+    <SettingsProvider>
+      <section className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
+        <Header />
 
-      <div className="mx-auto grid w-full max-w-6xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
-        <Nav />
-        <motion.main
-          variants={fadeInAnimationVariants}
-          initial="initial"
-          animate="animate"
-          className="flex flex-col gap-4"
-        >
-          <Card>
-            <CardHeader>
-              <CardTitle>Dollar</CardTitle>
-              <CardDescription>
-                Actualizalo segun veas si la tasa de cambio aumenta.
-              </CardDescription>
-              <span className="mt-4 text-muted-foreground/80">
-                Valor registrado ${dollar}
-              </span>
-            </CardHeader>
-            <CardFooter className="border-t flex gap-2 px-6 py-4">
-              <Input
-                className="max-w-[300px]"
-                placeholder="Ingresa un valor ejem: 36.64"
-                value={newPrice === 0 ? '' : newPrice}
-                onChange={handleOnchange}
-                type="number"
-              />
-              <Button
-                onClick={() => {
-                  Update(newPrice)
-                  setIsUpdated(v => !v)
-                }}
-              >
-                Actualizar
-              </Button>
-            </CardFooter>
-          </Card>
-        </motion.main>
-      </div>
-    </section>
+        <div className="mx-auto grid w-full max-w-6xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
+          <Nav />
+          <motion.main
+            variants={fadeInAnimationVariants}
+            initial="initial"
+            animate="animate"
+            className="flex flex-col gap-4"
+          >
+            <Card>
+              <CardHeader>
+                <CardTitle>Dollar</CardTitle>
+                <CardDescription>
+                  Actualizalo segun veas si la tasa de cambio aumenta.
+                </CardDescription>
+                <span className="mt-4 text-muted-foreground/80">
+                  Valor registrado ${dollar}
+                </span>
+              </CardHeader>
+              <CardFooter className="border-t flex gap-2 px-6 py-4">
+                <Input
+                  className="max-w-[300px]"
+                  placeholder="Ingresa un valor ejem: 36.64"
+                  value={newPrice === 0 ? '' : newPrice}
+                  onChange={handleOnchange}
+                  type="number"
+                />
+                <Button
+                  onClick={() => {
+                    Update(newPrice)
+                    setIsUpdated(v => !v)
+                  }}
+                >
+                  Actualizar
+                </Button>
+              </CardFooter>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Borrar cliente</CardTitle>
+                <CardDescription>
+                  Al seleccionar un cliente tiene la opcion de borrarlo.
+                </CardDescription>
+
+                <CardFooter className="border-t flex gap-2 p-0 pt-4">
+                  <DeleteCustomerSection />
+                </CardFooter>
+              </CardHeader>
+            </Card>
+          </motion.main>
+        </div>
+      </section>
+    </SettingsProvider>
+  )
+}
+
+function DeleteCustomerSection() {
+  const { customerId, deleteCustomer } = useSettings()
+
+  return (
+    <>
+      <DeleteCustomerComponent />
+      <Button onClick={() => deleteCustomer()} variant={'destructive'} disabled={customerId === 0}>
+        Borrar
+      </Button>
+    </>
   )
 }

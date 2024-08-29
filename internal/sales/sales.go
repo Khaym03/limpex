@@ -105,6 +105,11 @@ func (s *Sales) GetCustomerById(id int64) *domain.Customer {
 	return c
 }
 
+func (s *Sales) DeleteCustomer(id int64) domain.Message {
+	err := s.CustomerStore.Delete(id)
+	return common.MakeMessage(err)
+}
+
 func (s *Sales) SaveOrder(op domain.OrderPayload) domain.Message {
 	err := s.OrderStore.SaveOrder(&op)
 
