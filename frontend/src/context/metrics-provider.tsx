@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from 'react'
+import { createContext, ReactNode, useContext, useState } from 'react'
 import { domain } from 'wailsjs/go/models'
 
 type MetricsCtxType = {
@@ -32,4 +32,12 @@ export default function MetricsProvider({
       {children}
     </MetricsCtx.Provider>
   )
+}
+
+export function useMetrics() {
+  const context = useContext(MetricsCtx)
+  if (context === undefined)
+    throw new Error("useMetrics must be used within a MetricsProvider")
+
+  return context
 }

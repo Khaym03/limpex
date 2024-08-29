@@ -102,7 +102,7 @@ function ProductInfo({ product }: ProductInfoProps) {
               <CurrencyDisplay amount={profit} />
             </span>
             <p className="text-sm text-zinc-600 font-medium mt-1">
-              <span className="inline-block bg-green-400 text-zinc-800 rounded-full px-2 py-0.5">
+              <span className="inline-block bg-emerald-400 text-black rounded-full px-2 py-0.5">
                 +{profitPercentage}%
               </span>
             </p>

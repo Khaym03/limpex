@@ -60,14 +60,14 @@ export const columns: ColumnDef<domain.Order>[] = [
   // },
   {
     accessorKey: 'status',
-    header: 'status',
+    header: () => <div>Estatus</div>,
     cell: ({ row }) => {
       return <OrderStatus status={row.getValue('status')} />
     }
   },
   {
     accessorKey: 'total_amount',
-    header: () => <div className="">total_amount</div>,
+    header: () => <div>Total</div>,
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue('total_amount'))
       return <CurrencyDisplay amount={amount} />
@@ -105,13 +105,13 @@ function OrderStatus({ status }: OrderStatusProps) {
     switch (status) {
       case 'paid':
         return (
-          <Badge className="text-xs bg-green-600 dark:bg-green-400 pointer-events-none">
+          <Badge className="text-xs bg-emerald-500 dark:bg-emerald-400 pointer-events-none">
             Pagado
           </Badge>
         )
       case 'pending':
         return (
-          <Badge className="text-xs bg-yellow-400 dark:bg-yellow-300 pointer-events-none">
+          <Badge className="text-xs text-amber-800 bg-amber-300 dark:bg-amber-300 pointer-events-none">
             Pendiente
           </Badge>
         )

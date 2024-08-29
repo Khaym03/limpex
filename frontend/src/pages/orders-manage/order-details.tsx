@@ -15,13 +15,18 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
-import { CreditCardIcon, MoreVertical, MousePointerClick } from 'lucide-react'
+import {
+  Clock,
+  CreditCardIcon,
+  MoreVertical,
+  MousePointerClick
+} from 'lucide-react'
 import { domain } from 'wailsjs/go/models'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { useCleaningProducts } from '@/hooks/produtc'
 import { useCustomerDetails } from '@/hooks/costumer'
-import { formatTheHoursToClientTimeZone } from '@/lib/utils'
+import { cn, formatTheHoursToClientTimeZone } from '@/lib/utils'
 import { PAYMENT_METHODS, PaymentMethodType } from '@/config/app-config'
 import {
   Accordion,
@@ -32,10 +37,11 @@ import {
 import { DeleteOrder } from 'wailsjs/go/sales/Sales'
 import { useToast } from '@/components/ui/use-toast'
 import { PayWholeOrder } from '@/dialogs/pay-whole-order'
-import { useContext, useEffect, useMemo } from 'react'
+import { useContext, useMemo } from 'react'
 import { OrdersManagerCtx } from '@/context/orders-manager-provider'
 import CurrencyDisplay from '@/components/currency-display'
 import { motion } from 'framer-motion'
+import { fadeInAnimationVariants } from '@/lib/animations'
 
 export default function OrderDetails() {
   const { selectedOrder, setSelectedOrder, setOrders, orders } =
@@ -73,13 +79,9 @@ export default function OrderDetails() {
 
   return selectedOrder ? (
     <motion.div
-      initial={{ scale: 0.95 }}
-      animate={{ scale: 1 }}
-      transition={{
-        type: 'spring',
-        stiffness: 260,
-        damping: 20
-      }}
+      variants={fadeInAnimationVariants}
+      initial="initial"
+      animate="animate"
     >
       <Card className="flex flex-col overflow-hidden min-w-[296px] h-full">
         <CardHeader className="flex flex-row items-start bg-muted/50">
@@ -261,17 +263,6 @@ function PaymentMethodComponent({
   )
 }
 
-const container = {
-  hidden: { opacity: 0.5, y: -10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      staggerChildren: 0.03
-    }
-  }
-}
-
 function PaymentMethodInfo() {
   const { orders } = useContext(OrdersManagerCtx)
 
@@ -280,17 +271,17 @@ function PaymentMethodInfo() {
       const paymentType = order.payment_method as PaymentMethodType
       acc.set(paymentType, (acc.get(paymentType) || 0) + order.total_amount)
       return acc
-    }, new Map<string, number>())
+    }, new Map<PaymentMethodType, number>())
 
     return Array.from(acc, ([name, total]) => ({ name, total }))
   }, [orders])
 
   return (
     <motion.div
-      variants={container}
-      initial="hidden"
-      animate="visible"
-      className="grid grid-rows-3 gap-4 w-full h-full"
+      variants={fadeInAnimationVariants}
+      initial="initial"
+      animate="animate"
+      className="grid grid-rows-4 gap-4 w-full h-full"
     >
       {ordersByPaymentMethod.map(method => (
         <PaymentItem
@@ -302,37 +293,38 @@ function PaymentMethodInfo() {
     </motion.div>
   )
 }
-
-const item = {
-  hidden: { scale: 0.9, opacity: 0 },
-  visible: {
-    scale: 1,
-    opacity: 1
-  }
-}
-
 interface PaymentItemProps {
-  name: string
+  name: PaymentMethodType
   total: number
 }
 
 function PaymentItem({ name, total }: PaymentItemProps) {
   const paymentMethodDetails = PAYMENT_METHODS.find(pm => pm.name === name) || {
     name: 'Desconocido',
-    Icon: CreditCardIcon,
-    color: 'bg-gray-500'
+    Icon: Clock,
+    styles:
+      'bg-orange-50 text-orange-600 border-orange-200 dark:bg-orange-950/50 dark:text-orange-400 dark:border-orange-400'
   }
 
   return (
-    <motion.div variants={item}>
-      <Card className="flex flex-col h-full">
-        <CardHeader className="flex flex-row justify-between items-center py-4">
-          <CardTitle className="capitalize text-lg">{name ?? 'desconocido'}</CardTitle>
-          <paymentMethodDetails.Icon className="text-muted-foreground" />
-        </CardHeader>
-        <CardContent className="flex justify-center items-center border-t grow py-4">
+    <motion.div
+      variants={fadeInAnimationVariants}
+      initial="initial"
+      animate="animate"
+    >
+      <Card
+        className={cn(
+          'flex gap-2 flex-col-reverse h-full border-2 items-center justify-center shadow-none',
+          paymentMethodDetails.styles
+        )}
+      >
+        <div className="flex flex-row gap-2 justify-center items-center ">
+          <CardTitle className="capitalize">{name ?? 'Fiado'}</CardTitle>
+          <paymentMethodDetails.Icon size={20} />
+        </div>
+        <div className={cn('flex justify-center items-center ')}>
           <CurrencyDisplay className="text-2xl font-bold" amount={total} />
-        </CardContent>
+        </div>
       </Card>
     </motion.div>
   )

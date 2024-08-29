@@ -12,7 +12,6 @@ import Checkout from './pages/checkout/checkout'
 import TodayInfo from './pages/orders-manage/orders-manager'
 import Metrics from './pages/metricts/metrics'
 import Products from './pages/products/products'
-import Costumers from './pages/customer/customer'
 
 const container = document.getElementById('root')
 
@@ -31,7 +30,6 @@ const router = createBrowserRouter([
       { path: '/checkout', element: <Checkout /> },
       { path: '/today-info', element: <TodayInfo /> },
       { path: '/products', element: <Products /> },
-      { path: '/costumers', element: <Costumers /> },
       { path: '/settings', element: <Settings /> }
     ]
   }

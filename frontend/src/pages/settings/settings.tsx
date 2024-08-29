@@ -11,6 +11,8 @@ import { CurrencyCtx } from '@/context/currency-provider'
 import { CreateProductDialog } from '@/dialogs/create-cleaning-product'
 import { DeleteProductDialog } from '@/dialogs/delete-cleaning-product'
 import { UpdateProductDialog } from '@/dialogs/update-cleaning-product'
+import { fadeInAnimationVariants } from '@/lib/animations'
+import { motion } from 'framer-motion'
 import { ChangeEvent, useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Dollar, Update } from 'wailsjs/go/currency/currency'
@@ -69,7 +71,12 @@ export default function Settings() {
 
       <div className="mx-auto grid w-full max-w-6xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
         <Nav />
-        <main className="flex flex-col gap-4">
+        <motion.main
+          variants={fadeInAnimationVariants}
+          initial="initial"
+          animate="animate"
+          className="flex flex-col gap-4"
+        >
           <Card>
             <CardHeader>
               <CardTitle>Dollar</CardTitle>
@@ -98,7 +105,7 @@ export default function Settings() {
               </Button>
             </CardFooter>
           </Card>
-        </main>
+        </motion.main>
       </div>
     </section>
   )

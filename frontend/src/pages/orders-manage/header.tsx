@@ -31,7 +31,6 @@ export default function Header() {
     date,
     setDate,
     allOrders,
-    queryOrdersByDate,
     queryOrdersByDateRange,
     queryOrderByStatus
   } = useContext(OrdersManagerCtx)
@@ -45,42 +44,34 @@ export default function Header() {
 
   return (
     <motion.header variants={item} className="flex justify-between">
-      
-      <div className='flex gap-2'>
-      <Button
-        className="font-normal"
-        size={'icon'}
-        variant={'outline'}
-        onClick={allOrders}
-      >
-        <FileStack />
-      </Button>
-      <Button
-        className="font-normal"
-        size={'icon'}
-        variant={'outline'}
-        onClick={() => queryOrderByStatus('pending')}
-      >
-        <FileClock />
-      </Button>
+      <div className="flex gap-2">
+        <Button
+          className="font-normal"
+          size={'icon'}
+          variant={'outline'}
+          onClick={allOrders}
+        >
+          <FileStack size={20}/>
+        </Button>
+        <Button
+          className="font-normal"
+          size={'icon'}
+          variant={'outline'}
+          onClick={() => queryOrderByStatus('pending')}
+        >
+          <FileClock size={20}/>
+        </Button>
       </div>
 
-      <SearchCustomers/>
+      <SearchCustomers />
       <div className="flex gap-2">
         <DatePicker date={date} setDate={setDate} />
-        <Button onClick={queryOrdersByDate} size={'icon'} disabled={!date}>
-          <Search size={16} />
-        </Button>
       </div>
 
       <div className="flex gap-2">
         <DateRangePicker date={dateRange} setDate={setDateRange} />
-        <Button
-          onClick={queryOrdersByDateRange}
-          size={'icon'}
-          disabled={invalidRange}
-        >
-          <Search size={16} />
+        <Button onClick={queryOrdersByDateRange} disabled={invalidRange}>
+          <Search size={20} />
         </Button>
       </div>
     </motion.header>

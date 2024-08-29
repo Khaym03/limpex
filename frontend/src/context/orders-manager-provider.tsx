@@ -1,6 +1,6 @@
 import { OrderStatus } from '@/config/app-config'
 import { getUserTimeZone } from '@/lib/utils'
-import { createContext, ReactNode, useState } from 'react'
+import { createContext, ReactNode, useEffect, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { domain } from 'wailsjs/go/models'
 import {
@@ -79,6 +79,10 @@ export default function OrdersMangerProvider({
     setOrders(data)
     setSelectedOrder(null)
   }
+
+  useEffect(() => {
+    queryOrdersByDate()
+  }, [date])
 
   const queryOrdersByDateRange = async () => {
     if (!dateRange || !dateRange.from || !dateRange.to) return

@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
-
 import {
   Card,
   CardContent,
@@ -21,7 +20,7 @@ import { Search } from 'lucide-react'
 import { OrdersSummaryByDate } from 'wailsjs/go/metrics/Metrics'
 import { domain } from 'wailsjs/go/models'
 import { getUserTimeZone } from '@/lib/utils'
-import { MetricsCtx } from '@/context/metrics-provider'
+import { useMetrics } from '@/context/metrics-provider'
 import CurrencyDisplay from '@/components/currency-display'
 
 export const description = 'An interactive bar chart'
@@ -37,7 +36,7 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export default function MainChart() {
-    const {orders, setOrders} = React.useContext(MetricsCtx)
+  const { orders, setOrders } = useMetrics()
 
   const [dateRange, setDateRange] = React.useState<DateRange | undefined>({
     from: undefined,
@@ -66,25 +65,25 @@ export default function MainChart() {
   )
 
   return (
-    <Card className='w-4/5'>
+    <Card className="w-full">
       <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row ">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
-          <div className="flex gap-2">
+          <div className="flex gap-2 mb-4">
             <DateRangePicker date={dateRange} setDate={setDateRange} />
-            <Button onClick={summary} size={'icon'}>
+            <Button onClick={summary}>
               <Search size={20} />
             </Button>
           </div>
-          <CardTitle>Bar Chart - Interactive</CardTitle>
+          <CardTitle>Grafica de ordenes</CardTitle>
           <CardDescription>
-            Showing total visitors for the last 3 months
+            Muestra todas las ordenes dentro de un rango de fecha.
           </CardDescription>
         </div>
         <div className="flex">
           {['total_amount'].map(key => {
             const chart = key as keyof typeof chartConfig
             return (
-              <button
+              <div
                 key={chart}
                 className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6"
               >
@@ -92,10 +91,10 @@ export default function MainChart() {
                   {chartConfig[chart].label}
                 </span>
                 <span className="text-lg font-bold leading-none sm:text-3xl">
-                  <CurrencyDisplay amount={total}/>
+                  <CurrencyDisplay amount={total} />
                   {/* {formatCurrecy(total)} */}
                 </span>
-              </button>
+              </div>
             )
           })}
         </div>
@@ -143,7 +142,10 @@ export default function MainChart() {
                 />
               }
             />
-            <Bar dataKey={'total_amount'} fill={`var(--color-${'total_amount'})`} />
+            <Bar
+              dataKey={'total_amount'}
+              fill={`var(--color-${'total_amount'})`}
+            />
           </BarChart>
         </ChartContainer>
       </CardContent>

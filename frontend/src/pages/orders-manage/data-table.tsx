@@ -133,7 +133,7 @@ export default function DataTable<TData, TValue>({
         </TableBody>
       </Table>
 
-      <InfoBar/>
+      {/* <InfoBar/> */}
      </CardContent>
 
       <CardFooter className="flex items-center justify-between border-t px-6 py-3 bg-muted/50">

@@ -5,8 +5,7 @@ import {
   Settings,
   ShoppingCart as ShoppingCartIcon,
   Newspaper,
-  Box,
-  UsersRound
+  Box
 } from 'lucide-react'
 import {
   Tooltip,
@@ -14,7 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from '@/components/ui/tooltip'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import CurrencyProvider from './context/currency-provider'
 import CurrencyToggleButton from './components/currency-toggle-button'
 import { ThemeProvider } from './components/theme-provider'
@@ -26,11 +25,11 @@ const links = [
     link: '/shopping-cart/product-selection',
     Icon: ShoppingCartIcon
   },
-  // {
-  //   name: 'metrics',
-  //   link: '/metrics',
-  //   Icon: ChartLine
-  // },
+  {
+    name: 'metrics',
+    link: '/metrics',
+    Icon: ChartLine
+  },
   {
     name: 'today-info',
     link: '/today-info',
@@ -40,11 +39,6 @@ const links = [
     name: 'products',
     link: '/products',
     Icon: Box
-  },
-  {
-    name: 'costumers',
-    link: '/costumers',
-    Icon: UsersRound
   },
   {
     name: 'ajustes',
@@ -86,7 +80,7 @@ export default function Root() {
                 ))}
               </TooltipProvider>
               <CurrencyToggleButton />
-              <ModeToggle/>
+              <ModeToggle />
             </nav>
           </aside>
           <main className="min-h-screen ml-14 font-medium relative">

@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { Check, ChevronsUpDown } from 'lucide-react'
-
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -20,29 +19,6 @@ import { useCustomers } from '@/hooks/costumer'
 import { GetOrdersByCustomerAndStatus } from 'wailsjs/go/sales/Sales'
 import { OrdersManagerCtx } from '@/context/orders-manager-provider'
 
-const frameworks = [
-  {
-    value: 'next.js',
-    label: 'Next.js'
-  },
-  {
-    value: 'sveltekit',
-    label: 'SvelteKit'
-  },
-  {
-    value: 'nuxt.js',
-    label: 'Nuxt.js'
-  },
-  {
-    value: 'remix',
-    label: 'Remix'
-  },
-  {
-    value: 'astro',
-    label: 'Astro'
-  }
-]
-
 export function SearchCustomers() {
   const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState('')
@@ -50,8 +26,6 @@ export function SearchCustomers() {
   const { setOrders } = React.useContext(OrdersManagerCtx)
 
   const { costumers } = useCustomers()
-
-  const handleClick = async () => {}
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -62,17 +36,15 @@ export function SearchCustomers() {
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {value
-            ? costumers.find(c => c.name === value)?.name
-            : 'Select framework...'}
+          {value ? costumers.find(c => c.name === value)?.name : 'Clientes...'}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="Search framework..." />
+          <CommandInput placeholder="Buscar cliente" />
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>No se encuentra</CommandEmpty>
             <CommandGroup>
               {costumers.map(c => (
                 <CommandItem
