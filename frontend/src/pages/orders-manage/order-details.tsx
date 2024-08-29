@@ -51,7 +51,7 @@ export default function OrderDetails() {
   const prodName = (item: domain.OrderItem) =>
     products?.find(p => p.id === item.product_id)?.name || '???'
 
-  const { costumer } = useCustomerDetails(selectedOrder?.costumer_id)
+  const { costumer } = useCustomerDetails(selectedOrder?.customer_id)
   const { toast } = useToast()
 
   const deleteOrder = async () => {

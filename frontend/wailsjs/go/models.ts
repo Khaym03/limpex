@@ -1,6 +1,6 @@
 export namespace domain {
 	
-	export class Costumer {
+	export class Customer {
 	    id: number;
 	    name: string;
 	    // Go type: time
@@ -8,7 +8,7 @@ export namespace domain {
 	    ci: string;
 	
 	    static createFrom(source: any = {}) {
-	        return new Costumer(source);
+	        return new Customer(source);
 	    }
 	
 	    constructor(source: any = {}) {
@@ -95,7 +95,7 @@ export namespace domain {
 	}
 	export class Order {
 	    id: number;
-	    costumer_id?: number;
+	    customer_id?: number;
 	    items: OrderItem[];
 	    // Go type: time
 	    created_at: any;
@@ -114,7 +114,7 @@ export namespace domain {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.id = source["id"];
-	        this.costumer_id = source["costumer_id"];
+	        this.customer_id = source["customer_id"];
 	        this.items = this.convertValues(source["items"], OrderItem);
 	        this.created_at = this.convertValues(source["created_at"], null);
 	        this.updated_at = this.convertValues(source["updated_at"], null);
@@ -162,7 +162,7 @@ export namespace domain {
 	    }
 	}
 	export class OrderPayload {
-	    costumer_id?: number;
+	    customer_id?: number;
 	    payment_method?: string;
 	
 	    static createFrom(source: any = {}) {
@@ -171,7 +171,7 @@ export namespace domain {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.costumer_id = source["costumer_id"];
+	        this.customer_id = source["customer_id"];
 	        this.payment_method = source["payment_method"];
 	    }
 	}

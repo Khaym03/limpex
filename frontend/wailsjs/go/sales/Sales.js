@@ -6,8 +6,8 @@ export function AddItemToCart(arg1) {
   return window['go']['sales']['Sales']['AddItemToCart'](arg1);
 }
 
-export function CreateCostumer(arg1) {
-  return window['go']['sales']['Sales']['CreateCostumer'](arg1);
+export function CreateCustomer(arg1) {
+  return window['go']['sales']['Sales']['CreateCustomer'](arg1);
 }
 
 export function DeleteOrder(arg1) {
@@ -18,12 +18,12 @@ export function GetCartItems() {
   return window['go']['sales']['Sales']['GetCartItems']();
 }
 
-export function GetCostumerById(arg1) {
-  return window['go']['sales']['Sales']['GetCostumerById'](arg1);
+export function GetCustomerById(arg1) {
+  return window['go']['sales']['Sales']['GetCustomerById'](arg1);
 }
 
-export function GetCostumers() {
-  return window['go']['sales']['Sales']['GetCostumers']();
+export function GetCustomers() {
+  return window['go']['sales']['Sales']['GetCustomers']();
 }
 
 export function GetOrdersByCustomerAndStatus(arg1, arg2) {

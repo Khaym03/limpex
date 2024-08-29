@@ -1,4 +1,4 @@
-package costumer
+package customer
 
 import (
 	"database/sql"
@@ -16,9 +16,9 @@ func NewService(db *sql.DB) *Service {
 }
 
 // CI is optional.
-func (s *Service) CreateCostumer(cp domain.CostumerPayload) error {
+func (s *Service) CreateCustomer(cp domain.CustomerPayload) error {
 	_, err := s.db.Exec(
-		"INSERT INTO costumers(name,ci) VALUES(?,?)",
+		"INSERT INTO customers(name,ci) VALUES(?,?)",
 		cp.Name,
 		cp.CI,
 	)
@@ -29,17 +29,17 @@ func (s *Service) CreateCostumer(cp domain.CostumerPayload) error {
 	return nil
 }
 
-func (s *Service) GetCostumers() []domain.Costumer {
-	rows, err := s.db.Query("SELECT * FROM costumers")
+func (s *Service) GetCustomers() []domain.Customer {
+	rows, err := s.db.Query("SELECT * FROM customers")
 	if err != nil {
 		fmt.Println(err)
 		return nil
 	}
 	defer rows.Close()
 
-	var costumers []domain.Costumer
+	var customers []domain.Customer
 	for rows.Next() {
-		var c domain.Costumer
+		var c domain.Customer
 		err := rows.Scan(
 			&c.Id,
 			&c.Name,
@@ -52,22 +52,22 @@ func (s *Service) GetCostumers() []domain.Costumer {
 			return nil
 		}
 
-		costumers = append(costumers, c)
+		customers = append(customers, c)
 	}
 
-	return costumers
+	return customers
 }
 
-func (s *Service) GetCostumerById(id int64) (*domain.Costumer, error) {
-	costumer, err := s.db.Query(`SELECT * FROM costumers WHERE id = ?`, id)
+func (s *Service) GetCustomerById(id int64) (*domain.Customer, error) {
+	customer, err := s.db.Query(`SELECT * FROM customers WHERE id = ?`, id)
 	if err != nil {
 		return nil, err
 	}
-	defer costumer.Close()
+	defer customer.Close()
 
-	var c domain.Costumer
-	for costumer.Next() {
-		err = costumer.Scan(
+	var c domain.Customer
+	for customer.Next() {
+		err = customer.Scan(
 			&c.Id,
 			&c.Name,
 			&c.CreatedAt,

@@ -4,20 +4,20 @@ import { formatDate } from '@/lib/utils'
 import { ColumnDef } from '@tanstack/react-table'
 import { useEffect, useState } from 'react'
 import { domain } from 'wailsjs/go/models'
-import { GetCostumerById } from 'wailsjs/go/sales/Sales'
+import { GetCustomerById } from 'wailsjs/go/sales/Sales'
 
 export const columns: ColumnDef<domain.Order>[] = [
   {
-    accessorKey: 'costumer_id',
+    accessorKey: 'customer_id',
     header: () => <div className="">Cliente</div>,
     cell: ({ row }) => {
-      const costumerExist = row.getValue('costumer_id') as number
-      const [costumer, setCostumer] = useState<domain.Costumer | null>(null)
+      const costumerExist = row.getValue('customer_id') as number
+      const [costumer, setCostumer] = useState<domain.Customer | null>(null)
 
       useEffect(() => {
         const fetchCostumer = async () => {
           if (costumerExist) {
-            setCostumer(await GetCostumerById(costumerExist))
+            setCostumer(await GetCustomerById(costumerExist))
           }
         }
 
@@ -76,7 +76,7 @@ export const columns: ColumnDef<domain.Order>[] = [
 ]
 
 interface CostumerProps {
-  costumer: domain.Costumer | null
+  costumer: domain.Customer | null
 }
 
 function Costumer({ costumer }: CostumerProps) {

@@ -4,14 +4,14 @@ import (
 	"time"
 )
 
-type Costumer struct {
+type Customer struct {
 	Id        int64     `json:"id"`
 	Name      string    `json:"name"`
 	CreatedAt time.Time `json:"created_at"`
 	CI        string    `json:"ci"`
 }
 
-type CostumerPayload struct {
+type CustomerPayload struct {
 	Name string `json:"name"`
 	CI   string `json:"ci"`
 }
@@ -33,21 +33,21 @@ type OrderItem struct {
 	Id        int64   `json:"id"`
 	ProductID int64   `json:"product_id"`
 	OrderID   int64   `json:"order_id"`
-	Quantity  float64 `json:"quantity"`
+	Quantity  int64   `json:"quantity"`
 	UnitPrice float64 `json:"unit_price"`
 	Subtotal  float64 `json:"subtotal"`
 }
 
 type OrderItemPayload struct {
 	ProductID int64   `json:"product_id"`
-	Quantity  float64 `json:"quantity"`
+	Quantity  int64   `json:"quantity"`
 	UnitPrice float64 `json:"unit_price"`
 	Subtotal  float64 `json:"subtotal"`
 }
 
 type Order struct {
 	Id            int64       `json:"id"`
-	CostumerID    *int64      `json:"costumer_id"`
+	CustomerId    *int64      `json:"customer_id"`
 	Items         []OrderItem `json:"items"`
 	CreatedAt     time.Time   `json:"created_at"`
 	UpdatedAt     time.Time   `json:"updated_at"`
@@ -58,7 +58,7 @@ type Order struct {
 }
 
 type OrderPayload struct {
-	CostumerID    *int64  `json:"costumer_id"`
+	CustomerId    *int64  `json:"customer_id"`
 	PaymentMethod *string `json:"payment_method"`
 }
 

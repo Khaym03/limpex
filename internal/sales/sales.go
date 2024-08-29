@@ -10,7 +10,7 @@ import (
 	"github.com/khaym03/limpex/internal/core/domain"
 	"github.com/khaym03/limpex/internal/core/ports"
 	"github.com/khaym03/limpex/internal/core/services/cart"
-	"github.com/khaym03/limpex/internal/core/services/costumer"
+	"github.com/khaym03/limpex/internal/core/services/customer"
 	"github.com/khaym03/limpex/internal/core/services/order"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -30,7 +30,7 @@ var once sync.Once
 
 type Sales struct {
 	ShoppingCart  ports.ShoppingCart
-	CostumerStore ports.CostumerStore
+	CustomerStore ports.CustomerStore
 	OrderStore    ports.OrderStore
 	ctx           context.Context
 }
@@ -39,12 +39,12 @@ func NewSales() *Sales {
 	once.Do(func() {
 		dbConn := repository.NewSQLiteStorage()
 
-		costumerSrv := costumer.NewService(dbConn)
+		customerSrv := customer.NewService(dbConn)
 		orderSrv := order.Service(dbConn)
 
 		salesInstance = &Sales{
 			ShoppingCart:  cart.Service(dbConn),
-			CostumerStore: costumerSrv,
+			CustomerStore: customerSrv,
 			OrderStore:    orderSrv,
 		}
 	})
@@ -80,24 +80,24 @@ func (s *Sales) ResetCart() {
 	runtime.EventsEmit(s.ctx, updateCart)
 }
 
-func (s *Sales) CreateCostumer(costumerPayload any) domain.Message {
-	var cp domain.CostumerPayload
+func (s *Sales) CreateCustomer(customerPayload any) domain.Message {
+	var cp domain.CustomerPayload
 
-	common.JSToStruc(costumerPayload, &cp)
+	common.JSToStruc(customerPayload, &cp)
 
-	err := s.CostumerStore.CreateCostumer(cp)
+	err := s.CustomerStore.CreateCustomer(cp)
 
 	runtime.EventsEmit(s.ctx, updateCostumers)
 
 	return common.MakeMessage(err)
 }
 
-func (s *Sales) GetCostumers() []domain.Costumer {
-	return s.CostumerStore.GetCostumers()
+func (s *Sales) GetCustomers() []domain.Customer {
+	return s.CustomerStore.GetCustomers()
 }
 
-func (s *Sales) GetCostumerById(id int64) *domain.Costumer {
-	c, err := s.CostumerStore.GetCostumerById(id)
+func (s *Sales) GetCustomerById(id int64) *domain.Customer {
+	c, err := s.CustomerStore.GetCustomerById(id)
 	if err != nil {
 		fmt.Println(err)
 	}

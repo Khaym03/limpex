@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react'
-import { GetCostumerById, GetCostumers } from 'wailsjs/go/sales/Sales'
+import { GetCustomerById, GetCustomers } from 'wailsjs/go/sales/Sales'
 import { domain } from 'wailsjs/go/models'
 
 export const useCustomers = () => {
-  const [costumers, setCostumers] = useState<domain.Costumer[]>([])
+  const [costumers, setCostumers] = useState<domain.Customer[]>([])
 
   useEffect(() => {
-    GetCostumers().then(p => setCostumers(p))
+    GetCustomers().then(p => setCostumers(p ?? []))
   }, [])
 
   return { costumers }
 }
 
 export function useCustomerDetails(id: number | undefined) {
-  const [costumer, setCostumer] = useState<domain.Costumer | null>(null)
+  const [costumer, setCostumer] = useState<domain.Customer | null>(null)
 
   useEffect(() => {
     if(!id) {
@@ -21,7 +21,7 @@ export function useCustomerDetails(id: number | undefined) {
       return
     }
     const fetchCostumer = async () => {
-      setCostumer(await GetCostumerById(id))
+      setCostumer(await GetCustomerById(id))
     }
 
     fetchCostumer()
