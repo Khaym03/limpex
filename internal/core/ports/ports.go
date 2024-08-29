@@ -14,10 +14,10 @@ type ProductStore interface {
 	UpdateCleaningProduct(domain.Product) error
 }
 
-type CostumerStore interface {
-	CreateCostumer(domain.CostumerPayload) error
-	GetCostumers() []domain.Costumer
-	GetCostumerById(id int64) (*domain.Costumer, error)
+type CustomerStore interface {
+	CreateCustomer(domain.CustomerPayload) error
+	GetCustomers() []domain.Customer
+	GetCustomerById(id int64) (*domain.Customer, error)
 }
 
 type OrderStore interface {

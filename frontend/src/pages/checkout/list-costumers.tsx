@@ -7,14 +7,14 @@ import {
 import { Input } from '@/components/ui/input'
 import { CreateCostumerDialog } from '@/dialogs/create-costumer'
 import { useContext, useEffect, useState } from 'react'
-import { GetCostumers } from 'wailsjs/go/sales/Sales'
+import { GetCustomers } from 'wailsjs/go/sales/Sales'
 import { EventsOff, EventsOn } from 'wailsjs/runtime/runtime'
 import { UserRound, Search } from 'lucide-react'
 import { domain } from 'wailsjs/go/models'
 import { SalesCtx } from '@/context/sales-provider'
 
 interface ICostumerCard {
-  costumer: domain.Costumer
+  costumer: domain.Customer
 }
 
 const CostumerCard = ({ costumer }: ICostumerCard) => {
@@ -44,17 +44,17 @@ const CostumerCard = ({ costumer }: ICostumerCard) => {
 }
 
 export default function ListCostumers() {
-  const [costumers, setCostumers] = useState<domain.Costumer[]>([])
+  const [costumers, setCostumers] = useState<domain.Customer[]>([])
 
   useEffect(() => {
-    GetCostumers().then(c => {
+    GetCustomers().then(c => {
       c ? setCostumers(c) : setCostumers([])
     })
   }, [])
 
   useEffect(() => {
     const updateCostumers = async () => {
-      setCostumers(await GetCostumers() ?? [])
+      setCostumers(await GetCustomers() ?? [])
     }
 
     EventsOn('update-costumers', updateCostumers)

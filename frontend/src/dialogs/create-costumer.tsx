@@ -13,10 +13,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
 import {} from '@radix-ui/react-dialog'
-import { CreateCleaningProduct } from 'wailsjs/go/main/App'
 import { useToast } from '@/components/ui/use-toast'
 import { UserRoundPlus } from 'lucide-react'
-import { CreateCostumer } from 'wailsjs/go/sales/Sales'
+import { CreateCustomer } from 'wailsjs/go/sales/Sales'
 
 export function CreateCostumerDialog() {
   const [costumerName, setCostumerName] = useState('')
@@ -42,7 +41,7 @@ export function CreateCostumerDialog() {
   }
 
   const handleCreation = async (e: MouseEvent<HTMLButtonElement>) => {
-    const msg = (await CreateCostumer({
+    const msg = (await CreateCustomer({
       name: costumerName,
       ci: CI
     })) as Message

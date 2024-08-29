@@ -38,7 +38,7 @@ func (s *service) SaveOrder(op *domain.OrderPayload) error {
 	}
 
 	// Save the order but dont mark as paid
-	if op.CostumerID != nil {
+	if op.CustomerId != nil {
 		return nil
 	}
 
@@ -84,7 +84,7 @@ func (s *service) createOrder(op *domain.OrderPayload) (int64, error) {
 		INSERT INTO orders(costumer_id, payment_method, status, total_amount)
 		VALUES (?, ?, ?, ?)
 		`,
-		op.CostumerID,
+		op.CustomerId,
 		op.PaymentMethod,
 		common.Pending,
 		s.shoppingCart.CalcTotal(),
@@ -148,7 +148,7 @@ func (s *service) getOrderById(id int64) (*domain.Order, error) {
 
 	err := row.Scan(
 		&o.Id,
-		&o.CostumerID,
+		&o.CustomerId,
 		&o.CreatedAt,
 		&o.UpdatedAt,
 		&o.PaymentMethod,
@@ -173,7 +173,7 @@ func (s *service) UpdateOrder(o *domain.Order) error {
 
 	_, err := s.db.Exec(
 		query,
-		o.CostumerID,
+		o.CustomerId,
 		o.CreatedAt,
 		common.CurrentTimestamp(),
 		o.PaymentMethod,
@@ -337,7 +337,7 @@ func (s *service) fetchOrders(query string, args ...interface{}) ([]domain.Order
 		var o domain.Order
 		err := rows.Scan(
 			&o.Id,
-			&o.CostumerID,
+			&o.CustomerId,
 			&o.CreatedAt,
 			&o.UpdatedAt,
 			&o.PaymentMethod,

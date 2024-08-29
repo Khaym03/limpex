@@ -5,15 +5,15 @@ import {context} from '../models';
 
 export function AddItemToCart(arg1:any):Promise<void>;
 
-export function CreateCostumer(arg1:any):Promise<domain.Message>;
+export function CreateCustomer(arg1:any):Promise<domain.Message>;
 
 export function DeleteOrder(arg1:number):Promise<domain.Message>;
 
 export function GetCartItems():Promise<Array<domain.OrderItemPayload>>;
 
-export function GetCostumerById(arg1:number):Promise<domain.Costumer>;
+export function GetCustomerById(arg1:number):Promise<domain.Customer>;
 
-export function GetCostumers():Promise<Array<domain.Costumer>>;
+export function GetCustomers():Promise<Array<domain.Customer>>;
 
 export function GetOrdersByCustomerAndStatus(arg1:number,arg2:string):Promise<Array<domain.Order>>;
 

@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react'
-import { GetCartItems, GetCostumers, SaveOrder } from 'wailsjs/go/sales/Sales'
+import { GetCartItems, GetCustomers, SaveOrder } from 'wailsjs/go/sales/Sales'
 import { EventsOff, EventsOn } from 'wailsjs/runtime/runtime'
 import { domain } from 'wailsjs/go/models'
 import { useToast } from '@/components/ui/use-toast'
@@ -48,7 +48,7 @@ export default function SalesProvider({ children }: any) {
     if (cartItems.length < 1) return
 
     const orderPayload: domain.OrderPayload = {
-      costumer_id: costumerId,
+      customer_id: costumerId,
       payment_method: costumerId ? undefined : paymentMethod
     }
 
