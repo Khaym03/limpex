@@ -16,8 +16,9 @@ import { UpdateCleaningProduct } from 'wailsjs/go/main/App'
 import { useToast } from '@/components/ui/use-toast'
 import { ProductSelect } from '@/components/product-select'
 import { useCleaningProducts } from '@/hooks/produtc'
-import { CurrencyCtx } from '@/context/currency-provider'
+import { CurrencyCtx, useCurrency } from '@/context/currency-provider'
 import { ca } from 'date-fns/locale'
+import { useProducts } from '@/context/products-provider'
 
 interface UpdateProductDialogProps {
   callback?: () => void
@@ -25,14 +26,13 @@ interface UpdateProductDialogProps {
 
 
 export function UpdateProductDialog({callback}: UpdateProductDialogProps) {
-  const [btnClicked, setBtnClicked] = useState(false)
-  const { products } = useCleaningProducts([btnClicked])
+  const {products} = useProducts()
   const [productId, setProductId] = useState(0)
   const [name, setName] = useState('')
   const [purchasePrice, setPurchasePrice] = useState(0)
   const [salePrice, setSalePrice] = useState(0)
 
-  const {dollar} = useContext(CurrencyCtx)
+  const {currency,dollar} = useCurrency()
 
   const [disable, setDisable] = useState(true)
   const { toast } = useToast()
@@ -69,8 +69,8 @@ export function UpdateProductDialog({callback}: UpdateProductDialogProps) {
     const p: Product = {
       id: productId,
       name: name,
-      purchase_price: purchasePrice,
-      sale_price: salePrice / dollar
+      purchase_price: currency === 'VES' ? purchasePrice / dollar : purchasePrice,
+      sale_price: currency === 'VES' ? salePrice / dollar : salePrice
     }
 
     const msg = (await UpdateCleaningProduct(p)) as Message
@@ -89,7 +89,7 @@ export function UpdateProductDialog({callback}: UpdateProductDialogProps) {
     }
 
     resetForm()
-    setBtnClicked(v => !v)
+  
     if(callback) callback()
   }
 

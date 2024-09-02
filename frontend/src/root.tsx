@@ -18,6 +18,7 @@ import CurrencyProvider from './context/currency-provider'
 import CurrencyToggleButton from './components/currency-toggle-button'
 import { ThemeProvider } from './components/theme-provider'
 import { ModeToggle } from './components/mode-toggle'
+import ProductsProvider from './context/products-provider'
 
 const links = [
   {
@@ -53,6 +54,7 @@ export default function Root() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <CurrencyProvider>
+      <ProductsProvider>
         <div className="flex  w-full flex-col bg-muted/40">
           <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
             <nav className="flex flex-col items-center gap-4 px-2 sm:py-4 h-full">
@@ -89,6 +91,7 @@ export default function Root() {
             </SalesProvider>
           </main>
         </div>
+        </ProductsProvider>
       </CurrencyProvider>
     </ThemeProvider>
   )

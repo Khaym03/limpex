@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useEffect, useState } from 'react'
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 import { Dollar } from 'wailsjs/go/currency/currency'
 import { domain } from 'wailsjs/go/models'
 
@@ -57,4 +57,12 @@ export default function CurrencyProvider({ children }: CurrencyProviderProps) {
       {children}
     </CurrencyCtx.Provider>
   )
+}
+
+export function useCurrency() {
+  const context = useContext(CurrencyCtx)
+  if (context === undefined)
+    throw new Error("useCurrency must be used within a CurrencyProvider")
+
+  return context
 }

@@ -14,17 +14,16 @@ import { DeleteProductById } from 'wailsjs/go/main/App'
 import { useCleaningProducts } from '@/hooks/produtc'
 import { useToast } from '@/components/ui/use-toast'
 import { ProductSelect } from '@/components/product-select'
+import { useProducts } from '@/context/products-provider'
 
 interface DeleteProductDialogProps {
   callback?: () => void
 }
 
-
-export function DeleteProductDialog({callback}:DeleteProductDialogProps) {
-  const [btnClicked, setBtnClicked] = useState(false)
-  const { products } = useCleaningProducts([btnClicked])
+export function DeleteProductDialog({ callback }: DeleteProductDialogProps) {
   const [prodId, setProdId] = useState(0)
   const { toast } = useToast()
+  const { products } = useProducts()
 
   const clickHandler = async () => {
     if (!prodId || !products.length) {
@@ -41,18 +40,18 @@ export function DeleteProductDialog({callback}:DeleteProductDialogProps) {
         description: `Se a borrado ${selectedProd?.name} correctamente.`
       })
 
-
       setProdId(0)
       setTimeout(() => dismiss(), 2000)
-      setBtnClicked(v => !v)
-      if(callback) callback()
+      if (callback) callback()
     }
   }
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="link"  className='w-min'>Borra Producto</Button>
+        <Button variant="link" className="w-min">
+          Borra Producto
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

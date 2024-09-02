@@ -15,18 +15,19 @@ import { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
 import {} from '@radix-ui/react-dialog'
 import { CreateCleaningProduct } from 'wailsjs/go/main/App'
 import { useToast } from '@/components/ui/use-toast'
+import { useCurrency } from '@/context/currency-provider'
 
 interface CreateProductDialogProps {
   callback?: () => void
 }
 
-
-export function CreateProductDialog({callback}: CreateProductDialogProps) {
+export function CreateProductDialog({ callback }: CreateProductDialogProps) {
   const [name, setName] = useState('')
   const [purchasePrice, setPurchasePrice] = useState(0)
   const [salePrice, setSalePrice] = useState(0)
   const [disable, setDisable] = useState(true)
   const { toast } = useToast()
+  const { currency, dollar } = useCurrency()
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target
@@ -56,13 +57,13 @@ export function CreateProductDialog({callback}: CreateProductDialogProps) {
   const handleCreation = async (e: MouseEvent<HTMLButtonElement>) => {
     const pp: ProductPaylaod = {
       name: name,
-      purchase_price: purchasePrice,
-      sale_price: salePrice
+      purchase_price:
+        currency === 'VES' ? purchasePrice / dollar : purchasePrice,
+      sale_price: currency === 'VES' ? salePrice / dollar : salePrice
     }
 
     const msg = (await CreateCleaningProduct(pp)) as Message
 
-    
     if (msg.Success) {
       const { dismiss } = toast({
         title: 'Creado exitosamente'
@@ -77,7 +78,7 @@ export function CreateProductDialog({callback}: CreateProductDialogProps) {
     }
 
     resetForm()
-    if(callback) {
+    if (callback) {
       callback()
     }
   }
@@ -89,7 +90,9 @@ export function CreateProductDialog({callback}: CreateProductDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant='link' className='w-min'>Crear Producto</Button>
+        <Button variant="link" className="w-min">
+          Crear Producto
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

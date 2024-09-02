@@ -418,7 +418,7 @@ func (s *service) OrdersSummaryByDate(startDate, endDate time.Time, clientTimeZo
 
 func (s *service) GetOrdersByCustomerAndStatus(id int64, status string) ([]domain.Order, error) {
 
-	const query = `SELECT * FROM orders WHERE costumer_id = ? AND status = ?`
+	const query = `SELECT * FROM orders WHERE customer_id = ? AND status = ?`
 
 	return s.fetchOrders(query, id, status)
 }
