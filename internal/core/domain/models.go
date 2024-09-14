@@ -70,8 +70,8 @@ type OrderPayments struct {
 }
 
 type Message struct {
-	Success bool
-	Error   string
+	Success bool   `json:"success"`
+	Error   string `json:"error"`
 }
 
 type DateArg struct {

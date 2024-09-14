@@ -12,7 +12,8 @@ import { useCleaningProducts } from '@/hooks/produtc'
 import { addToShoppingCart } from '@/lib/utils'
 import { MouseEvent, useContext } from 'react'
 import { Box } from 'lucide-react'
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion'
+import { domain } from 'wailsjs/go/models'
 
 interface IQuanButton {
   product: Product
@@ -25,12 +26,13 @@ function QuanButton({ product, quantity }: IQuanButton) {
     addToShoppingCart(product, quantity)
   }
   return (
-    <div
+    <motion.div
+      whileTap={{ scale: 0.85 }}
       onClick={clickHanler}
       className={`grid place-items-center transition-colors cursor-pointer`}
     >
       {`${quantity / 1000} Lt`}
-    </div>
+    </motion.div>
   )
 }
 
@@ -46,45 +48,42 @@ export default function ProductSlice() {
       className=" w-full mx-auto"
     >
       <CarouselContent className="px-2 py-3">
-        {products &&
-          products.map((p: Product) => (
-            <CarouselItem
-              key={p.id}
-              className="md:basis-1/4 sm:basis-1/4 lg:basis-1/5"
+        {products.map((p: domain.Product) => (
+          <CarouselItem
+            key={p.id}
+            className="md:basis-1/4 sm:basis-1/4 lg:basis-1/5"
+          >
+            <Card
+              className={`[&>*]:select-none relative aspect-[2/3] overflow-hidden flex flex-col gap-2 cursor-pointer border-2  transition ${
+                selectedProduct?.id === p.id
+                  ? 'border-primary dark:border-primary -translate-y-2'
+                  : 'border-transparent'
+              }`}
+              onClick={() => {
+                if (selectedProduct?.id === p.id) setSelectedProduct(null)
+                else setSelectedProduct(p)
+              }}
             >
-            
-             <Card
-                className={`[&>*]:select-none relative aspect-[2/3] overflow-hidden flex flex-col gap-2 cursor-pointer border-2  transition ${
-                  selectedProduct?.id === p.id
-                    ? 'border-primary dark:border-primary -translate-y-2'
-                    : 'border-transparent'
-                }`}
-                onClick={() => {
-                  if (selectedProduct?.id === p.id) setSelectedProduct(null)
-                  else setSelectedProduct(p)
-                }}
-              >
-                <div className="font-medium text-muted-foreground top-0 w-full h-12 grid grid-cols-2 ">
-                  <QuanButton product={p} quantity={500} />
-                  <QuanButton product={p} quantity={1000} />
-                </div>
+              <div className="font-medium text-muted-foreground top-0 w-full h-12 grid grid-cols-2 ">
+                <QuanButton product={p} quantity={500} />
+                <QuanButton product={p} quantity={1000} />
+              </div>
 
-                <div className="flex flex-grow w-full justify-center items-center">
-                  <Box className="transition" size={'2rem'} />
-                </div>
+              <div className="flex flex-grow w-full justify-center items-center">
+                <Box className="transition" size={'2rem'} />
+              </div>
 
-                <div className="text-left px-6 py-4 flex flex-col">
-                  <span className="font-medium capitalize text-base">
-                    {p.name}
-                  </span>
-                  <span className="text-muted-foreground font-medium text-sm">
-                    <CurrencyDisplay amount={p.sale_price} />
-                  </span>
-                </div>
-              </Card>
-            
-            </CarouselItem>
-          ))}
+              <div className="text-left px-6 py-4 flex flex-col">
+                <span className="font-medium capitalize text-base">
+                  {p.name}
+                </span>
+                <span className="text-muted-foreground font-medium text-sm">
+                  <CurrencyDisplay amount={p.sale_price} />
+                </span>
+              </div>
+            </Card>
+          </CarouselItem>
+        ))}
       </CarouselContent>
       <CarouselPrevious />
       <CarouselNext />

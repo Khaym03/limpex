@@ -16,6 +16,7 @@ import {} from '@radix-ui/react-dialog'
 import { CreateCleaningProduct } from 'wailsjs/go/main/App'
 import { useToast } from '@/components/ui/use-toast'
 import { useCurrency } from '@/context/currency-provider'
+import { domain } from 'wailsjs/go/models'
 
 interface CreateProductDialogProps {
   callback?: () => void
@@ -62,9 +63,9 @@ export function CreateProductDialog({ callback }: CreateProductDialogProps) {
       sale_price: currency === 'VES' ? salePrice / dollar : salePrice
     }
 
-    const msg = (await CreateCleaningProduct(pp)) as Message
+    const msg = (await CreateCleaningProduct(pp))
 
-    if (msg.Success) {
+    if (msg.success) {
       const { dismiss } = toast({
         title: 'Creado exitosamente'
       })
@@ -73,7 +74,7 @@ export function CreateProductDialog({ callback }: CreateProductDialogProps) {
     } else {
       toast({
         title: 'Error',
-        description: msg.Error
+        description: msg.error
       })
     }
 

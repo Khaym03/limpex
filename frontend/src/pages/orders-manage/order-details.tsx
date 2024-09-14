@@ -21,7 +21,7 @@ import {
   MoreVertical,
   MousePointerClick
 } from 'lucide-react'
-import { domain } from 'wailsjs/go/models'
+import { domain, time } from 'wailsjs/go/models'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { useCleaningProducts } from '@/hooks/produtc'
@@ -59,7 +59,7 @@ export default function OrderDetails() {
 
     const msg = await DeleteOrder(selectedOrder.id)
 
-    if (msg.Success) {
+    if (msg.success) {
       const { dismiss } = toast({
         title: 'Borrado',
         description: `Se a borrado la Order #${selectedOrder.id} correctamente.`
@@ -72,7 +72,7 @@ export default function OrderDetails() {
     } else {
       const { dismiss } = toast({
         title: 'Error',
-        description: msg.Error
+        description: msg.error
       })
     }
   }
@@ -90,7 +90,7 @@ export default function OrderDetails() {
               Order {`#${selectedOrder?.id}`}
             </CardTitle>
             <CardDescription>
-              Fecha: {format(selectedOrder.created_at, 'PPP', { locale: es })}
+              Fecha: {format(selectedOrder.created_at as string, 'PPP', { locale: es })}
             </CardDescription>
           </div>
           <div className="ml-auto flex items-center gap-1">
@@ -178,7 +178,7 @@ export default function OrderDetails() {
                         {selectedOrder.paid_at
                           ? format(
                               formatTheHoursToClientTimeZone(
-                                new Date(selectedOrder.paid_at)
+                                new Date(selectedOrder.paid_at as string)
                               ),
                               'PPPp',
                               { locale: es }
@@ -206,7 +206,7 @@ export default function OrderDetails() {
             Actualizado:{' '}
             {format(
               formatTheHoursToClientTimeZone(
-                new Date(selectedOrder.created_at)
+                new Date(selectedOrder.created_at as string)
               ),
               'PPPp',
               { locale: es }

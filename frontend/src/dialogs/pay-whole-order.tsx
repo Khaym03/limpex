@@ -77,7 +77,7 @@ export function PayWholeOrder({ reset }: PayWholeOrderProps) {
       paymentMethod
     )
 
-    if (msg.Success) {
+    if (msg.success) {
       const { dismiss } = toast({
         title: 'Abono',
         description: `Se le ha abonado a la Order #${selectedOrder.id} un monto de $${amount}.`

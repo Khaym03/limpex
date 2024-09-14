@@ -16,6 +16,7 @@ import {} from '@radix-ui/react-dialog'
 import { useToast } from '@/components/ui/use-toast'
 import { UserRoundPlus } from 'lucide-react'
 import { CreateCustomer } from 'wailsjs/go/sales/Sales'
+import { domain } from 'wailsjs/go/models'
 
 export function CreateCostumerDialog() {
   const [costumerName, setCostumerName] = useState('')
@@ -44,9 +45,9 @@ export function CreateCostumerDialog() {
     const msg = (await CreateCustomer({
       name: costumerName,
       ci: CI
-    })) as Message
+    }))
 
-    if (msg.Success) {
+    if (msg.success) {
       const { dismiss } = toast({
         title: 'Creado exitosamente'
       })
@@ -55,7 +56,7 @@ export function CreateCostumerDialog() {
     } else {
       toast({
         title: 'Error',
-        description: msg.Error
+        description: msg.error
       })
     }
 

@@ -54,7 +54,9 @@ export function calculateAverageDailySales(orders: domain.Order[]): number {
   // Extract unique dates and sum sales by day
   const salesByDay: { [date: string]: number } = {}
   orders.forEach(order => {
-    const date = order.created_at.split('T')[0] // Extract date without time
+    let data = order.created_at as string
+
+    const date = data.split('T')[0] // Extract date without time
     if (!salesByDay[date]) {
       salesByDay[date] = 0
     }

@@ -73,9 +73,9 @@ export function UpdateProductDialog({callback}: UpdateProductDialogProps) {
       sale_price: currency === 'VES' ? salePrice / dollar : salePrice
     }
 
-    const msg = (await UpdateCleaningProduct(p)) as Message
+    const msg = (await UpdateCleaningProduct(p))
 
-    if (msg.Success) {
+    if (msg.success) {
       const { dismiss } = toast({
         title: 'Actualizado exitosamente'
       })
@@ -84,7 +84,7 @@ export function UpdateProductDialog({callback}: UpdateProductDialogProps) {
     } else {
       toast({
         title: 'Error',
-        description: msg.Error
+        description: msg.error
       })
     }
 

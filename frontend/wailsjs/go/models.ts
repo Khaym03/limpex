@@ -3,8 +3,7 @@ export namespace domain {
 	export class Customer {
 	    id: number;
 	    name: string;
-	    // Go type: time
-	    created_at: any;
+	    created_at: time.Time;
 	    ci: string;
 	
 	    static createFrom(source: any = {}) {
@@ -15,7 +14,7 @@ export namespace domain {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.id = source["id"];
 	        this.name = source["name"];
-	        this.created_at = this.convertValues(source["created_at"], null);
+	        this.created_at = this.convertValues(source["created_at"], time.Time);
 	        this.ci = source["ci"];
 	    }
 	
@@ -38,8 +37,7 @@ export namespace domain {
 		}
 	}
 	export class DateArg {
-	    // Go type: time
-	    date: any;
+	    date: time.Time;
 	    client_time_zone: string;
 	
 	    static createFrom(source: any = {}) {
@@ -48,7 +46,7 @@ export namespace domain {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.date = this.convertValues(source["date"], null);
+	        this.date = this.convertValues(source["date"], time.Time);
 	        this.client_time_zone = source["client_time_zone"];
 	    }
 	
@@ -70,7 +68,20 @@ export namespace domain {
 		    return a;
 		}
 	}
+	export class Message {
+	    success: boolean;
+	    error: string;
 	
+	    static createFrom(source: any = {}) {
+	        return new Message(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.success = source["success"];
+	        this.error = source["error"];
+	    }
+	}
 	export class OrderItem {
 	    id: number;
 	    product_id: number;
@@ -97,14 +108,11 @@ export namespace domain {
 	    id: number;
 	    customer_id?: number;
 	    items: OrderItem[];
-	    // Go type: time
-	    created_at: any;
-	    // Go type: time
-	    updated_at: any;
+	    created_at: time.Time;
+	    updated_at: time.Time;
 	    payment_method?: string;
 	    status: string;
-	    // Go type: time
-	    paid_at?: any;
+	    paid_at?: time.Time;
 	    total_amount: number;
 	
 	    static createFrom(source: any = {}) {
@@ -116,11 +124,11 @@ export namespace domain {
 	        this.id = source["id"];
 	        this.customer_id = source["customer_id"];
 	        this.items = this.convertValues(source["items"], OrderItem);
-	        this.created_at = this.convertValues(source["created_at"], null);
-	        this.updated_at = this.convertValues(source["updated_at"], null);
+	        this.created_at = this.convertValues(source["created_at"], time.Time);
+	        this.updated_at = this.convertValues(source["updated_at"], time.Time);
 	        this.payment_method = source["payment_method"];
 	        this.status = source["status"];
-	        this.paid_at = this.convertValues(source["paid_at"], null);
+	        this.paid_at = this.convertValues(source["paid_at"], time.Time);
 	        this.total_amount = source["total_amount"];
 	    }
 	
@@ -191,6 +199,23 @@ export namespace domain {
 	        this.name = source["name"];
 	        this.purchase_price = source["purchase_price"];
 	        this.sale_price = source["sale_price"];
+	    }
+	}
+
+}
+
+export namespace time {
+	
+	export class Time {
+	
+	
+	    static createFrom(source: any = {}) {
+	        return new Time(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	
 	    }
 	}
 

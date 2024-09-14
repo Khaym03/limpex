@@ -55,3 +55,21 @@ func CalcTotalAmount(items []domain.OrderItem) float64 {
 
 	return total
 }
+
+func GetStartOfMonth(t time.Time) time.Time {
+	return time.Date(t.Year(), t.Month(), 1, 0, 0, 0, 0, t.Location())
+}
+
+func GetEndOfMonth(date time.Time) time.Time {
+	year, month, _ := date.Date()
+	location := date.Location()
+
+	// Creamos una nueva fecha con el primer día del siguiente mes
+	firstDayOfNextMonth := time.Date(year, month+1, 1, 0, 0, 0, 0, location)
+
+	// Restamos un día para obtener el último día del mes actual
+	lastDay := firstDayOfNextMonth.Add(-time.Nanosecond)
+
+	// Devolvemos la fecha en formato UTC
+	return lastDay.UTC()
+}

@@ -105,10 +105,10 @@ function ProductInfo({ product }: ProductInfoProps) {
             <p className="text-sm text-zinc-600 font-medium mt-1">
               <span
                 className={cn(
-                  'inline-block  rounded-full px-2 py-0.5',
+                  'inline-block  rounded-full px-2 py-0.5 text-black',
                   product.sale_price > product.purchase_price
-                    ? 'bg-emerald-400 text-black'
-                    : 'bg-red-400 text-black'
+                    ? 'bg-emerald-400'
+                    : 'bg-red-400'
                 )}
               >
                 {profitPercentage}%

@@ -43,5 +43,6 @@ func (m *Metrics) OrdersSummaryByDate(fromDate domain.DateArg, toDate domain.Dat
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	return orders
 }

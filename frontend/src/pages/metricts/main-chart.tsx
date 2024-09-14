@@ -17,11 +17,13 @@ import { DateRange } from 'react-day-picker'
 import { DateRangePicker } from '@/components/date-range-picker'
 import { Button } from '@/components/ui/button'
 import { Search } from 'lucide-react'
-import { OrdersSummaryByDate } from 'wailsjs/go/metrics/Metrics'
+import { OrdersMadeInAMonth, OrdersSummaryByDate } from 'wailsjs/go/metrics/Metrics'
 import { domain } from 'wailsjs/go/models'
 import { getUserTimeZone } from '@/lib/utils'
 import { useMetrics } from '@/context/metrics-provider'
 import CurrencyDisplay from '@/components/currency-display'
+import { DatePicker } from '@/components/date-picker'
+// import {OrdersMadeInAMonth} from "wailsjs/go/metrics"
 
 export const description = 'An interactive bar chart'
 
@@ -37,6 +39,15 @@ const chartConfig = {
 
 export default function MainChart() {
   const { orders, setOrders } = useMetrics()
+
+  const ordersMadeInAMonth = async () => {
+    const date  = new Date("2024-09-13 15:49:02.185 +0000 UTC")
+    
+
+    const orders  = await OrdersMadeInAMonth(date.toISOString()) 
+    console.log(orders)
+    setOrders(orders ?? [])
+  }
 
   const [dateRange, setDateRange] = React.useState<DateRange | undefined>({
     from: undefined,
@@ -73,7 +84,9 @@ export default function MainChart() {
             <Button onClick={summary}>
               <Search size={20} />
             </Button>
+            <Button onClick={ordersMadeInAMonth}>este mes</Button>
           </div>
+         
           <CardTitle>Grafica de ordenes</CardTitle>
           <CardDescription>
             Muestra todas las ordenes dentro de un rango de fecha.

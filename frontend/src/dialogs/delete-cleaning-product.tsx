@@ -15,6 +15,7 @@ import { useCleaningProducts } from '@/hooks/produtc'
 import { useToast } from '@/components/ui/use-toast'
 import { ProductSelect } from '@/components/product-select'
 import { useProducts } from '@/context/products-provider'
+import { domain } from 'wailsjs/go/models'
 
 interface DeleteProductDialogProps {
   callback?: () => void
@@ -32,9 +33,9 @@ export function DeleteProductDialog({ callback }: DeleteProductDialogProps) {
     }
     const selectedProd = products.find(p => p.id === prodId)
 
-    const msg = (await DeleteProductById(prodId)) as Message
+    const msg = (await DeleteProductById(prodId))
 
-    if (msg.Success) {
+    if (msg.success) {
       const { dismiss } = toast({
         title: 'Borrado',
         description: `Se a borrado ${selectedProd?.name} correctamente.`

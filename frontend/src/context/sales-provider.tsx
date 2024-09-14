@@ -53,7 +53,7 @@ export default function SalesProvider({ children }: any) {
     }
 
     const msg = await SaveOrder(orderPayload)
-    if (msg.Success) {
+    if (msg.success) {
       const { dismiss } = toast({
         title: 'Creado exitosamente'
       })
@@ -65,7 +65,7 @@ export default function SalesProvider({ children }: any) {
     } else {
       toast({
         title: 'Error',
-        description: msg.Error
+        description: msg.error
       })
     }
   }

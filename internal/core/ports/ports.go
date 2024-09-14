@@ -34,6 +34,7 @@ type OrderStore interface {
 	GetTotalPayments(orderId int64) (float64, error)
 	OrdersSummaryByDate(startDate, endDate time.Time, clientTimeZone string) ([]domain.Order, error)
 	GetOrdersByCustomerAndStatus(id int64, status string) ([]domain.Order, error)
+	OrdersMadeInAMonth(date time.Time) ([]domain.Order, error)
 }
 
 type ShoppingCart interface {

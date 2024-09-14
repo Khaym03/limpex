@@ -25,7 +25,7 @@ export default function SettingsProvider({ children }: any) {
     if (customerId === 0) return
 
     const msg = await DeleteCustomer(customerId)
-    if (msg.Success) {
+    if (msg.success) {
       const { dismiss } = toast({
         title: 'Borrado exitosamente'
       })
@@ -34,7 +34,7 @@ export default function SettingsProvider({ children }: any) {
     } else {
       toast({
         title: 'Error',
-        description: msg.Error
+        description: msg.error
       })
     }
   }
