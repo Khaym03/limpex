@@ -5,8 +5,17 @@ go 1.21
 toolchain go1.22.2
 
 require (
+	github.com/gofiber/fiber/v2 v2.52.5
 	github.com/mattn/go-sqlite3 v1.14.22
 	github.com/wailsapp/wails/v2 v2.9.1
+)
+
+require (
+	github.com/andybalholm/brotli v1.0.5 // indirect
+	github.com/klauspost/compress v1.17.0 // indirect
+	github.com/mattn/go-runewidth v0.0.15 // indirect
+	github.com/valyala/fasthttp v1.51.0 // indirect
+	github.com/valyala/tcplisten v1.0.0 // indirect
 )
 
 require (
@@ -21,6 +30,7 @@ require (
 	github.com/leaanthony/gosod v1.0.3 // indirect
 	github.com/leaanthony/slicer v1.6.0 // indirect
 	github.com/leaanthony/u v1.1.0 // indirect
+	github.com/lib/pq v1.10.9
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/pkg/browser v0.0.0-20210911075715-681adbf594b8 // indirect

@@ -1,0 +1,12 @@
+-- +goose Up
+
+CREATE TABLE IF NOT EXISTS customers (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR NOT NULL UNIQUE,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ci VARCHAR
+);
+
+-- +goose Down
+
+DROP TABLE IF EXISTS customers;

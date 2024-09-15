@@ -8,12 +8,12 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-var db *sql.DB
-var once sync.Once
+var sqliteInstance *sql.DB
+var sqliteOnce sync.Once
 
 func NewSQLiteStorage() *sql.DB {
 
-	once.Do(func() {
+	sqliteOnce.Do(func() {
 		dbConn, err := sql.Open("sqlite3", "./limpex.db")
 		if err != nil {
 			log.Fatal(err)
@@ -23,8 +23,8 @@ func NewSQLiteStorage() *sql.DB {
 			log.Fatal(err)
 		}
 
-		db = dbConn
+		sqliteInstance = dbConn
 	})
 
-	return db
+	return sqliteInstance
 }
