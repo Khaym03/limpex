@@ -14,7 +14,7 @@ RUN go mod download
 COPY . .
 
 # Compila la aplicación Go
-RUN go build -o bin cmd/api/main.go
+RUN CGO_ENABLED=1 go build -o bin cmd/api/main.go
 
 EXPOSE 3000
 
