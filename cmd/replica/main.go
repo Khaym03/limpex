@@ -65,7 +65,7 @@ func (r *Replicator) Products() {
 
 }
 
-func (r *Replicator) q() {
+func (r *Replicator) Q() {
 	var i domain.Product
 
 	result := r.psqlDB.QueryRow("SELECT * FROM products WHERE id = 1")
