@@ -7,8 +7,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/khaym03/limpex/internal/adapters/repository"
 	"github.com/khaym03/limpex/internal/core/domain"
-	"github.com/khaym03/limpex/internal/core/ports"
-	"github.com/khaym03/limpex/internal/core/services/product"
 )
 
 func main() {
@@ -22,25 +20,17 @@ func main() {
 	})
 
 	app.Post("/sync/products", replicator.Products)
-	app.Get("/products", func(c *fiber.Ctx) error {
-		return c.JSON(replicator.productSvc.GetCleaningProducts())
-	})
 
 	app.Listen(":3000")
 }
 
 type Replicator struct {
-	sqliteDB   *sql.DB
-	psqlDB     *sql.DB
-	productSvc ports.ProductStore
+	psqlDB *sql.DB
 }
 
 func NewReplicator() *Replicator {
-	sqliteConn := repository.NewSQLiteStorage()
 	return &Replicator{
-		sqliteDB:   sqliteConn,
-		psqlDB:     repository.NewPostgreSQLStorage(),
-		productSvc: product.NewService(sqliteConn),
+		psqlDB: repository.NewPostgreSQLStorage(),
 	}
 }
 
@@ -67,15 +57,6 @@ func (r *Replicator) Products(c *fiber.Ctx) error {
 
 }
 
-// func (r *Replicator) Q() {
-// 	var i domain.Product
-
-// 	result := r.psqlDB.QueryRow("SELECT * FROM products WHERE id = 1")
-// 	result.Scan(&i.Id, &i.Name, &i.PurchasePrice, &i.SalePrice)
-// 	fmt.Println(i)
-// }
-
 func (r *Replicator) Close() {
-	r.sqliteDB.Close()
 	r.psqlDB.Close()
 }

@@ -4,6 +4,7 @@ FROM golang:1.23.1-alpine AS go-builder
 # Establece el directorio de trabajo en el contenedor
 WORKDIR /app
 
+#ENV CGO_ENABLED=1
 # Copia los archivos go.mod y go.sum
 COPY go.mod go.sum ./
 
@@ -15,8 +16,6 @@ COPY . .
 
 # Compila la aplicación Go
 RUN go build -o bin cmd/api/main.go
-
-ENV CGO_ENABLED=1
 
 EXPOSE 3000
 
