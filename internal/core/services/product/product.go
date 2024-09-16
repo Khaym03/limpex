@@ -8,11 +8,15 @@ import (
 )
 
 type Service struct {
-	db *sql.DB
+	db      *sql.DB
+	scanner ProductScanner
 }
 
 func NewService(db *sql.DB) *Service {
-	return &Service{db: db}
+	return &Service{
+		db:      db,
+		scanner: ProductScanner{},
+	}
 }
 
 func (s *Service) CreateProduct(pp domain.ProductPayload) (int64, error) {
@@ -33,20 +37,6 @@ func (s *Service) CreateProduct(pp domain.ProductPayload) (int64, error) {
 	return id, err
 }
 
-// func (s *Service) CreateCleaningProduct(pp domain.ProductPayload, color string) error {
-// 	id, err := s.CreateProduct(pp)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	_, err = s.db.Exec("INSERT INTO cleaning_products (product_id,color) VALUES (?,?)", id, color)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	return nil
-// }
-
 func (s *Service) GetCleaningProducts() []domain.Product {
 	cleaningRows, err := s.db.Query(`
 	SELECT id, name, purchase_price, sale_price
@@ -56,22 +46,27 @@ func (s *Service) GetCleaningProducts() []domain.Product {
 	}
 	defer cleaningRows.Close()
 
-	var cleaningProducts []domain.Product
-	for cleaningRows.Next() {
-		var cp domain.Product
-		err := cleaningRows.Scan(
-			&cp.Id,
-			&cp.Name,
-			&cp.PurchasePrice,
-			&cp.SalePrice,
-		)
-		if err != nil {
-			fmt.Println(err)
-		}
-		cleaningProducts = append(cleaningProducts, cp)
+	products, err := s.scanner.ScanProducts(cleaningRows)
+	if err != nil {
+		fmt.Println(err)
+		return []domain.Product{}
 	}
+	// var cleaningProducts []domain.Product
+	// for cleaningRows.Next() {
+	// 	var cp domain.Product
+	// 	err := cleaningRows.Scan(
+	// 		&cp.Id,
+	// 		&cp.Name,
+	// 		&cp.PurchasePrice,
+	// 		&cp.SalePrice,
+	// 	)
+	// 	if err != nil {
+	// 		fmt.Println(err)
+	// 	}
+	// 	cleaningProducts = append(cleaningProducts, cp)
+	// }
 
-	return cleaningProducts
+	return products
 }
 
 func (s *Service) DeleteById(id int64) error {
@@ -98,20 +93,25 @@ func (s *Service) GetById(id int64) (*domain.Product, error) {
 		return nil, fmt.Errorf("no cleaning product found with id %d", id)
 	}
 
-	var cp domain.Product
-
-	err = rows.Scan(
-		&cp.Id,
-		&cp.Name,
-		&cp.PurchasePrice,
-		&cp.SalePrice,
-	)
-
+	product, err := s.scanner.ScanProduct(rows)
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
+	// var cp domain.Product
 
-	return &cp, nil
+	// err = rows.Scan(
+	// 	&cp.Id,
+	// 	&cp.Name,
+	// 	&cp.PurchasePrice,
+	// 	&cp.SalePrice,
+	// )
+
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	return product, nil
 }
 
 func (s *Service) UpdateCleaningProduct(cp domain.Product) error {
