@@ -15,7 +15,7 @@ var psqlOnce sync.Once
 func NewPostgreSQLStorage() *sql.DB {
 
 	psqlOnce.Do(func() {
-		connStr := os.Getenv("POSTGRES_URL")
+		connStr := os.Getenv("DATABASE_URL")
 
 		dbConn, err := sql.Open("postgres", connStr)
 		if err != nil {

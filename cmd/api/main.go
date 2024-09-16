@@ -19,6 +19,8 @@ func main() {
 		return c.SendString("Hello, World!")
 	})
 
+	app.Get("/list/products", replicator.ListProducts)
+
 	app.Post("/sync/products", replicator.Products)
 
 	app.Listen(":3000")
@@ -54,7 +56,33 @@ func (r *Replicator) Products(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).SendString("All good...")
+}
 
+func (r *Replicator) ListProducts(c *fiber.Ctx) error {
+	cleaningRows, err := r.psqlDB.Query(`
+	SELECT id, name, purchase_price, sale_price
+	FROM products`)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
+	}
+	defer cleaningRows.Close()
+
+	var cleaningProducts []domain.Product
+	for cleaningRows.Next() {
+		var cp domain.Product
+		err := cleaningRows.Scan(
+			&cp.Id,
+			&cp.Name,
+			&cp.PurchasePrice,
+			&cp.SalePrice,
+		)
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
+		}
+		cleaningProducts = append(cleaningProducts, cp)
+	}
+
+	return c.JSON(cleaningProducts)
 }
 
 func (r *Replicator) Close() {
