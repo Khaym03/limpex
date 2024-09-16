@@ -18,6 +18,7 @@ import { Link } from 'react-router-dom'
 import { Dollar, Update } from 'wailsjs/go/currency/currency'
 import { DeleteCustomerComponent } from './delete-customer'
 import SettingsProvider, { useSettings } from '@/context/settings-provider'
+import { useSyncProducts } from '@/hooks/sync'
 
 const Header = () => {
   return (
@@ -50,6 +51,7 @@ const Nav = () => {
 export default function Settings() {
   const [newPrice, setNewPrice] = useState(0)
   const [isUpdated, setIsUpdated] = useState(false)
+  const { syncProducts } = useSyncProducts()
 
   const { dollar, setDollar } = useContext(CurrencyCtx)
 
@@ -118,6 +120,19 @@ export default function Settings() {
 
                 <CardFooter className="border-t flex gap-2 p-0 pt-4">
                   <DeleteCustomerSection />
+                </CardFooter>
+              </CardHeader>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Sincronozador</CardTitle>
+                <CardDescription>
+                  Sincroniza las tablas
+                </CardDescription>
+
+                <CardFooter className="border-t flex gap-2 p-0 pt-4">
+                  <Button onClick={() => syncProducts()}>syncProducts</Button>
                 </CardFooter>
               </CardHeader>
             </Card>

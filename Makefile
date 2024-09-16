@@ -26,3 +26,6 @@ migrate-psql-down:
 
 migrate-railway-psql-up:
 	@goose -dir $(MIGRATION_DIR)/psql postgres "user=postgres password=sLkeZGVcOFXgKsrXzYiMIOjXTDFgCagF dbname=railway host=autorack.proxy.rlwy.net port=58000 sslmode=require" up
+
+migrate-railway-psql-down:
+	@goose -dir $(MIGRATION_DIR)/psql postgres "user=postgres password=sLkeZGVcOFXgKsrXzYiMIOjXTDFgCagF dbname=railway host=autorack.proxy.rlwy.net port=58000 sslmode=require" down

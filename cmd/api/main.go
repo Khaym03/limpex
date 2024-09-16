@@ -5,8 +5,11 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/khaym03/limpex/internal/adapters/repository"
 	"github.com/khaym03/limpex/internal/core/domain"
+	"github.com/khaym03/limpex/internal/core/services/product"
 )
 
 func main() {
@@ -14,6 +17,8 @@ func main() {
 	replicator := NewReplicator()
 	defer replicator.Close()
 	app := fiber.New()
+	app.Use(cors.New())
+	app.Use(logger.New())
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World!")
@@ -21,41 +26,49 @@ func main() {
 
 	app.Get("/list/products", replicator.ListProducts)
 
-	app.Post("/sync/products", replicator.Products)
+	app.Post("/sync/products", replicator.SyncProducts)
 
 	app.Listen(":3000")
 }
 
 type Replicator struct {
-	psqlDB *sql.DB
+	psqlDB         *sql.DB
+	productScanner product.ProductScanner
 }
 
 func NewReplicator() *Replicator {
 	return &Replicator{
-		psqlDB: repository.NewPostgreSQLStorage(),
+		psqlDB:         repository.NewPostgreSQLStorage(),
+		productScanner: product.ProductScanner{},
 	}
 }
 
-func (r *Replicator) Products(c *fiber.Ctx) error {
-	query := "INSERT INTO products(name, purchase_price, sale_price) VALUES ($1, $2, $3)"
-
+func (r *Replicator) SyncProducts(c *fiber.Ctx) error {
 	var products []domain.Product
-
-	err := c.BodyParser(&products)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).SendString("error parsing the req")
+	if err := c.BodyParser(&products); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Error parsing request body",
+		})
 	}
 
-	for _, p := range products {
-		fmt.Println(p.Name)
-		_, err = r.psqlDB.Exec(query, p.Name, p.PurchasePrice, p.SalePrice)
-		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).SendString(
-				fmt.Sprintf("Error inserting product %s: %v", p.Name, err))
+	const query = "INSERT INTO products(name, purchase_price, sale_price) VALUES ($1, $2, $3)"
+
+	for _, product := range products {
+		if err := r.insertProduct(query, product); err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"error": fmt.Sprintf("Error inserting product %s: %v", product.Name, err),
+			})
 		}
 	}
 
-	return c.Status(fiber.StatusOK).SendString("All good...")
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "Products synchronized successfully",
+	})
+}
+
+func (r *Replicator) insertProduct(query string, p domain.Product) error {
+	_, err := r.psqlDB.Exec(query, p.Name, p.PurchasePrice, p.SalePrice)
+	return err
 }
 
 func (r *Replicator) ListProducts(c *fiber.Ctx) error {
@@ -67,22 +80,12 @@ func (r *Replicator) ListProducts(c *fiber.Ctx) error {
 	}
 	defer cleaningRows.Close()
 
-	var cleaningProducts []domain.Product
-	for cleaningRows.Next() {
-		var cp domain.Product
-		err := cleaningRows.Scan(
-			&cp.Id,
-			&cp.Name,
-			&cp.PurchasePrice,
-			&cp.SalePrice,
-		)
-		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
-		}
-		cleaningProducts = append(cleaningProducts, cp)
+	products, err := r.productScanner.ScanProducts(cleaningRows)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
 	}
 
-	return c.JSON(cleaningProducts)
+	return c.JSON(products)
 }
 
 func (r *Replicator) Close() {
